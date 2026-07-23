@@ -3,6 +3,9 @@ import styles from '../rides.module.css';
 import RentalBookingForm from '@/app/(main)/rentals/RentalBookingForm';
 import RentalsView from './RentalsView';
 import prisma from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
+
 export default async function RentalsPage() {
   const cycles = await (prisma as any).rentalCycle.findMany({
     where: { isActive: true },
