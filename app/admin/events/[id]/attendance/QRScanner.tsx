@@ -75,7 +75,7 @@ export default function QRScanner({ eventId }: { eventId: string }) {
               <Scanner 
                 onScan={handleScan}
                 constraints={{ facingMode }}
-                components={{ audio: false, finder: true }}
+                components={{ finder: true }}
                 styles={{ container: { width: '100%', height: '100%' } }}
               />
             ) : (
