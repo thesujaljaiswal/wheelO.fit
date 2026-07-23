@@ -6,8 +6,18 @@ import { togglePresence } from './actions';
 export default function ParticipantList({ registrations, eventId }: { registrations: any[], eventId: string }) {
   const [search, setSearch] = useState('');
 
-  const filtered = registrations.filter(r => 
-    r.name.toLowerCase().includes(search.toLowerCase()) || 
+  const flattened = registrations.flatMap(r => {
+    const list = [{ ...r, displayName: r.name, isLead: true, uniqueKey: `${r.id}_lead` }];
+    if (r.additionalNames && r.additionalNames.length > 0) {
+      r.additionalNames.forEach((addName: string, index: number) => {
+        list.push({ ...r, displayName: addName, isLead: false, uniqueKey: `${r.id}_${index}` });
+      });
+    }
+    return list;
+  });
+
+  const filtered = flattened.filter(r => 
+    r.displayName.toLowerCase().includes(search.toLowerCase()) || 
     (r.ticketCode && r.ticketCode.toLowerCase().includes(search.toLowerCase()))
   );
 
@@ -33,7 +43,7 @@ export default function ParticipantList({ registrations, eventId }: { registrati
         {filtered.length === 0 ? (
           <p style={{ color: '#888', textAlign: 'center', padding: '1rem' }}>No participants found.</p>
         ) : filtered.map(r => (
-          <div key={r.id} style={{ 
+          <div key={r.uniqueKey} style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center', 
@@ -43,8 +53,12 @@ export default function ParticipantList({ registrations, eventId }: { registrati
             borderLeft: r.isPresent ? '4px solid #1eb53a' : '4px solid #555'
           }}>
             <div>
-              <p style={{ margin: '0 0 0.3rem 0', fontWeight: 'bold' }}>{r.name}</p>
-              <p style={{ margin: 0, fontSize: '0.8rem', color: '#888' }}>Ticket: {r.ticketCode || 'N/A'}</p>
+              <p style={{ margin: '0 0 0.3rem 0', fontWeight: 'bold' }}>
+                {r.displayName} {r.isLead && <span style={{ background: '#444', color: '#fff', fontSize: '0.7rem', padding: '2px 6px', borderRadius: '10px', marginLeft: '6px' }}>Lead</span>}
+              </p>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: '#888' }}>
+                Ticket: {r.ticketCode || 'N/A'}
+              </p>
             </div>
             
             <button 

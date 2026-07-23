@@ -90,6 +90,28 @@ export default function AdminSidebar({ role, username, isOpen, closeSidebar }: A
           Testimonials
         </Link>
 
+        <Link 
+          href="/admin/cycle-classes" 
+          onClick={closeSidebar}
+          style={{ 
+            color: pathname.startsWith('/admin/cycle-classes') ? '#fff' : '#888',
+            textDecoration: 'none',
+            fontWeight: pathname.startsWith('/admin/cycle-classes') ? 'bold' : 'normal'
+          }}>
+          Cycle Class Inquiries
+        </Link>
+
+        <Link 
+          href="/admin/rentals" 
+          onClick={closeSidebar}
+          style={{ 
+            color: pathname.startsWith('/admin/rentals') ? '#fff' : '#888',
+            textDecoration: 'none',
+            fontWeight: pathname.startsWith('/admin/rentals') ? 'bold' : 'normal'
+          }}>
+          Manage Rentals
+        </Link>
+
         {role === 'SUPERADMIN' && (
           <Link 
             href="/admin/manage-admins" 

@@ -7,6 +7,16 @@ export async function registerForEvent(formData: FormData) {
   const name = formData.get('name') as string;
   const email = formData.get('email') as string;
   const phone = formData.get('phone') as string;
+  const ticketCountStr = formData.get('ticketCount') as string;
+  const ticketCount = parseInt(ticketCountStr, 10) || 1;
+  
+  const additionalNames: string[] = [];
+  for (let i = 0; i < ticketCount - 1; i++) {
+    const addName = formData.get(`additionalName_${i}`) as string;
+    if (addName) {
+      additionalNames.push(addName);
+    }
+  }
 
   if (!eventId || !name || !email || !phone) {
     return { error: 'All fields are required.' };
@@ -21,12 +31,14 @@ export async function registerForEvent(formData: FormData) {
     const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
     const ticketCode = `TKT-${randomString}`;
 
-    await prisma.registration.create({
+    await (prisma as any).registration.create({
       data: {
         eventId,
         name,
         email,
         phone,
+        ticketCount,
+        additionalNames,
         ticketCode
       }
     });

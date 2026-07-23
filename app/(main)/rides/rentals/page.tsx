@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../rides.module.css';
-import { BookingForm } from '@/components/ui/BookingForm';
+import RentalBookingForm from '@/app/(main)/rentals/RentalBookingForm';
 import prisma from '@/lib/prisma';
 import Masonry from '@/components/react-bits/Masonry';
 
@@ -13,9 +13,9 @@ const masonryItems = [
 ];
 
 export default async function RentalsPage() {
-  const events = await prisma.event.findMany({
-    where: { eventType: 'RENTAL', isActive: true, date: { gte: new Date() } },
-    orderBy: { date: 'asc' }
+  const cycles = await (prisma as any).rentalCycle.findMany({
+    where: { isActive: true },
+    orderBy: { createdAt: 'desc' }
   });
 
   return (
@@ -38,11 +38,8 @@ export default async function RentalsPage() {
         </div>
         
         <div className={styles.formSection}>
-          <BookingForm 
-            title="Rent a Bike"
-            buttonText="Request Rental"
-            events={events}
-          />
+          <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#fff' }}>Rent a Bike</h2>
+          <RentalBookingForm cycles={cycles} />
         </div>
       </div>
       <div style={{ padding: '2rem 5%', marginTop: '2rem' }}>

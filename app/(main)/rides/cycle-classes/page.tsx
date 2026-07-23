@@ -1,7 +1,5 @@
 import React from 'react';
 import styles from '../rides.module.css';
-import { BookingForm } from '@/components/ui/BookingForm';
-import prisma from '@/lib/prisma';
 import Masonry from '@/components/react-bits/Masonry';
 
 const masonryItems = [
@@ -23,12 +21,9 @@ const masonryItems = [
   { id: "16", img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop", url: "#", height: 400 },
 ];
 
-export default async function CycleClassesPage() {
-  const events = await prisma.event.findMany({
-    where: { eventType: 'CYCLE_CLASS', isActive: true, date: { gte: new Date() } },
-    orderBy: { date: 'asc' }
-  });
+import CycleClassForm from '@/components/ui/CycleClassForm';
 
+export default async function CycleClassesPage() {
   return (
     <main>
       <div className={styles.hero}>
@@ -49,11 +44,7 @@ export default async function CycleClassesPage() {
         </div>
         
         <div className={styles.formSection}>
-          <BookingForm 
-            title="Enroll Now"
-            buttonText="Book Class"
-            events={events}
-          />
+          <CycleClassForm />
         </div>
       </div>
       

@@ -28,12 +28,13 @@ export function BookingForm({ title, events = [], buttonText = 'Book Now' }: Boo
 
   const selectedEvent = events.find(ev => ev.id === selectedEventId);
 
+  const [ticketCount, setTicketCount] = useState(1);
+
   async function handleSubmit(formData: FormData) {
     setPending(true);
     setError(null);
     setSuccess(null);
     
-    // Manually add the selectedEventId since it's no longer a standard form input
     if (!selectedEventId) {
       setError('Please select an event to register.');
       setPending(false);
@@ -136,9 +137,40 @@ export function BookingForm({ title, events = [], buttonText = 'Book Now' }: Boo
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label} htmlFor="name">Full Name</label>
+          <label className={styles.label}>Number of Tickets</label>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#222', padding: '0.5rem', borderRadius: '8px', border: '1px solid #444', width: 'fit-content' }}>
+            <button 
+              type="button" 
+              onClick={() => setTicketCount(Math.max(1, ticketCount - 1))}
+              style={{ background: '#333', color: '#fff', border: 'none', width: '36px', height: '36px', borderRadius: '6px', fontSize: '1.2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              -
+            </button>
+            <span style={{ fontSize: '1.2rem', fontWeight: 'bold', width: '30px', textAlign: 'center' }}>
+              {ticketCount}
+            </span>
+            <button 
+              type="button" 
+              onClick={() => setTicketCount(Math.min(30, ticketCount + 1))}
+              style={{ background: '#333', color: '#fff', border: 'none', width: '36px', height: '36px', borderRadius: '6px', fontSize: '1.2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              +
+            </button>
+          </div>
+          <input type="hidden" name="ticketCount" value={ticketCount} />
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="name">Lead Attendee Full Name</label>
           <input className={styles.input} type="text" id="name" name="name" placeholder="John Doe" required />
         </div>
+
+        {Array.from({ length: ticketCount - 1 }).map((_, i) => (
+          <div className={styles.field} key={i}>
+            <label className={styles.label} htmlFor={`additionalName_${i}`}>Attendee {i + 2} Name</label>
+            <input className={styles.input} type="text" id={`additionalName_${i}`} name={`additionalName_${i}`} placeholder={`Attendee ${i + 2} Name`} required />
+          </div>
+        ))}
 
         <div className={styles.field}>
           <label className={styles.label} htmlFor="email">Email Address</label>

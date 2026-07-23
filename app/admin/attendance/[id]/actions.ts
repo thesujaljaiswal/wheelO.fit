@@ -15,9 +15,10 @@ export async function getEventAttendance(eventId: string) {
   
   if (!event) throw new Error('Event not found');
   
-  const presentCount = event.registrations.filter((r) => r.isPresent).length;
+  const presentCount = event.registrations.reduce((acc, r) => r.isPresent ? acc + ((r as any).ticketCount || 1) : acc, 0);
+  const totalCount = event.registrations.reduce((acc, r) => acc + ((r as any).ticketCount || 1), 0);
   
-  return { event, presentCount, totalCount: event.registrations.length };
+  return { event, presentCount, totalCount };
 }
 
 export async function markPresent(ticketCode: string, eventId: string) {

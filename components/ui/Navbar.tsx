@@ -43,13 +43,11 @@ export function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "About Us", href: "/about" },
     { name: "Cycle Classes", href: "/rides/cycle-classes" },
     { name: "Midnight Rides", href: "/rides/midnight-rides" },
     { name: "Sunday Morning", href: "/rides/sunday-morning" },
     { name: "Rentals", href: "/rides/rentals" },
     { name: "Check Ticket", href: "/find-ticket" },
-    { name: "Contact", href: "/contact" },
   ];
 
   const currentNavIndex = navLinks.findIndex(l => l.href === pathname);

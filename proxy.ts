@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { decrypt } from '@/lib/auth';
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get('host') || '';
-  
+
   const isAdminHost = hostname.startsWith('admin.');
   const isAdminPath = url.pathname.startsWith('/admin');
 
@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
   if (isAdminHost || isAdminPath) {
     const sessionCookie = request.cookies.get('admin_session')?.value;
     const isLoginPage = url.pathname === '/login' || url.pathname === '/admin/login';
-    
+
     // Decrypt the session
     const session = await decrypt(sessionCookie);
 

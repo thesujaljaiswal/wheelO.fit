@@ -40,8 +40,6 @@ export default function CreateEventForm() {
         <select id="eventType" name="eventType" required style={{ padding: '0.8rem', borderRadius: '6px', border: '1px solid #444', background: '#222', color: '#fff' }}>
           <option value="MIDNIGHT">Midnight Rides</option>
           <option value="SUNDAY">Sunday Morning Rides</option>
-          <option value="CYCLE_CLASS">Cycle Classes</option>
-          <option value="RENTAL">Rentals</option>
         </select>
       </div>
       

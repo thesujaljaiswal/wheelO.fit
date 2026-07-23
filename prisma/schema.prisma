@@ -33,15 +33,17 @@ model Event {
 }
 
 model Registration {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  eventId    String   @db.ObjectId
-  event      Event    @relation(fields: [eventId], references: [id])
-  name       String
-  email      String
-  phone      String
-  ticketCode String?  @unique
-  isPresent  Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  eventId         String   @db.ObjectId
+  event           Event    @relation(fields: [eventId], references: [id])
+  name            String
+  email           String
+  phone           String
+  ticketCount     Int      @default(1)
+  additionalNames String[] @default([])
+  ticketCode      String?  @unique
+  isPresent       Boolean  @default(false)
+  createdAt       DateTime @default(now())
 }
 
 model JobPosting {
@@ -75,4 +77,47 @@ model Testimonial {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model CycleClassInquiry {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  email           String
+  phone           String
+  experienceLevel String?
+  message         String?
+  contacted       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+}
+
+type PricingOption {
+  durationLabel String
+  durationValue Int
+  durationUnit  String @default("DAYS")
+  price         Int
+}
+
+model RentalCycle {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  type        String   // e.g., "Mountain Bike", "Road Bike"
+  quantity    Int      // Total stock available
+  pricing     PricingOption[] // Array of pricing options
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookings    RentalBooking[]
+}
+
+model RentalBooking {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  cycleId         String   @db.ObjectId
+  cycle           RentalCycle @relation(fields: [cycleId], references: [id])
+  startDate       DateTime
+  endDate         DateTime
+  quantity        Int      @default(1)
+  name            String
+  email           String
+  phone           String
+  status          String   @default("CONFIRMED") // CONFIRMED, CANCELLED, RETURNED
+  createdAt       DateTime @default(now())
 }

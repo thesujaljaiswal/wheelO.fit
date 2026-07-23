@@ -11,6 +11,8 @@ type TicketData = {
   eventName: string;
   eventDate: string;
   eventTime: string;
+  ticketCount: number;
+  additionalNames: string[];
 };
 
 export default function TicketDownload({ ticket }: { ticket: TicketData }) {
@@ -80,9 +82,20 @@ export default function TicketDownload({ ticket }: { ticket: TicketData }) {
           </div>
         </div>
 
-        <div style={{ marginBottom: '2rem', position: 'relative', zIndex: 1 }}>
-          <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.25rem' }}>Attendee</p>
-          <p style={{ fontSize: '1.2rem', fontWeight: '500' }}>{ticket.name}</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', position: 'relative', zIndex: 1 }}>
+          <div>
+            <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.25rem' }}>Attendees ({ticket.ticketCount})</p>
+            <p style={{ fontSize: '1.2rem', fontWeight: '500' }}>{ticket.name} (Lead)</p>
+            {ticket.additionalNames.length > 0 && (
+              <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)', marginTop: '4px' }}>
+                + {ticket.additionalNames.join(', ')}
+              </p>
+            )}
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '8px', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Admit</p>
+            <p style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>{ticket.ticketCount}</p>
+          </div>
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', background: '#fff', color: '#000', padding: '1.5rem', borderRadius: '8px', alignItems: 'center', position: 'relative', zIndex: 1 }}>

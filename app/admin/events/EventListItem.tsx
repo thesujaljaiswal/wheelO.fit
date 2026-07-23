@@ -79,8 +79,6 @@ export default function EventListItem({ event }: { event: Event }) {
               >
                 <option value="MIDNIGHT">MIDNIGHT</option>
                 <option value="SUNDAY">SUNDAY</option>
-                <option value="CYCLE_CLASS">CYCLE_CLASS</option>
-                <option value="RENTAL">RENTAL</option>
               </select>
             </div>
 
