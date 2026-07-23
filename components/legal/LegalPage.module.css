@@ -1,0 +1,72 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 140px 20px 80px; /* Padding top accounts for the fixed navbar */
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #fff, #aaa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lastUpdated {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.content h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.content h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.content p {
+  margin-bottom: 16px;
+}
+
+.content ul {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+.content li {
+  margin-bottom: 8px;
+}
+
+.content a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.2rem;
+  }
+  .content h2 {
+    font-size: 1.5rem;
+  }
+}

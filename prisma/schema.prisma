@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  username     String   @unique
+  passwordHash String
+  role         String   @default("ADMIN") // 'SUPERADMIN' or 'ADMIN'
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Event {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  eventType     String         // e.g., 'MIDNIGHT', 'SUNDAY', 'CYCLE_CLASS', 'RENTAL'
+  date          DateTime
+  timeSlot      String
+  ageLimit      String?
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  registrations Registration[]
+}
+
+model Registration {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  eventId    String   @db.ObjectId
+  event      Event    @relation(fields: [eventId], references: [id])
+  name       String
+  email      String
+  phone      String
+  ticketCode String?  @unique
+  isPresent  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model JobPosting {
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  applications JobApplication[]
+}
+
+model JobApplication {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  jobPostingId String     @db.ObjectId
+  jobPosting   JobPosting @relation(fields: [jobPostingId], references: [id])
+  name         String
+  email        String
+  phone        String
+  resumeLink   String
+  createdAt    DateTime   @default(now())
+}
+
+model Testimonial {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  role      String?
+  content   String
+  rating    Int      @default(5)
+  avatarUrl String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
