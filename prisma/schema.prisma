@@ -101,6 +101,12 @@ model RentalCycle {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   type        String   // e.g., "Mountain Bike", "Road Bike"
   quantity    Int      // Total stock available
+  imageUrl    String?
+  category    String?
+  tyreSize    String?
+  speed       String?
+  bikeType    String?
+  brakes      String?
   pricing     PricingOption[] // Array of pricing options
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -121,3 +127,13 @@ model RentalBooking {
   status          String   @default("CONFIRMED") // CONFIRMED, CANCELLED, RETURNED
   createdAt       DateTime @default(now())
 }
+model FAQ {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  question  String
+  answer    String
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

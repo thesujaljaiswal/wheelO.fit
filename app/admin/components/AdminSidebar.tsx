@@ -112,6 +112,17 @@ export default function AdminSidebar({ role, username, isOpen, closeSidebar }: A
           Manage Rentals
         </Link>
 
+        <Link 
+          href="/admin/faqs" 
+          onClick={closeSidebar}
+          style={{ 
+            color: pathname.startsWith('/admin/faqs') ? '#fff' : '#888',
+            textDecoration: 'none',
+            fontWeight: pathname.startsWith('/admin/faqs') ? 'bold' : 'normal'
+          }}>
+          Manage FAQs
+        </Link>
+
         {role === 'SUPERADMIN' && (
           <Link 
             href="/admin/manage-admins" 

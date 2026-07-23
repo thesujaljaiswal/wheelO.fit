@@ -2,6 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import styles from './Footer.module.css';
 
+import prisma from '@/lib/prisma';
+import { FAQAccordion } from './FAQAccordion';
+
 export function Footer() {
   return (
     <footer className={styles.footer}>
@@ -35,6 +38,7 @@ export function Footer() {
               <h3>Legal</h3>
               <Link href="/privacy">Privacy Policy</Link>
               <Link href="/terms">Terms of Service</Link>
+              <Link href="/faq">FAQ's</Link>
             </div>
           </div>
         </div>

@@ -4,57 +4,44 @@ import React, { useState, useEffect } from 'react';
 import { getCycleAvailabilityMap, bookRental } from './actions';
 import styles from '@/components/ui/BookingForm.module.css';
 
-export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
-  const [step, setStep] = useState(1);
-  const [selectedCycleId, setSelectedCycleId] = useState('');
+export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel }: { cycles: any[], preselectedCycleId?: string, onCancel?: () => void }) {
+  const [step, setStep] = useState(preselectedCycleId ? 2 : 1);
+  const [selectedCycleId, setSelectedCycleId] = useState(preselectedCycleId || '');
   const [availabilityMap, setAvailabilityMap] = useState<Record<string, number>>({});
   
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   
-  const [selectedDate, setSelectedDate] = useState('');
   const [selectedPricing, setSelectedPricing] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
-  const [maxQuantityForDate, setMaxQuantityForDate] = useState<number | null>(null);
+  const [selectedDate, setSelectedDate] = useState('');
   
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<{ type: 'error' | 'success', text: string } | null>(null);
+
+  useEffect(() => {
+    if (preselectedCycleId) {
+      setSelectedCycleId(preselectedCycleId);
+      setStep(2);
+    }
+  }, [preselectedCycleId]);
 
   useEffect(() => {
     if (selectedCycleId) {
       getCycleAvailabilityMap(selectedCycleId, currentMonth, currentYear).then(res => {
         if (res) setAvailabilityMap(res);
       });
-      // Reset selections when cycle changes
-      setSelectedDate('');
-      setSelectedPricing(null);
-      setQuantity(1);
-      setMaxQuantityForDate(null);
     }
   }, [selectedCycleId, currentMonth, currentYear]);
   
+  // Reset selections when cycle changes
   useEffect(() => {
-    if (selectedDate && availabilityMap[selectedDate] !== undefined) {
-      let minAvail = availabilityMap[selectedDate];
-      
-      // If a package is selected, find the minimum availability across the whole duration
-      if (selectedPricing) {
-        const durationDays = selectedPricing.durationValue;
-        for (let i = 0; i < durationDays; i++) {
-          const d = new Date(selectedDate);
-          d.setDate(d.getDate() + i);
-          const dStr = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-          
-          if (availabilityMap[dStr] !== undefined) {
-            minAvail = Math.min(minAvail, availabilityMap[dStr]);
-          }
-        }
-      }
-      
-      setMaxQuantityForDate(minAvail);
-      if (quantity > minAvail) setQuantity(Math.max(1, minAvail));
+    if (selectedCycleId) {
+      setSelectedPricing(null);
+      setQuantity(1);
+      setSelectedDate('');
     }
-  }, [selectedDate, selectedPricing, availabilityMap]);
+  }, [selectedCycleId]);
 
   const selectedCycle = cycles.find(c => c.id === selectedCycleId);
 
@@ -80,9 +67,11 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
       setMessage({ type: 'success', text: res.success });
       form.reset();
       setSelectedDate('');
-      setSelectedCycleId('');
+      if (!preselectedCycleId) setSelectedCycleId('');
       setSelectedPricing(null);
       setQuantity(1);
+      if (!preselectedCycleId) setStep(1); else setStep(2);
+      
       // Refresh availability
       getCycleAvailabilityMap(selectedCycleId, currentMonth, currentYear).then(res => {
         if (res) setAvailabilityMap(res);
@@ -123,11 +112,26 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
     
     for (let d = 1; d <= daysInMonth; d++) {
       const dateObj = new Date(currentYear, currentMonth, d);
-      // Format as YYYY-MM-DD local
       const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const isPast = dateObj < today;
-      const availableQty = availabilityMap[dateStr];
-      const isAvailable = availableQty !== undefined && availableQty > 0;
+      
+      let minAvailForDuration = availabilityMap[dateStr] || 0;
+      // If a package is selected, find the minimum availability across the whole duration
+      if (selectedPricing && minAvailForDuration > 0) {
+        // Approximate days if MONTHS (assuming 30 days per month)
+        let durationDays = selectedPricing.durationUnit === 'MONTHS' ? selectedPricing.durationValue * 30 : selectedPricing.durationValue;
+        for (let i = 0; i < durationDays; i++) {
+          const dt = new Date(dateObj);
+          dt.setDate(dt.getDate() + i);
+          const dStr = new Date(dt.getTime() - (dt.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+          
+          if (availabilityMap[dStr] !== undefined) {
+            minAvailForDuration = Math.min(minAvailForDuration, availabilityMap[dStr]);
+          }
+        }
+      }
+
+      const isAvailable = minAvailForDuration >= quantity;
       const isSelected = selectedDate === dateStr;
       
       let bgColor = '#222';
@@ -148,6 +152,7 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
 
       days.push(
         <div 
+          className="calendar-cell"
           key={d} 
           onClick={() => {
             if (!isPast && isAvailable) setSelectedDate(dateStr);
@@ -156,7 +161,6 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
             background: bgColor, 
             opacity, 
             cursor, 
-            padding: '1rem', 
             textAlign: 'center', 
             borderRadius: '4px',
             border: isSelected ? '2px solid #fff' : '1px solid #444',
@@ -168,9 +172,9 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
           }}
         >
           <span style={{ fontWeight: 'bold' }}>{d}</span>
-          {!isPast && availableQty !== undefined && (
-            <span style={{ fontSize: '0.7rem', color: isAvailable ? (isSelected ? '#fff' : '#1eb53a') : '#ff4d4d', marginTop: '4px' }}>
-              {isAvailable ? `${availableQty} left` : 'Sold out'}
+          {!isPast && availabilityMap[dateStr] !== undefined && (
+            <span className="calendar-status-text" style={{ color: isAvailable ? (isSelected ? '#fff' : '#1eb53a') : '#ff4d4d' }}>
+              {isAvailable ? 'Available' : 'Sold out'}
             </span>
           )}
         </div>
@@ -178,18 +182,48 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
     }
 
     return (
-      <div style={{ background: '#1a1a1a', padding: '1rem', borderRadius: '8px', border: '1px solid #333' }}>
+      <div style={{ background: '#1a1a1a', padding: '1rem', borderRadius: '8px', border: '1px solid #333', overflow: 'hidden' }}>
+        <style>{`
+          .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+          }
+          .calendar-cell {
+            padding: 0.6rem 0.2rem;
+          }
+          .calendar-status-text {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            display: block;
+          }
+          @media (max-width: 480px) {
+            .calendar-grid {
+              gap: 0.2rem;
+            }
+            .calendar-cell {
+              padding: 0.3rem 0.1rem;
+            }
+            .calendar-status-text {
+              font-size: 0.5rem;
+              letter-spacing: -0.5px;
+            }
+          }
+          @media (max-width: 350px) {
+            .calendar-status-text {
+              display: none;
+            }
+          }
+        `}</style>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <button type="button" onClick={prevMonth} style={{ background: '#333', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>&larr;</button>
           <h3 style={{ margin: 0 }}>{new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
           <button type="button" onClick={nextMonth} style={{ background: '#333', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>&rarr;</button>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.5rem', marginBottom: '0.5rem' }}>
+        <div className="calendar-grid">
           {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-            <div key={day} style={{ textAlign: 'center', color: '#888', fontSize: '0.8rem', fontWeight: 'bold' }}>{day}</div>
+            <div key={day} style={{ textAlign: 'center', color: '#888', fontSize: '0.8rem', fontWeight: 'bold', paddingBottom: '0.5rem' }}>{day}</div>
           ))}
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.5rem' }}>
           {days}
         </div>
       </div>
@@ -200,25 +234,39 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
     return <p style={{ textAlign: 'center', color: '#888' }}>No cycles available for rent currently.</p>;
   }
 
+  const stepsToRender = preselectedCycleId ? [2, 3, 4] : [1, 2, 3, 4];
+
   return (
     <div className={styles.formContainer} style={{ width: '100%', maxWidth: '600px', margin: '0 auto', background: '#111', padding: '2rem', borderRadius: '12px', border: '1px solid #333' }}>
       
-      {/* Stepper Progress */}
+      {preselectedCycleId && onCancel && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <h3 style={{ margin: 0, color: '#fff' }}>Book: {selectedCycle?.type}</h3>
+          <button type="button" onClick={onCancel} style={{ background: 'transparent', border: 'none', color: '#888', fontSize: '1.5rem', cursor: 'pointer' }}>&times;</button>
+        </div>
+      )}
+
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '15px', left: 0, right: 0, height: '2px', background: '#333', zIndex: 0 }}></div>
-        {[1, 2, 3, 4].map(s => (
-          <div key={s} style={{ zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ position: 'absolute', top: '15px', left: '16px', right: '16px', height: '2px', background: '#333', zIndex: 0 }}>
+          <div style={{ 
+            width: stepsToRender.length > 1 ? `${(stepsToRender.indexOf(step) / (stepsToRender.length - 1)) * 100}%` : '0%', 
+            height: '100%', background: '#1eb53a', transition: 'width 0.3s ease' 
+          }}></div>
+        </div>
+        {stepsToRender.map((s, index) => (
+          <div key={s} style={{ zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', background: '#111', padding: '0 0.5rem' }}>
             <div style={{ 
               width: '32px', height: '32px', borderRadius: '50%', 
               background: step >= s ? '#1eb53a' : '#222', 
               color: step >= s ? '#fff' : '#888',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 'bold', border: `2px solid ${step >= s ? '#1eb53a' : '#444'}`
+              fontWeight: 'bold', border: `2px solid ${step >= s ? '#1eb53a' : '#444'}`,
+              transition: 'all 0.3s ease'
             }}>
-              {step > s ? '✓' : s}
+              {step > s ? '✓' : (index + 1)}
             </div>
             <span style={{ fontSize: '0.8rem', color: step >= s ? '#fff' : '#888' }}>
-              {s === 1 ? 'Cycle' : s === 2 ? 'Date' : s === 3 ? 'Package' : 'Details'}
+              {s === 1 ? 'Cycle' : s === 2 ? 'Package' : s === 3 ? 'Date' : 'Details'}
             </span>
           </div>
         ))}
@@ -232,7 +280,7 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
       
       <form onSubmit={handleSubmit}>
         
-        {step === 1 && (
+        {step === 1 && !preselectedCycleId && (
           <div className="step-content">
             <h3 style={{ marginBottom: '1rem', color: '#fff' }}>Choose your ride</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -254,20 +302,9 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
           </div>
         )}
 
-        {step === 2 && (
+        {step === 2 && selectedCycle && (
           <div className="step-content">
-            <h3 style={{ marginBottom: '1rem', color: '#fff' }}>Select Start Date</h3>
-            {renderCalendar()}
-            <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
-              <button type="button" onClick={() => setStep(1)} style={{ background: '#333', color: '#fff', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '6px', cursor: 'pointer' }}>&larr; Back</button>
-              <button type="button" onClick={() => setStep(3)} disabled={!selectedDate} className={styles.submitBtn} style={{ width: 'auto', padding: '0.8rem 2rem', opacity: !selectedDate ? 0.5 : 1 }}>Next &rarr;</button>
-            </div>
-          </div>
-        )}
-
-        {step === 3 && selectedCycle && (
-          <div className="step-content">
-            <h3 style={{ marginBottom: '1rem', color: '#fff' }}>Select Duration & Quantity</h3>
+            <h3 style={{ marginBottom: '1rem', color: '#fff' }}>Select Package</h3>
             <div className={styles.field}>
               <label className={styles.label}>Pricing Package</label>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -280,24 +317,24 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
                       style={{ padding: '1rem', background: isSelected ? '#1eb53a' : '#222', color: isSelected ? '#fff' : '#ccc', borderRadius: '6px', cursor: 'pointer', border: '1px solid #444', flex: '1 1 120px', textAlign: 'center' }}
                     >
                       <div style={{ fontWeight: 'bold', marginBottom: '0.2rem', fontSize: '1.1rem' }}>{p.durationLabel}</div>
-                      <div>₹{p.price}</div>
+                      <div>₹{p.price}{p.durationUnit === 'MONTHS' ? '/month' : p.durationUnit === 'DAYS' ? '/day' : ''}</div>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            {selectedPricing && maxQuantityForDate !== null && (
+            {selectedPricing && (
               <div className={styles.field} style={{ marginTop: '1.5rem' }}>
-                <label className={styles.label}>Quantity (Max {maxQuantityForDate} available)</label>
+                <label className={styles.label}>Quantity (Cycles)</label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#222', padding: '0.5rem', borderRadius: '8px', border: '1px solid #444', width: 'fit-content' }}>
                   <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} style={{ background: '#333', color: '#fff', border: 'none', width: '40px', height: '40px', borderRadius: '6px', fontSize: '1.2rem', cursor: 'pointer' }}>-</button>
                   <span style={{ fontSize: '1.2rem', fontWeight: 'bold', width: '40px', textAlign: 'center', color: '#fff' }}>{quantity}</span>
                   <button 
                     type="button" 
-                    onClick={() => setQuantity(Math.min(maxQuantityForDate, quantity + 1))} 
-                    disabled={quantity >= maxQuantityForDate}
-                    style={{ background: quantity >= maxQuantityForDate ? '#222' : '#333', color: quantity >= maxQuantityForDate ? '#555' : '#fff', border: 'none', width: '40px', height: '40px', borderRadius: '6px', fontSize: '1.2rem', cursor: quantity >= maxQuantityForDate ? 'not-allowed' : 'pointer' }}
+                    onClick={() => setQuantity(Math.min(selectedCycle.quantity, quantity + 1))} 
+                    disabled={quantity >= selectedCycle.quantity}
+                    style={{ background: quantity >= selectedCycle.quantity ? '#222' : '#333', color: quantity >= selectedCycle.quantity ? '#555' : '#fff', border: 'none', width: '40px', height: '40px', borderRadius: '6px', fontSize: '1.2rem', cursor: quantity >= selectedCycle.quantity ? 'not-allowed' : 'pointer' }}
                   >+</button>
                 </div>
                 <input type="hidden" name="quantity" value={quantity} />
@@ -305,8 +342,21 @@ export default function RentalBookingForm({ cycles }: { cycles: any[] }) {
             )}
 
             <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
+              {!preselectedCycleId && <button type="button" onClick={() => setStep(1)} style={{ background: '#333', color: '#fff', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '6px', cursor: 'pointer' }}>&larr; Back</button>}
+              {preselectedCycleId && <div></div>}
+              <button type="button" onClick={() => setStep(3)} disabled={!selectedPricing} className={styles.submitBtn} style={{ width: 'auto', padding: '0.8rem 2rem', opacity: !selectedPricing ? 0.5 : 1 }}>Next &rarr;</button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="step-content">
+            <h3 style={{ marginBottom: '1rem', color: '#fff' }}>Select Start Date</h3>
+            <p style={{ color: '#888', marginBottom: '1rem', fontSize: '0.9rem' }}>Showing availability for {quantity} cycle(s) over {selectedPricing?.durationLabel}.</p>
+            {renderCalendar()}
+            <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
               <button type="button" onClick={() => setStep(2)} style={{ background: '#333', color: '#fff', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '6px', cursor: 'pointer' }}>&larr; Back</button>
-              <button type="button" onClick={() => setStep(4)} disabled={!selectedPricing} className={styles.submitBtn} style={{ width: 'auto', padding: '0.8rem 2rem', opacity: !selectedPricing ? 0.5 : 1 }}>Next &rarr;</button>
+              <button type="button" onClick={() => setStep(4)} disabled={!selectedDate} className={styles.submitBtn} style={{ width: 'auto', padding: '0.8rem 2rem', opacity: !selectedDate ? 0.5 : 1 }}>Next &rarr;</button>
             </div>
           </div>
         )}

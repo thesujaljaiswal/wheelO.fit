@@ -1,21 +1,57 @@
 import React from 'react';
 import styles from '../rides.module.css';
 import RentalBookingForm from '@/app/(main)/rentals/RentalBookingForm';
+import RentalsView from './RentalsView';
 import prisma from '@/lib/prisma';
-import Masonry from '@/components/react-bits/Masonry';
-
-const masonryItems = [
-  { id: "1", img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop", url: "#", height: 400 },
-  { id: "2", img: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=600&auto=format&fit=crop", url: "#", height: 250 },
-  { id: "3", img: "https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?q=80&w=600&auto=format&fit=crop", url: "#", height: 600 },
-  { id: "4", img: "https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=600&auto=format&fit=crop", url: "#", height: 350 },
-  { id: "5", img: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?q=80&w=600&auto=format&fit=crop", url: "#", height: 450 }
-];
-
 export default async function RentalsPage() {
   const cycles = await (prisma as any).rentalCycle.findMany({
     where: { isActive: true },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' },
+    include: { bookings: { where: { status: 'CONFIRMED' } } }
+  });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
+
+  const cyclesWithStockInfo = cycles.map((cycle: any) => {
+    let isInstock = cycle.quantity > 0;
+    let nextAvailableDate: string | null = null;
+    
+    if (isInstock && cycle.bookings && cycle.bookings.length > 0) {
+      // Helper to get booked quantity for a specific date
+      const getBookedQty = (date: Date) => cycle.bookings.reduce((sum: number, b: any) => {
+         const bStart = new Date(b.startDate); bStart.setHours(0,0,0,0);
+         const bEnd = new Date(b.endDate); bEnd.setHours(23,59,59,999);
+         if (date >= bStart && date <= bEnd) {
+           return sum + b.quantity;
+         }
+         return sum;
+      }, 0);
+
+      // Check if available today
+      if (cycle.quantity - getBookedQty(today) <= 0) {
+         isInstock = false;
+         
+         // Find next available date in the next 365 days
+         for (let i = 1; i <= 365; i++) {
+            const d = new Date(today);
+            d.setDate(d.getDate() + i);
+            if (cycle.quantity - getBookedQty(d) > 0) {
+               nextAvailableDate = d.toISOString();
+               break;
+            }
+         }
+      }
+    } else if (cycle.quantity <= 0) {
+       isInstock = false;
+    }
+
+    return {
+      ...cycle,
+      isInstock,
+      nextAvailableDate
+    };
   });
 
   return (
@@ -26,27 +62,8 @@ export default async function RentalsPage() {
         <h1 className={styles.title}>Bicycle Rentals</h1>
       </div>
       
-      <div className={styles.content}>
-        <div className={styles.description}>
-          <h2>Ride Your Way</h2>
-          <p>
-            Don't have a bike? No problem. We offer a wide range of premium bicycles for rent. From city cruisers to high-performance road bikes, we have the perfect ride for your next adventure.
-          </p>
-          <p>
-            All rentals include a helmet, lock, and basic maintenance kit. Daily and weekly rates available.
-          </p>
-        </div>
-        
-        <div className={styles.formSection}>
-          <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#fff' }}>Rent a Bike</h2>
-          <RentalBookingForm cycles={cycles} />
-        </div>
-      </div>
-      <div style={{ padding: '2rem 5%', marginTop: '2rem' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '2rem', fontWeight: 'bold' }}>Event Gallery</h2>
-        <div style={{ position: 'relative' }}>
-          <Masonry items={masonryItems} />
-        </div>
+      <div style={{ background: '#0a0a0a', minHeight: '100vh' }}>
+        <RentalsView cycles={cyclesWithStockInfo} />
       </div>
     </main>
   );

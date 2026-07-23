@@ -72,10 +72,11 @@ export async function checkAvailability(cycleId: string, startDateStr: string, d
     
     if (durationUnit === 'DAYS') {
       endDate.setDate(endDate.getDate() + durationValue - 1);
+    } else if (durationUnit === 'MONTHS') {
+      // Approximate 30 days per month
+      endDate.setDate(endDate.getDate() + (durationValue * 30) - 1);
     } else {
-      // For HOURS, assume it blocks the current day anyway for simplicity in this implementation, 
-      // or just keep start and end date the same day.
-      // We don't add days.
+      // For HOURS or other, keep same day
     }
 
     // Find overlapping bookings
@@ -131,6 +132,8 @@ export async function bookRental(formData: FormData) {
   
   if (durationUnit === 'DAYS') {
     endDate.setDate(endDate.getDate() + durationValue - 1);
+  } else if (durationUnit === 'MONTHS') {
+    endDate.setDate(endDate.getDate() + (durationValue * 30) - 1);
   }
 
   try {

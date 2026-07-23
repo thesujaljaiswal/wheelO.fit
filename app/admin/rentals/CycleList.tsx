@@ -1,9 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { toggleCycleActive, deleteCycle } from './actions';
+import EditCycleModal from './EditCycleModal';
 
 export default function CycleList({ cycles }: { cycles: any[] }) {
+  const [editingCycle, setEditingCycle] = useState<any>(null);
+
   if (cycles.length === 0) {
     return <p style={{ color: '#888' }}>No cycles in inventory yet.</p>;
   }
@@ -18,6 +21,12 @@ export default function CycleList({ cycles }: { cycles: any[] }) {
               <p style={{ margin: 0, color: '#aaa', fontSize: '0.9rem' }}>Stock: {c.quantity}</p>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button 
+                onClick={() => setEditingCycle(c)}
+                style={{ background: '#0ea5e922', color: '#0ea5e9', border: '1px solid #0ea5e9', padding: '0.4rem 0.8rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
+              >
+                Edit
+              </button>
               <button 
                 onClick={() => toggleCycleActive(c.id, c.isActive)}
                 style={{ background: c.isActive ? '#333' : '#1eb53a', color: '#fff', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
@@ -46,6 +55,10 @@ export default function CycleList({ cycles }: { cycles: any[] }) {
           </div>
         </div>
       ))}
+
+      {editingCycle && (
+        <EditCycleModal cycle={editingCycle} onClose={() => setEditingCycle(null)} />
+      )}
     </div>
   );
 }
