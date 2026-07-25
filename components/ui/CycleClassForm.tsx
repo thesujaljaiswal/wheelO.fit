@@ -35,32 +35,23 @@ export default function CycleClassForm() {
 
       <form id="cycle-class-form" action={handleSubmit} className={styles.form}>
         <div className={styles.field}>
-          <label htmlFor="name" className={styles.label}>Full Name</label>
-          <input type="text" id="name" name="name" required className={styles.input} placeholder="John Doe" />
+          <label htmlFor="name" className={styles.label}>Name <span style={{color: 'red'}}>*</span></label>
+          <input type="text" id="name" name="name" required className={styles.input} />
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="email" className={styles.label}>Email Address</label>
-          <input type="email" id="email" name="email" required className={styles.input} placeholder="john@example.com" />
+          <label htmlFor="phone" className={styles.label}>WhatsApp no <span style={{color: 'red'}}>*</span></label>
+          <input type="tel" id="phone" name="phone" required className={styles.input} placeholder="+91 081234 56789" />
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="phone" className={styles.label}>Phone Number</label>
-          <input type="tel" id="phone" name="phone" required className={styles.input} placeholder="+91 9876543210" />
+          <label htmlFor="area" className={styles.label}>Area (Locality)</label>
+          <input type="text" id="area" name="area" className={styles.input} />
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="experienceLevel" className={styles.label}>Experience Level</label>
-          <select id="experienceLevel" name="experienceLevel" className={styles.select}>
-            <option value="Beginner">Beginner - Never ridden before</option>
-            <option value="Intermediate">Intermediate - Know how to balance</option>
-            <option value="Advanced">Advanced - Want to improve technique</option>
-          </select>
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="message" className={styles.label}>Any specific goals or questions? (Optional)</label>
-          <textarea id="message" name="message" className={styles.input} rows={4} placeholder="Tell us what you want to achieve..."></textarea>
+          <label htmlFor="height" className={styles.label}>Height</label>
+          <input type="text" id="height" name="height" className={styles.input} />
         </div>
 
         <button 

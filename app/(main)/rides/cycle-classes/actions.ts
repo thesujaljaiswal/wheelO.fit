@@ -5,14 +5,17 @@ import { revalidatePath } from 'next/cache';
 
 export async function submitCycleClassInquiry(formData: FormData) {
   const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
   const phone = formData.get('phone') as string;
-  const experienceLevel = formData.get('experienceLevel') as string;
-  const message = formData.get('message') as string;
+  const area = formData.get('area') as string;
+  const height = formData.get('height') as string;
 
-  if (!name || !email || !phone) {
-    return { error: 'Name, email, and phone are required fields.' };
+  if (!name || !phone) {
+    return { error: 'Name and WhatsApp no are required fields.' };
   }
+
+  // Constructing a message field to hold area and height
+  const message = `Area: ${area || 'N/A'}\nHeight: ${height || 'N/A'}`;
+  const email = `${phone.replace(/\D/g, '')}@whatsapp.dummy`; // dummy email since it's required in schema
 
   try {
     // We are casting it because prisma client might not have type definitions loaded immediately due to locked file during generate.
@@ -21,7 +24,6 @@ export async function submitCycleClassInquiry(formData: FormData) {
         name,
         email,
         phone,
-        experienceLevel,
         message,
       },
     });
