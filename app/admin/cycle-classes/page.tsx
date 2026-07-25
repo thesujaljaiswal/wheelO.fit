@@ -80,7 +80,7 @@ export default async function AdminCycleClassesPage(props: {
                   </td>
                   <td style={{ padding: '1rem', borderBottom: '1px solid #444', color: '#aaa', fontSize: '0.9rem' }}>
                     {new Date(inquiry.createdAt).toLocaleDateString('en-GB', {
-                      day: '2-digit', month: 'short', year: 'numeric',
+                      day: '2-digit', month: '2-digit', year: 'numeric',
                       hour: '2-digit', minute: '2-digit'
                     })}
                   </td>

@@ -169,7 +169,7 @@ export default function EventListItem({ event }: { event: Event }) {
           <strong>Type:</strong> {event.eventType}
         </div>
         <div style={{ fontSize: '0.9rem', color: '#ccc' }}>
-          <strong>Date:</strong> {new Date(event.date).toLocaleDateString('en-GB')}
+          <strong>Date:</strong> {new Date(event.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
         </div>
         <div style={{ fontSize: '0.9rem', color: '#ccc' }}>
           <strong>Time:</strong> {event.timeSlot}

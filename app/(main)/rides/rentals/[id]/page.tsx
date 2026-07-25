@@ -7,15 +7,51 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
   
   const cycle = await (prisma as any).rentalCycle.findUnique({
     where: { id },
+    include: { bookings: true }
   });
 
   if (!cycle) {
     notFound();
   }
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let isInstock = true;
+  let nextAvailableDate = null;
+
+  const getBookedQty = (date: Date) => cycle.bookings.reduce((sum: number, b: any) => {
+    const bStart = new Date(b.startDate); bStart.setHours(0,0,0,0);
+    const bEnd = new Date(b.endDate); bEnd.setHours(23,59,59,999);
+    if (date >= bStart && date <= bEnd) {
+      return sum + b.quantity;
+    }
+    return sum;
+  }, 0);
+
+  const isAvailableFor30DaysFrom = (startDate: Date) => {
+    for (let i = 0; i < 30; i++) {
+       const d = new Date(startDate);
+       d.setDate(d.getDate() + i);
+       if (cycle.quantity - getBookedQty(d) <= 0) return false;
+    }
+    return true;
+  };
+
+  if (!isAvailableFor30DaysFrom(today)) {
+    isInstock = false;
+    for (let i = 1; i <= 365; i++) {
+       const d = new Date(today);
+       d.setDate(d.getDate() + i);
+       if (isAvailableFor30DaysFrom(d)) {
+          nextAvailableDate = d.toISOString();
+          break;
+       }
+    }
+  }
+
   return (
     <div>
-      <CycleDetailView cycle={cycle} />
+      <CycleDetailView cycle={{ ...cycle, isInstock, nextAvailableDate }} />
     </div>
   );
 }

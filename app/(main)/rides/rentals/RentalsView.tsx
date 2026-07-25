@@ -19,7 +19,7 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isHeightChartOpen, setIsHeightChartOpen] = useState(false);
 
-  const categories = ['All', 'Non Gear', 'Gear', 'Kids', 'Women', 'Premium', 'Electric'];
+  const categories = ['Non Gear', 'Gear', 'Premium', 'Kids'];
   const tyreSizes = ["14 Inches (3'0 - 3'6)", "16 Inches (3'6 - 3'1)", "20 Inches (4'0 - 4'7)", "24 Inches (4'6 - 5'2)", "26 Inches (5'0 - 6'6)", "27.5 Inches (5'4 - 6'2)", "29 Inches (5'8 - 6'4)"];
   const speeds = ['Single Speed', '7 (1x7) Gears', '8 (1x8) Gears', '9 (1x9) Gears', '14 (2x7) Gears', '21 (3x7) Gears'];
   const bikeTypes = ['MTB', 'Hybrid', 'Road Bike', 'Kids'];
@@ -28,6 +28,12 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
   const toggleArrayItem = (arr: string[], item: string, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
     if (arr.includes(item)) setter(arr.filter(i => i !== item));
     else setter([...arr, item]);
+  };
+
+  const getStartingPriceInfo = (cycle: any) => {
+    if (!cycle.pricing || cycle.pricing.length === 0) return { price: 0, unit: 'MONTHS' };
+    const basePricing = cycle.pricing.reduce((min: any, p: any) => p.durationValue < min.durationValue ? p : min, cycle.pricing[0]);
+    return { price: basePricing.price, unit: basePricing.durationUnit };
   };
 
   const filteredCycles = useMemo(() => {
@@ -52,12 +58,6 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
       return 0; // 'Newest' is default from backend ordering
     });
   }, [cycles, category, inStockOnly, selectedTyreSizes, selectedSpeeds, selectedBikeTypes, selectedBrakes, sortOption]);
-
-  const getStartingPriceInfo = (cycle: any) => {
-    if (!cycle.pricing || cycle.pricing.length === 0) return { price: 0, unit: 'MONTHS' };
-    const basePricing = cycle.pricing.reduce((min: any, p: any) => p.durationValue < min.durationValue ? p : min, cycle.pricing[0]);
-    return { price: basePricing.price, unit: basePricing.durationUnit };
-  };
 
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem 1rem' }}>
@@ -100,14 +100,23 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
         .mobile-categories {
           display: none;
         }
+        .mobile-bottom-bar {
+          display: none;
+        }
         
         @media (max-width: 768px) {
           .rentals-topbar {
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            gap: 0.5rem;
           }
           .rentals-topbar > h1 {
-            width: 100%;
-            margin-bottom: 0.5rem !important;
+            width: auto;
+            margin-bottom: 0 !important;
+            font-size: 1.15rem !important;
+          }
+          .rentals-topbar > label > span {
+            font-size: 0.9rem !important;
           }
           .rentals-layout {
             flex-direction: column;
@@ -153,68 +162,168 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
           .mobile-categories {
             display: block;
           }
+          .mobile-bottom-bar {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #0a0a0a;
+            border-top: 1px solid #333;
+            z-index: 100;
+          }
+          .mobile-bottom-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: transparent;
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+          }
+          .mobile-bottom-divider {
+            width: 1px;
+            background: #333;
+            margin: 0.5rem 0;
+          }
+          .hide-on-mobile {
+            display: none !important;
+          }
+          .rentals-layout {
+            padding-bottom: 4rem;
+          }
         }
       `}</style>
       
-      {/* Top Bar */}
-      <div className="rentals-topbar">
-        <h1 style={{ margin: 0, fontSize: '1.5rem', whiteSpace: 'nowrap', color: '#fff' }}>Cycle on rent</h1>
-        <div className="desktop-only-item" style={{ gap: '0.5rem', margin: '0 auto', overflowX: 'auto', paddingBottom: '0.5rem', flex: 1, scrollbarWidth: 'none' }}>
-          {categories.map(c => (
+      {/* Combined Top Bar & Categories */}
+      <div className="rentals-topbar" style={{ flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', borderBottom: 'none' }}>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+          <h1 style={{ margin: 0, fontSize: '1.8rem', whiteSpace: 'nowrap', color: '#fff' }}>Cycle on rent</h1>
+          
+          <div className="desktop-only-item" style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+            {['All', ...categories].map(c => (
+              <button 
+                key={c}
+                onClick={() => setCategory(c)}
+                style={{ 
+                  padding: '0.4rem 1.2rem', 
+                  borderRadius: '24px', 
+                  border: 'none', 
+                  background: category === c ? '#1eb53a' : '#1eb53a15',
+                  color: category === c ? '#fff' : '#1eb53a',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  fontWeight: '600',
+                  fontSize: '0.85rem',
+                  boxShadow: category === c ? '0 4px 6px rgba(30, 181, 58, 0.2)' : 'none'
+                }}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', flexWrap: 'wrap' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', whiteSpace: 'nowrap', color: '#fff' }}>
+            <div style={{
+              position: 'relative',
+              width: '36px',
+              height: '20px',
+              background: inStockOnly ? '#1eb53a' : '#333',
+              borderRadius: '12px',
+              transition: 'background 0.3s'
+            }}>
+              <div style={{
+                position: 'absolute',
+                top: '2px',
+                left: inStockOnly ? '18px' : '2px',
+                width: '16px',
+                height: '16px',
+                background: '#fff',
+                borderRadius: '50%',
+                transition: 'left 0.3s',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }} />
+            </div>
+            <span style={{ fontSize: '0.9rem', color: '#ccc' }}>Instock</span>
+            <input 
+              type="checkbox" 
+              checked={inStockOnly} 
+              onChange={e => setInStockOnly(e.target.checked)} 
+              style={{ display: 'none' }} 
+            />
+          </label>
+          
+          <div className="hide-on-mobile" style={{ position: 'relative' }}>
             <button 
-              key={c}
+              onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+              style={{ background: 'transparent', color: '#1eb53a', border: '1px solid #1eb53a', padding: '0.4rem 1.2rem', borderRadius: '24px', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: '600' }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+              {sortOption !== 'Newest' ? sortOption : 'Sort'}
+            </button>
+            
+            {isSortDropdownOpen && (
+              <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: '0.5rem', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px', overflow: 'hidden', zIndex: 50, minWidth: '180px', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
+                {['Newest', 'Price: Low to High', 'Price: High to Low', 'Availability'].map(option => (
+                  <div 
+                    key={option}
+                    onClick={() => { setSortOption(option); setIsSortDropdownOpen(false); }}
+                    style={{ padding: '0.8rem 1rem', color: sortOption === option ? '#1eb53a' : '#fff', cursor: 'pointer', background: sortOption === option ? '#222' : 'transparent', borderBottom: '1px solid #333', fontSize: '0.9rem' }}
+                    onMouseOver={e => e.currentTarget.style.background = '#222'}
+                    onMouseOut={e => e.currentTarget.style.background = sortOption === option ? '#222' : 'transparent'}
+                  >
+                    {option}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="mobile-categories" style={{ marginBottom: '1.5rem', overflow: 'hidden' }}>
+        <h3 style={{ fontSize: '1.3rem', marginBottom: '1rem', color: '#fff', fontWeight: 'bold' }}>Category</h3>
+        <div style={{ 
+          display: 'flex', 
+          flexWrap: 'nowrap', 
+          gap: '0.8rem', 
+          overflowX: 'auto', 
+          paddingBottom: '0.5rem',
+          scrollbarWidth: 'none', /* Firefox */
+          msOverflowStyle: 'none'  /* IE/Edge */
+        }}>
+          <style>{`
+            .mobile-categories div::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
+          {['All', ...categories].map(c => (
+            <button 
+              key={`mobile-${c}`}
               onClick={() => setCategory(c)}
               style={{ 
-                padding: '0.5rem 1rem', 
-                borderRadius: '20px', 
+                padding: '0.6rem 1.2rem', 
+                borderRadius: '24px', 
                 border: 'none', 
-                background: category === c ? '#1eb53a' : '#1eb53a22', 
+                background: category === c ? '#1eb53a' : '#1eb53a15', 
                 color: category === c ? '#fff' : '#1eb53a',
                 cursor: 'pointer',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                fontWeight: '600',
+                fontSize: '0.9rem',
+                flexShrink: 0
               }}
             >
               {c}
             </button>
           ))}
-        </div>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', whiteSpace: 'nowrap', color: '#fff' }}>
-          <input type="checkbox" checked={inStockOnly} onChange={e => setInStockOnly(e.target.checked)} style={{ width: '18px', height: '18px' }} />
-          Instock
-        </label>
-        
-        <button 
-          className="mobile-filter-btn" 
-          onClick={() => setIsFilterOpen(true)}
-          style={{ background: 'transparent', color: '#fff', border: '1px solid #333', padding: '0.5rem 1rem', borderRadius: '20px', cursor: 'pointer' }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-          Filters
-        </button>
-
-        <div style={{ position: 'relative' }}>
-          <button 
-            onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-            style={{ background: 'transparent', color: '#1eb53a', border: '1px solid #1eb53a', padding: '0.5rem 1rem', borderRadius: '20px', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-          >
-            <span>↑↓</span> {sortOption !== 'Newest' ? sortOption : 'Sort'}
-          </button>
-          
-          {isSortDropdownOpen && (
-            <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: '0.5rem', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px', overflow: 'hidden', zIndex: 50, minWidth: '180px', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
-              {['Newest', 'Price: Low to High', 'Price: High to Low', 'Availability'].map(option => (
-                <div 
-                  key={option}
-                  onClick={() => { setSortOption(option); setIsSortDropdownOpen(false); }}
-                  style={{ padding: '0.8rem 1rem', color: sortOption === option ? '#1eb53a' : '#fff', cursor: 'pointer', background: sortOption === option ? '#222' : 'transparent', borderBottom: '1px solid #333' }}
-                  onMouseOver={e => e.currentTarget.style.background = '#222'}
-                  onMouseOut={e => e.currentTarget.style.background = sortOption === option ? '#222' : 'transparent'}
-                >
-                  {option}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
@@ -224,29 +333,6 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
           <div className="mobile-only-item" style={{ justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '1px solid #333', paddingBottom: '1rem' }}>
             <h2 style={{ margin: 0, color: '#fff', fontSize: '1.5rem' }}>Filters</h2>
             <button onClick={() => setIsFilterOpen(false)} style={{ background: 'transparent', border: 'none', color: '#fff', fontSize: '2rem', cursor: 'pointer', lineHeight: 1 }}>&times;</button>
-          </div>
-
-          <div className="mobile-categories" style={{ marginBottom: '2rem' }}>
-            <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: '#fff' }}>Category</h3>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {categories.map(c => (
-                <button 
-                  key={`mobile-${c}`}
-                  onClick={() => setCategory(c)}
-                  style={{ 
-                    padding: '0.5rem 1rem', 
-                    borderRadius: '20px', 
-                    border: 'none', 
-                    background: category === c ? '#1eb53a' : '#1eb53a22', 
-                    color: category === c ? '#fff' : '#1eb53a',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
           </div>
 
           <div>
@@ -346,7 +432,7 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
                       <div style={{ background: '#dc2626', color: '#fff', padding: '4px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>Sold out</div>
                       <div style={{ background: '#fee2e2', color: '#b91c1c', padding: '4px 8px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
                         {cycle.nextAvailableDate 
-                          ? `Available from ${new Date(cycle.nextAvailableDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}` 
+                          ? `Available from ${new Date(cycle.nextAvailableDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}` 
                           : 'Currently unavailable'}
                       </div>
                     </div>
@@ -407,6 +493,39 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
       </div>
 
       <HeightChartModal isOpen={isHeightChartOpen} onClose={() => setIsHeightChartOpen(false)} />
+
+      {/* Mobile Bottom Bar for Sort & Filter */}
+      <div className="mobile-bottom-bar">
+        <button 
+          className="mobile-bottom-btn"
+          onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+          Sort
+        </button>
+        <div className="mobile-bottom-divider"></div>
+        <button 
+          className="mobile-bottom-btn"
+          onClick={() => setIsFilterOpen(true)}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+          Filter
+        </button>
+        
+        {isSortDropdownOpen && (
+          <div style={{ position: 'absolute', bottom: '100%', left: 0, width: '50%', background: '#1a1a1a', borderTop: '1px solid #333', borderRight: '1px solid #333', zIndex: 101 }}>
+            {['Newest', 'Price: Low to High', 'Price: High to Low', 'Availability'].map(option => (
+              <div 
+                key={option}
+                onClick={() => { setSortOption(option); setIsSortDropdownOpen(false); }}
+                style={{ padding: '1rem', color: sortOption === option ? '#1eb53a' : '#fff', cursor: 'pointer', borderBottom: '1px solid #333' }}
+              >
+                {option}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

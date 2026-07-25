@@ -59,7 +59,7 @@ export default function BookingList({ bookings }: { bookings: any[] }) {
                 <strong>Cycle:</strong> {b.cycle?.type || 'Unknown'} (Qty: {b.quantity})
               </p>
               <p style={{ margin: '0 0 0.3rem 0', color: '#ccc', fontSize: '0.9rem', wordBreak: 'break-word' }}>
-                <strong>Dates:</strong> {new Date(b.startDate).toLocaleDateString()} - {new Date(b.endDate).toLocaleDateString()}
+                <strong>Dates:</strong> {new Date(b.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })} - {new Date(b.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
               </p>
               <p style={{ margin: '0 0 0.3rem 0', color: '#888', fontSize: '0.8rem', wordBreak: 'break-word' }}>
                 {b.email} | {b.phone}

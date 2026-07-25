@@ -110,7 +110,7 @@ export default function AdminListItem({ admin, currentUsername }: { admin: Admin
         <strong>{admin.username}</strong>
         {isCurrentUser && <span style={{ marginLeft: '0.5rem', fontSize: '0.7rem', color: '#888' }}>(You)</span>}
         <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.3rem' }}>
-          Created: {new Date(admin.createdAt).toLocaleDateString('en-GB')}
+          Created: {new Date(admin.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
         </div>
         {error && <div style={{ color: '#ff4d4d', fontSize: '0.8rem', marginTop: '0.3rem' }}>{error}</div>}
       </div>

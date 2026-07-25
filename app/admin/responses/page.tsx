@@ -29,7 +29,7 @@ export default async function ResponsesPage() {
                   {event.title}
                 </h2>
                 <div style={{ fontSize: '0.9rem', color: '#ccc', display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1rem' }}>
-                  <span><strong>Date:</strong> {new Date(event.date).toLocaleDateString()}</span>
+                  <span><strong>Date:</strong> {new Date(event.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
                   <span><strong>Time:</strong> {event.timeSlot}</span>
                   <span><strong>Type:</strong> {event.eventType}</span>
                 </div>

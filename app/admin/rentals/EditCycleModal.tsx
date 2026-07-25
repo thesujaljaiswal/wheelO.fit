@@ -52,15 +52,13 @@ export default function EditCycleModal({ cycle, onClose }: { cycle: any, onClose
             <select name="category" defaultValue={cycle.category || 'Gear'} required style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }}>
               <option value="Non Gear">Non Gear</option>
               <option value="Gear">Gear</option>
-              <option value="Kids">Kids</option>
-              <option value="Women">Women</option>
               <option value="Premium">Premium</option>
-              <option value="Electric">Electric</option>
+              <option value="Kids">Kids</option>
             </select>
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <div style={{ flex: 1 }}>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1 1 200px' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Tyre Size</label>
               <select name="tyreSize" defaultValue={cycle.tyreSize || "26 Inches (5'0 - 6'6)"} required style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }}>
                 <option value="14 Inches (3'0 - 3'6)">14 Inches (3'0 - 3'6)</option>
@@ -86,8 +84,8 @@ export default function EditCycleModal({ cycle, onClose }: { cycle: any, onClose
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <div style={{ flex: 1 }}>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1 1 200px' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Bike Type</label>
               <select name="bikeType" defaultValue={cycle.bikeType || "MTB"} required style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }}>
                 <option value="MTB">MTB</option>
@@ -113,9 +111,9 @@ export default function EditCycleModal({ cycle, onClose }: { cycle: any, onClose
           </div>
 
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Cycle Image (Leave blank to keep existing image)</label>
+            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Cycle Image (leave blank to keep current)</label>
             <input type="file" name="image" accept="image/*" style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }} />
-            {cycle.imageUrl && <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.5rem' }}>Current image: {cycle.imageUrl}</p>}
+            {cycle.imageUrl && <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.5rem', wordBreak: 'break-all' }}>Current image: {cycle.imageUrl.split('/').pop()}</p>}
           </div>
 
           <div style={{ background: '#222', padding: '1rem', borderRadius: '6px', border: '1px solid #333' }}>

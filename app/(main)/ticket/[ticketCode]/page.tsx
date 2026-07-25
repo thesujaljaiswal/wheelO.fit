@@ -26,7 +26,7 @@ export default async function TicketPage({ params }: { params: Promise<{ ticketC
     name: registration.name,
     email: registration.email,
     eventName: registration.event.title,
-    eventDate: registration.event.date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' }),
+    eventDate: registration.event.date.toLocaleDateString('en-GB', { weekday: 'short', month: '2-digit', day: '2-digit', year: 'numeric' }),
     eventTime: registration.event.timeSlot,
     ticketCount: registration.ticketCount || 1,
     additionalNames: registration.additionalNames || [],

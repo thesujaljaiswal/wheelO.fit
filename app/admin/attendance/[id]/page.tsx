@@ -15,7 +15,7 @@ export default async function AttendancePage({ params }: { params: Promise<{ id:
         <div>
           <h1 style={{ margin: '0 0 0.5rem 0' }}>{event.title} - Attendance</h1>
           <p style={{ color: '#aaa', margin: 0 }}>
-            {new Date(event.date).toLocaleDateString()} | {event.timeSlot}
+            {new Date(event.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })} | {event.timeSlot}
           </p>
         </div>
         <Link 

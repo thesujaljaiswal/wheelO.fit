@@ -131,8 +131,28 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
         }
       }
 
+      let isSelected = false;
+      let isInRange = false;
+      let isRangeEnd = false;
+
+      if (selectedDate && selectedPricing) {
+        const start = new Date(selectedDate);
+        let durationDays = selectedPricing.durationUnit === 'MONTHS' ? selectedPricing.durationValue * 30 : selectedPricing.durationValue;
+        
+        const end = new Date(start);
+        end.setDate(end.getDate() + durationDays - 1);
+
+        const current = new Date(dateStr);
+        if (dateStr === selectedDate) {
+           isSelected = true;
+        } else if (current > start && current < end) {
+           isInRange = true;
+        } else if (current.getTime() === end.getTime()) {
+           isRangeEnd = true;
+        }
+      }
+
       const isAvailable = minAvailForDuration >= quantity;
-      const isSelected = selectedDate === dateStr;
       
       let bgColor = '#222';
       let cursor = 'default';
@@ -142,7 +162,7 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
         opacity = 0.3;
       } else if (availabilityMap[dateStr] !== undefined) {
         if (isAvailable) {
-          bgColor = isSelected ? '#1eb53a' : '#1eb53a44';
+          bgColor = isSelected || isInRange || isRangeEnd ? '#1eb53a' : '#1eb53a44';
           cursor = 'pointer';
         } else {
           bgColor = '#ff4d4d44';
@@ -163,7 +183,7 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
             cursor, 
             textAlign: 'center', 
             borderRadius: '4px',
-            border: isSelected ? '2px solid #fff' : '1px solid #444',
+            border: isSelected || isInRange || isRangeEnd ? '2px solid #fff' : '1px solid #444',
             color: '#fff',
             display: 'flex',
             flexDirection: 'column',
@@ -173,7 +193,7 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
         >
           <span style={{ fontWeight: 'bold' }}>{d}</span>
           {!isPast && availabilityMap[dateStr] !== undefined && (
-            <span className="calendar-status-text" style={{ color: isAvailable ? (isSelected ? '#fff' : '#1eb53a') : '#ff4d4d' }}>
+            <span className="calendar-status-text" style={{ color: isAvailable ? (isSelected || isInRange || isRangeEnd ? '#fff' : '#1eb53a') : '#ff4d4d' }}>
               {isAvailable ? 'Available' : 'Sold out'}
             </span>
           )}
@@ -188,30 +208,37 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 0.5rem;
+            width: 100%;
           }
           .calendar-cell {
             padding: 0.6rem 0.2rem;
+            min-width: 0;
+            word-wrap: break-word;
           }
           .calendar-status-text {
             font-size: 0.7rem;
             margin-top: 4px;
             display: block;
+            word-break: break-word;
+            line-height: 1;
           }
           @media (max-width: 480px) {
             .calendar-grid {
-              gap: 0.2rem;
+              gap: 2px;
             }
             .calendar-cell {
-              padding: 0.3rem 0.1rem;
+              padding: 0.4rem 0;
             }
             .calendar-status-text {
-              font-size: 0.5rem;
+              font-size: 0.45rem;
               letter-spacing: -0.5px;
+              margin-top: 2px;
             }
           }
-          @media (max-width: 350px) {
+          @media (max-width: 380px) {
             .calendar-status-text {
-              display: none;
+              font-size: 0.4rem;
+              letter-spacing: -0.5px;
             }
           }
         `}</style>
@@ -377,15 +404,15 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
               <input type="tel" name="phone" required className={styles.input} />
             </div>
             
-            <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ marginTop: '2rem', display: 'flex', flexWrap: 'wrap-reverse', gap: '1rem', justifyContent: 'space-between', alignItems: 'center' }}>
               <button type="button" onClick={() => setStep(3)} style={{ background: '#333', color: '#fff', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '6px', cursor: 'pointer' }}>&larr; Back</button>
               <button 
                 type="submit" 
                 disabled={pending} 
                 className={styles.submitBtn}
-                style={{ width: 'auto', padding: '0.8rem 2rem', opacity: pending ? 0.5 : 1, cursor: pending ? 'not-allowed' : 'pointer' }}
+                style={{ width: 'auto', padding: '0.8rem 2rem', opacity: pending ? 0.5 : 1, cursor: pending ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap' }}
               >
-                {pending ? <><span className="btn-spinner"></span> Booking...</> : 'Confirm Rental Booking'}
+                {pending ? <><span className="btn-spinner"></span> Booking...</> : (!selectedCycle?.isInstock ? 'Confirm Pre-Booking' : 'Confirm Rental Booking')}
               </button>
             </div>
           </div>

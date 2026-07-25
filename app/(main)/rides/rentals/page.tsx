@@ -32,15 +32,24 @@ export default async function RentalsPage() {
          return sum;
       }, 0);
 
-      // Check if available today
-      if (cycle.quantity - getBookedQty(today) <= 0) {
+      const isAvailableFor30DaysFrom = (startDate: Date) => {
+         for (let i = 0; i < 30; i++) {
+            const d = new Date(startDate);
+            d.setDate(d.getDate() + i);
+            if (cycle.quantity - getBookedQty(d) <= 0) return false;
+         }
+         return true;
+      };
+
+      // Check if available for the next 1 month (30 days) starting today
+      if (!isAvailableFor30DaysFrom(today)) {
          isInstock = false;
          
-         // Find next available date in the next 365 days
+         // Find next available date (where it is free for 30 days) in the next 365 days
          for (let i = 1; i <= 365; i++) {
             const d = new Date(today);
             d.setDate(d.getDate() + i);
-            if (cycle.quantity - getBookedQty(d) > 0) {
+            if (isAvailableFor30DaysFrom(d)) {
                nextAvailableDate = d.toISOString();
                break;
             }

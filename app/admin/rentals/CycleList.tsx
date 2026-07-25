@@ -15,12 +15,12 @@ export default function CycleList({ cycles }: { cycles: any[] }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       {cycles.map(c => (
         <div key={c.id} style={{ background: '#222', padding: '1rem', borderRadius: '8px', borderLeft: c.isActive ? '4px solid #1eb53a' : '4px solid #555' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.5rem' }}>
             <div>
               <h3 style={{ margin: '0 0 0.3rem 0' }}>{c.type}</h3>
               <p style={{ margin: 0, color: '#aaa', fontSize: '0.9rem' }}>Stock: {c.quantity}</p>
             </div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
               <button 
                 onClick={() => setEditingCycle(c)}
                 style={{ background: '#0ea5e922', color: '#0ea5e9', border: '1px solid #0ea5e9', padding: '0.4rem 0.8rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}

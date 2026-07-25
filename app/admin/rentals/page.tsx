@@ -14,7 +14,7 @@ export default async function AdminRentalsPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>Manage Cycle Inventory</h1>
         <Link 
           href="/admin/rentals/bookings" 

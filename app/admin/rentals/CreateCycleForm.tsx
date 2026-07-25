@@ -39,7 +39,7 @@ export default function CreateCycleForm() {
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div>
-        <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Cycle Type (e.g., Mountain Bike)</label>
+        <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Cycle Name (e.g., Mountain Bike)</label>
         <input type="text" name="type" required style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }} />
       </div>
 
@@ -48,15 +48,13 @@ export default function CreateCycleForm() {
         <select name="category" required style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }}>
           <option value="Non Gear">Non Gear</option>
           <option value="Gear">Gear</option>
-          <option value="Kids">Kids</option>
-          <option value="Women">Women</option>
           <option value="Premium">Premium</option>
-          <option value="Electric">Electric</option>
+          <option value="Kids">Kids</option>
         </select>
       </div>
 
-      <div style={{ display: 'flex', gap: '1rem' }}>
-        <div style={{ flex: 1 }}>
+      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <div style={{ flex: '1 1 200px' }}>
           <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Tyre Size</label>
           <select name="tyreSize" required style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }}>
             <option value="14 Inches (3'0 - 3'6)">14 Inches (3'0 - 3'6)</option>
@@ -82,8 +80,8 @@ export default function CreateCycleForm() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '1rem' }}>
-        <div style={{ flex: 1 }}>
+      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <div style={{ flex: '1 1 200px' }}>
           <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Bike Type</label>
           <select name="bikeType" required style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }}>
             <option value="MTB">MTB</option>

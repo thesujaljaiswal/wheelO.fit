@@ -120,7 +120,7 @@ export default function FindTicketPage() {
                     <div>
                       <h4 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{ticket.eventName}</h4>
                       <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
-                        {new Date(ticket.eventDate).toLocaleDateString()} at {ticket.eventTime}
+                        {new Date(ticket.eventDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })} at {ticket.eventTime}
                       </p>
                     </div>
                     <div style={{ color: '#aaa' }}>

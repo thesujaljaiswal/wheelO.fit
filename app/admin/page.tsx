@@ -69,7 +69,7 @@ export default async function AdminDashboard() {
                   <div>
                     <div style={{ fontWeight: 'bold', marginBottom: '0.2rem', wordBreak: 'break-word' }}>{event.title}</div>
                     <div style={{ fontSize: '0.8rem', color: '#888' }}>
-                      {event.date.toLocaleDateString()} at {event.timeSlot}
+                      {event.date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })} at {event.timeSlot}
                     </div>
                   </div>
                   <div style={{ background: '#222', padding: '0.3rem 0.6rem', borderRadius: '12px', fontSize: '0.8rem', whiteSpace: 'nowrap', marginLeft: '1rem' }}>
@@ -101,7 +101,7 @@ export default async function AdminDashboard() {
                     </div>
                   </div>
                   <div style={{ fontSize: '0.8rem', color: '#555', whiteSpace: 'nowrap', marginLeft: '1rem' }}>
-                    {new Date(reg.createdAt).toLocaleDateString()}
+                    {new Date(reg.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                   </div>
                 </li>
               ))}
