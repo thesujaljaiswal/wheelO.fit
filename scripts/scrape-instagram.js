@@ -139,13 +139,14 @@ async function scrape() {
   console.log(`[Scraper] Pushing reels to live MongoDB database...`);
   
   try {
-    const ops = top4.map((r) =>
-      prisma.instagramReel.upsert({
+    const ops = top4.map((r) => {
+      const { id, ...updateData } = r;
+      return prisma.instagramReel.upsert({
         where: { id: r.id },
         create: r,
-        update: r,
-      })
-    );
+        update: updateData,
+      });
+    });
 
     await prisma.$transaction(ops);
 
