@@ -4,6 +4,7 @@ import { HeroCarousel } from '@/components/landing/HeroCarousel';
 import { ServicesSection } from '@/components/landing/ServicesSection';
 import DomeGallery from '@/components/react-bits/DomeGallery';
 import { TestimonialsSection } from '@/components/landing/Testimonials';
+import { InstagramWidget } from '@/components/landing/InstagramWidget';
 
 const galleryImages = [
   { src: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=800&auto=format&fit=crop', alt: 'Cycling group' },
@@ -39,6 +40,7 @@ export default async function Home() {
         </div>
       </section>
       <ServicesSection />
+      <InstagramWidget />
       <TestimonialsSection testimonials={testimonials} />
     </main>
   );

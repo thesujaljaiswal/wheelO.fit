@@ -11,10 +11,6 @@ export function Footer() {
       <div className={styles.container}>
         <div className={styles.topSection}>
           <div className={styles.brandInfo}>
-            <div className={styles.logo}>
-              <img src="/logo.png" alt="Wheelo.fit Logo" className={styles.logoImage} />
-              Wheelo.fit
-            </div>
             <p className={styles.description}>
               Elevating your cycling experience. From high-octane indoor classes to breathtaking outdoor adventures.
             </p>

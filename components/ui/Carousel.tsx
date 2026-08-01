@@ -4,6 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BlurText } from '../react-bits/BlurText';
+import Link from 'next/link';
 import styles from './Carousel.module.css';
 
 interface CarouselSlide {
@@ -11,6 +12,7 @@ interface CarouselSlide {
   image: string;
   title: string;
   subtitle: string;
+  link: string;
 }
 
 interface CarouselProps {
@@ -49,7 +51,7 @@ export function Carousel({ slides }: CarouselProps) {
           {slides.map((slide, index) => {
             const isActive = index === selectedIndex;
             return (
-              <div className={styles.slide} key={slide.id}>
+              <Link href={slide.link} className={styles.slide} key={slide.id}>
                 <div className={styles.imageWrapper}>
                   <motion.img 
                     src={slide.image} 
@@ -88,7 +90,7 @@ export function Carousel({ slides }: CarouselProps) {
                     )}
                   </AnimatePresence>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
