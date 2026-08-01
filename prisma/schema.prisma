@@ -136,13 +136,3 @@ model FAQ {
   updatedAt DateTime @updatedAt
 }
 
-model InstagramReel {
-  id        String   @id @map("_id") // shortcode
-  image     String
-  link      String
-  likes     Int      @default(0)
-  comments  Int      @default(0)
-  caption   String   @default("")
-  timestamp String   @default("")
-  updatedAt DateTime @updatedAt
-}

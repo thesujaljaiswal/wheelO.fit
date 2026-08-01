@@ -76,13 +76,13 @@ export function InstagramWidget() {
     return () => controller.abort();
   }, []);
 
-  // Fallback data if API fails (Vercel-compatible static reels)
+  // Fallback data if API fails (e.g., on Vercel)
   const displayPosts = (error || posts.length === 0) && !loading ? [
-    { id: '1', type: 'reel' as const, image: '/carousel_midnight.png', link: 'https://www.instagram.com/wheelo.fit/reels/', likes: 1205, comments: 89, caption: 'Midnight rides are back', timestamp: '' },
-    { id: '2', type: 'reel' as const, image: '/carousel_classes.png', link: 'https://www.instagram.com/wheelo.fit/reels/', likes: 830, comments: 45, caption: 'Join our latest classes!', timestamp: '' },
-    { id: '3', type: 'reel' as const, image: '/carousel_sunday.png', link: 'https://www.instagram.com/wheelo.fit/reels/', likes: 452, comments: 23, caption: 'Sunday morning vibes', timestamp: '' },
-    { id: '4', type: 'reel' as const, image: '/carousel_rental.png', link: 'https://www.instagram.com/wheelo.fit/reels/', likes: 320, comments: 12, caption: 'Rent your gear today', timestamp: '' },
-  ] : posts;
+    { id: '1', type: 'reel', image: '/carousel_classes.png', link: 'https://www.instagram.com/wheelo.fit/', likes: 452, comments: 23, caption: 'Join our latest classes!', timestamp: '' },
+    { id: '2', type: 'reel', image: '/carousel_midnight.png', link: 'https://www.instagram.com/wheelo.fit/', likes: 1205, comments: 89, caption: 'Midnight rides are back', timestamp: '' },
+    { id: '3', type: 'reel', image: '/carousel_sunday.png', link: 'https://www.instagram.com/wheelo.fit/', likes: 830, comments: 45, caption: 'Sunday morning vibes', timestamp: '' },
+    { id: '4', type: 'reel', image: '/carousel_rental.png', link: 'https://www.instagram.com/wheelo.fit/', likes: 320, comments: 12, caption: 'Rent your gear today', timestamp: '' },
+  ] as Post[] : posts;
 
   return (
     <section className={styles.section}>
@@ -143,8 +143,8 @@ export function InstagramWidget() {
               >
                 <div className={styles.imageWrapper}>
                   <img
-                    src={post.image.startsWith('http') ? proxyImage(post.image) : post.image}
-                    alt={post.caption || 'Wheelo.fit Instagram reel'}
+                    src={error ? post.image : proxyImage(post.image)}
+                    alt={post.caption || 'Wheelo.fit Instagram post'}
                     className={styles.image}
                     loading="lazy"
                   />
