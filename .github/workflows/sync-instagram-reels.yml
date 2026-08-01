@@ -1,0 +1,43 @@
+name: Sync Instagram Reels
+
+on:
+  schedule:
+    # Run daily at 3:00 AM UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Scrape Instagram reels
+        run: node scripts/scrape-instagram.js
+        env:
+          INSTAGRAM_USERNAME: wheelo.fit
+          # Output file path used by the script
+          OUTPUT_FILE: /tmp/reels.json
+
+      - name: Push reels to Vercel DB
+        run: |
+          REELS=$(cat /tmp/reels.json)
+          PAYLOAD=$(echo "{\"reels\": $REELS}")
+          curl -sf -X POST "${{ secrets.VERCEL_SITE_URL }}/api/instagram/sync" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.INSTAGRAM_SYNC_SECRET }}" \
+            -d "$PAYLOAD"
