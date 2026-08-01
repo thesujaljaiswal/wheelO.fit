@@ -3,8 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Crosshair } from '@/components/ui/blueprint/Crosshair';
-import { DimensionLine } from '@/components/ui/blueprint/DimensionLine';
 
 const proxyImage = (url: string) =>
   `/api/image-proxy?url=${encodeURIComponent(url)}`;
@@ -130,49 +128,49 @@ export function InstagramWidget() {
                 <div key={`sk-${i}`} className={`${styles.postCard} ${styles.skeleton}`} />
               ))
             : displayPosts.map((post, index) => (
-                <motion.div
-                  key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                >
-                  <Link
-                    href={post.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${styles.postCard} blueprint-border p-2`}
-                  >
-                    <div className={styles.imageWrapper}>
-                      <img
-                        src={error ? post.image : proxyImage(post.image)}
-                        alt={post.caption || 'Wheelo.fit Instagram post'}
-                        className={styles.image}
-                        loading="lazy"
-                      />
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            >
+              <Link
+                href={post.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.postCard} blueprint-border p-2`}
+              >
+                <div className={styles.imageWrapper}>
+                  <img
+                    src={error ? post.image : proxyImage(post.image)}
+                    alt={post.caption || 'Wheelo.fit Instagram post'}
+                    className={styles.image}
+                    loading="lazy"
+                  />
 
-                      {post.type === 'reel' && (
-                        <div className={styles.reelIcon}>
-                          <Play size={22} fill="currentColor" />
-                        </div>
-                      )}
+                  {post.type === 'reel' && (
+                    <div className={styles.reelIcon}>
+                      <Play size={22} fill="currentColor" />
+                    </div>
+                  )}
 
-                      <div className={styles.overlay} style={{ background: 'linear-gradient(to top, rgba(10,25,47,0.9) 0%, rgba(10,25,47,0) 60%)' }}>
-                        <div className={`${styles.stats} font-mono`}>
-                          <div className={styles.stat}>
-                            <Heart size={16} fill="currentColor" />
-                            <span>{formatCount(post.likes)}</span>
-                          </div>
-                          <div className={styles.stat}>
-                            <MessageCircle size={16} fill="currentColor" />
-                            <span>{formatCount(post.comments)}</span>
-                          </div>
-                        </div>
+                  <div className={styles.overlay} style={{ background: 'linear-gradient(to top, rgba(9,18,11,0.9) 0%, rgba(9,18,11,0) 60%)' }}>
+                    <div className={`${styles.stats} font-mono`}>
+                      <div className={styles.stat}>
+                        <Heart size={16} fill="currentColor" />
+                        <span>{formatCount(post.likes)}</span>
+                      </div>
+                      <div className={styles.stat}>
+                        <MessageCircle size={16} fill="currentColor" />
+                        <span>{formatCount(post.comments)}</span>
                       </div>
                     </div>
-                  </Link>
-                </motion.div>
-              ))}
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
