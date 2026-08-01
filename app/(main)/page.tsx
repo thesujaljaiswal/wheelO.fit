@@ -1,6 +1,7 @@
 import React from 'react';
 import prisma from '@/lib/prisma';
 import { HeroCarousel } from '@/components/landing/HeroCarousel';
+import { AboutSection } from '@/components/landing/AboutSection';
 import { ServicesSection } from '@/components/landing/ServicesSection';
 import DomeGallery from '@/components/react-bits/DomeGallery';
 import { TestimonialsSection } from '@/components/landing/Testimonials';
@@ -26,6 +27,7 @@ export default async function Home() {
   return (
     <main>
       <HeroCarousel />
+      <AboutSection />
       <section style={{ padding: '6rem 2rem', textAlign: 'center' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', marginBottom: '4rem' }}>
           <h2 style={{ fontSize: '3.5rem', fontWeight: 'bold', marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
