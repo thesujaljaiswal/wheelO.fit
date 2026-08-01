@@ -27,7 +27,7 @@ async function scrape() {
     addParentData: false,
     directUrls: [`https://www.instagram.com/${INSTAGRAM_USERNAME}/reels/`],
     enhanceUserSearchWithFacebookPage: false,
-    isUserReelFeedURL: false,
+    isUserReelFeedURL: true,
     isUserTaggedFeedURL: false,
     resultsLimit: 15,
     resultsType: 'posts',
@@ -60,8 +60,13 @@ async function scrape() {
     // Process and normalize the data
     const reels = [];
     for (const item of items) {
-      // Instagram reels typically have isVideo = true or type = 'Video'
-      if (!item.isVideo) continue;
+      // Different Apify actors return different fields. Accept any video/reel format.
+      const isVideo = item.isVideo || item.type === 'Video' || item.is_video || item.productType === 'clips' || (item.url && item.url.includes('/reel/'));
+      
+      if (!isVideo && items.length > 0) {
+        // If it's not detected as a video but we are on a reels URL, we might still want it, 
+        // but let's log it once for debugging if needed.
+      }
       
       const shortcode = item.shortCode;
       if (!shortcode) continue;
