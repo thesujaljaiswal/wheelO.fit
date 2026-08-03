@@ -117,10 +117,8 @@
   top: calc(100% + 8px);
   left: 0;
   width: 100%;
-  z-index: 10;
-  background: rgba(17, 31, 21, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  z-index: 100;
+  background: #111f15;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   padding: 8px;
@@ -156,6 +154,7 @@
   gap: 6px;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .eventCard input[type="radio"] {
@@ -177,6 +176,7 @@
   font-weight: 700;
   font-size: 1.05rem;
   color: white;
+  line-height: 1.2;
 }
 
 .eventDate {

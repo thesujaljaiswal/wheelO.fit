@@ -1,0 +1,92 @@
+.stickyBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(17, 31, 21, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  padding: 15px 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.priceSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.priceLabel {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.priceValue {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.bookNowBtn {
+  padding: 12px 36px;
+  background-color: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(30, 181, 58, 0.3);
+}
+
+.bookNowBtn:hover {
+  background-color: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(30, 181, 58, 0.4);
+}
+
+@media (max-width: 600px) {
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bookNowBtn {
+    padding: 10px 24px;
+    font-size: 1rem;
+  }
+  .priceValue {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .enquireBtn, .bookNowBtn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  .priceValue {
+    font-size: 1.2rem;
+  }
+}

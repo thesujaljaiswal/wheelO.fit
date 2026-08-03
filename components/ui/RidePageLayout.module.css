@@ -1,0 +1,262 @@
+.layoutContainer {
+  padding-bottom: 80px; /* Space for the sticky bottom bar */
+  min-height: 100vh;
+  background-color: var(--background, #000); /* Assuming dark theme as per project style */
+  color: var(--foreground, #fff);
+}
+
+.header {
+  padding: 120px 20px 40px;
+  text-align: center;
+}
+
+.pageTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--primary, #fff);
+}
+
+.sliderSection {
+  width: 100%;
+  position: relative;
+  margin-bottom: 40px;
+  padding: 0 5%;
+}
+
+.mainContent {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section {
+  margin-bottom: 60px;
+  position: relative;
+  padding: 0 20px;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 30px;
+  color: var(--foreground, #fff);
+  letter-spacing: -1px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sectionTitle::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary, #1eb53a) 0%, transparent 100%);
+  opacity: 0.3;
+}
+
+.sectionBody {
+  line-height: 1.6;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modalContent {
+  background: var(--background, #111);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.modalContent::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.modalCloseBtn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modalCloseBtn:hover {
+  color: #fff;
+}
+
+/* Layout utility classes for pages to use */
+.grid2Col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.incCard, .excCard {
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+
+.incCard h3 {
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.incCard h3::before {
+  content: '✦';
+  color: var(--primary);
+}
+
+.excCard h3 {
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0.7;
+}
+
+.excCard h3::before {
+  content: '✦';
+  color: #ff4d4d;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.list li {
+  position: relative;
+  padding-left: 36px;
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.list.incList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: rgba(30, 181, 58, 0.15);
+  color: var(--primary);
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.list.excList li::before {
+  content: '✕';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 77, 77, 0.1);
+  color: #ff4d4d;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 40px;
+  margin-top: 20px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 10px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--primary) 0%, rgba(30, 181, 58, 0.1) 100%);
+}
+
+.timelineItem {
+  position: relative;
+  margin-bottom: 32px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.1rem;
+}
+
+.timelineItem::before {
+  content: '';
+  position: absolute;
+  left: -35px;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--background, #111);
+  border: 2px solid var(--primary, #1eb53a);
+  box-shadow: 0 0 15px rgba(30, 181, 58, 0.6);
+}
+
+.timelineTime {
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: block;
+  letter-spacing: -0.5px;
+}
+
+@media (max-width: 768px) {
+  .pageTitle {
+    font-size: 2.2rem;
+  }
+  .section {
+    padding: 0 10px;
+  }
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+  .grid2Col {
+    grid-template-columns: 1fr;
+  }
+}

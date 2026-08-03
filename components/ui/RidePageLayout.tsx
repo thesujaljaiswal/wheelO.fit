@@ -1,0 +1,120 @@
+'use client';
+
+import React, { useRef, useState, useEffect } from 'react';
+import { StickyBottomBar } from './StickyBottomBar';
+import Masonry from '@/components/react-bits/Masonry';
+import styles from './RidePageLayout.module.css';
+
+interface Section {
+  title: string;
+  content: React.ReactNode;
+}
+
+interface RidePageLayoutProps {
+  title: string;
+  overview: React.ReactNode;
+  inclusionsExclusions: React.ReactNode;
+  itinerary: React.ReactNode;
+  additionalSections: Section[];
+  sliderImages: { id: string; img: string; url?: string; height?: number }[];
+  bookingForm: React.ReactNode;
+  priceText: string;
+}
+
+export function RidePageLayout({
+  title,
+  overview,
+  inclusionsExclusions,
+  itinerary,
+  additionalSections,
+  sliderImages,
+  bookingForm,
+  priceText,
+}: RidePageLayoutProps) {
+  const bookingRef = useRef<HTMLDivElement>(null);
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [visibleImagesCount, setVisibleImagesCount] = useState(10); // default for SSR/desktop
+
+  const handleBookNowClick = () => {
+    setIsFormVisible(true);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setVisibleImagesCount(window.innerWidth < 768 ? 5 : 10);
+    };
+    
+    // Set initial size
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (isFormVisible) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isFormVisible]);
+
+  return (
+    <div className={styles.layoutContainer}>
+      <header className={styles.header}>
+        <h1 className={styles.pageTitle}>{title}</h1>
+      </header>
+
+      {/* Top Image Slider via Masonry */}
+      <section className={styles.sliderSection}>
+        <Masonry items={sliderImages.slice(0, visibleImagesCount)} />
+      </section>
+
+      <main className={styles.mainContent}>
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Overview</h2>
+          <div className={styles.sectionBody}>{overview}</div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Inclusions & Exclusions</h2>
+          <div className={styles.sectionBody}>{inclusionsExclusions}</div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Tour Plan (Itinerary)</h2>
+          <div className={styles.sectionBody}>{itinerary}</div>
+        </section>
+
+        {additionalSections.map((section, index) => (
+          <section key={index} className={styles.section}>
+            <h2 className={styles.sectionTitle}>{section.title}</h2>
+            <div className={styles.sectionBody}>{section.content}</div>
+          </section>
+        ))}
+      </main>
+
+      {isFormVisible && (
+        <div className={styles.modalOverlay} onClick={() => setIsFormVisible(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <button 
+              className={styles.modalCloseBtn} 
+              onClick={() => setIsFormVisible(false)}
+            >
+              &times;
+            </button>
+            {bookingForm}
+          </div>
+        </div>
+      )}
+
+      <StickyBottomBar 
+        priceText={priceText} 
+        onBookNowClick={handleBookNowClick} 
+      />
+    </div>
+  );
+}
