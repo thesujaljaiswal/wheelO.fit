@@ -189,3 +189,9 @@
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.6);
 }
+
+@media (max-width: 768px) {
+  .formContainer {
+    padding: 24px;
+  }
+}

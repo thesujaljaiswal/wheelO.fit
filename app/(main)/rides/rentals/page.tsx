@@ -1,8 +1,9 @@
 import React from 'react';
 import styles from '../rides.module.css';
-import RentalBookingForm from '@/app/(main)/rentals/RentalBookingForm';
 import RentalsView from './RentalsView';
 import prisma from '@/lib/prisma';
+import Link from 'next/link';
+import { SectionAccordion } from '@/components/ui/SectionAccordion';
 
 export const dynamic = 'force-dynamic';
 
@@ -68,14 +69,63 @@ export default async function RentalsPage() {
 
   return (
     <main>
-      <div className={styles.hero}>
+      <div className={styles.hero} style={{ flexDirection: 'column', textAlign: 'center' }}>
         <img src="/rentals-hero.png" alt="Bicycle Rentals" className={styles.heroImage} />
         <div className={styles.heroOverlay}></div>
-        <h1 className={styles.title}>Bicycle Rentals</h1>
+        <h1 className={styles.title} style={{ marginBottom: '1rem' }}>Bicycle Rentals</h1>
+        <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.25rem', maxWidth: '800px', margin: '0 auto 2rem', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
+          Discover the joy of riding with our premium fleet of cycles. Whether you're hitting the trails or just going for a casual weekend spin, we have the perfect ride for you. Well-maintained, comfortable, and ready for your next adventure.
+        </p>
+        <div style={{ display: 'inline-block', background: 'rgba(30, 181, 58, 0.2)', border: '1px solid var(--primary, #1eb53a)', padding: '12px 24px', borderRadius: '8px', color: '#fff', backdropFilter: 'blur(5px)' }}>
+          <strong>Important Note:</strong> For Weekly, Hourly, or Daily rentals, please <strong>DM us</strong> directly for custom bookings!
+        </div>
       </div>
       
-      <div style={{ background: '#0a0a0a', minHeight: '100vh' }}>
+      <div style={{ background: '#0a0a0a', minHeight: '100vh', padding: '0 2rem' }}>
+        <div style={{ height: '4rem' }}></div> {/* Spacer */}
         <RentalsView cycles={cyclesWithStockInfo} />
+
+        {/* Additional Info Sections */}
+        <div style={{ maxWidth: '1000px', margin: '3rem auto 0', paddingBottom: '3rem' }}>
+          <SectionAccordion sections={[
+            {
+              title: 'Why Choose Us?',
+              content: (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: '1.5rem', paddingTop: '1rem' }}>
+                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🚲</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#fff' }}>Premium Fleet</h3>
+                    <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: '1.5', fontSize: '0.95rem' }}>Top-quality geared and non-geared cycles, perfectly maintained for a smooth ride.</p>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🛡️</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#fff' }}>Safety First</h3>
+                    <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: '1.5', fontSize: '0.95rem' }}>Helmets and basic safety checks are always included with every rental.</p>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>⏱️</div>
+                    <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#fff' }}>Flexible Timings</h3>
+                    <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: '1.5', fontSize: '0.95rem' }}>Rent by the hour, day, or week. We cater to all your scheduling needs via DM.</p>
+                  </div>
+                </div>
+              )
+            },
+            {
+              title: 'FAQs',
+              content: (
+                <div style={{ paddingTop: '1rem' }}>
+                  <p><strong>Q: Do I need to leave a deposit?</strong><br/>A: Yes, a valid original ID (Aadhar/Driving License) must be deposited during the rental period.</p>
+                  <p style={{marginTop: '10px'}}><strong>Q: What if the cycle gets damaged?</strong><br/>A: The rider is responsible for any physical damages during the rental period and will be charged accordingly.</p>
+                  <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                    <Link href="/faq" style={{ color: 'var(--primary, #1eb53a)', textDecoration: 'none', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      View all FAQs <span>&rarr;</span>
+                    </Link>
+                  </div>
+                </div>
+              )
+            }
+          ]} />
+        </div>
       </div>
     </main>
   );

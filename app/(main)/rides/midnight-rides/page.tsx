@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { BookingForm } from '@/components/ui/BookingForm';
 import prisma from '@/lib/prisma';
 import { RidePageLayout } from '@/components/ui/RidePageLayout';
@@ -10,11 +11,6 @@ const sliderImages = [
   { id: "3", img: "https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?q=80&w=600&auto=format&fit=crop", height: 600 },
   { id: "4", img: "https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=600&auto=format&fit=crop", height: 350 },
   { id: "5", img: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?q=80&w=600&auto=format&fit=crop", height: 450 },
-  { id: "6", img: "https://images.unsplash.com/photo-1518104593124-ac2e82a5eb9b?q=80&w=600&auto=format&fit=crop", height: 300 },
-  { id: "7", img: "https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?q=80&w=600&auto=format&fit=crop", height: 500 },
-  { id: "8", img: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop", height: 400 },
-  { id: "9", img: "https://images.unsplash.com/photo-1517351659960-935748805cb6?q=80&w=600&auto=format&fit=crop", height: 350 },
-  { id: "10", img: "https://images.unsplash.com/photo-1506710507565-203b9f24669b?q=80&w=600&auto=format&fit=crop", height: 450 },
 ];
 
 export default async function MidnightRidesPage() {
@@ -105,6 +101,11 @@ export default async function MidnightRidesPage() {
         <div>
           <p><strong>Q: Do I need to bring my own cycle?</strong><br/>A: No, geared cycles are included in the package unless you choose the BYOC (Bring Your Own Cycle) ticket.</p>
           <p style={{marginTop: '10px'}}><strong>Q: Is it safe for solo female riders?</strong><br/>A: Absolutely! We have female ride leaders and a support vehicle accompanying the group at all times.</p>
+          <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <Link href="/faq" style={{ color: 'var(--primary, #1eb53a)', textDecoration: 'none', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              View all FAQs <span>&rarr;</span>
+            </Link>
+          </div>
         </div>
       )
     }

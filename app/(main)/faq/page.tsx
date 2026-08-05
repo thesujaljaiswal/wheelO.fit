@@ -1,6 +1,6 @@
 import React from 'react';
 import prisma from '@/lib/prisma';
-import { FAQAccordion } from '@/components/ui/FAQAccordion';
+import { SectionAccordion } from '@/components/ui/SectionAccordion';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -26,7 +26,10 @@ export default async function FAQPage() {
       </h1>
       
       {faqs.length > 0 ? (
-        <FAQAccordion faqs={faqs} />
+        <SectionAccordion sections={faqs.map((faq: any) => ({
+          title: faq.question,
+          content: <p>{faq.answer}</p>
+        }))} />
       ) : (
         <p style={{ textAlign: 'center', color: '#888' }}>No frequently asked questions available at this time.</p>
       )}

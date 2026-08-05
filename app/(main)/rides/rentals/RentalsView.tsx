@@ -85,7 +85,7 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
         }
         .rentals-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
           gap: 1.5rem;
         }
         .mobile-filter-btn {
@@ -137,9 +137,6 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
           }
           .rentals-sidebar.open {
             transform: translateX(0);
-          }
-          .rentals-grid {
-            grid-template-columns: 1fr;
           }
           .mobile-filter-btn {
             display: flex;
@@ -294,14 +291,21 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
           display: 'flex', 
           flexWrap: 'nowrap', 
           gap: '0.8rem', 
-          overflowX: 'auto', 
-          paddingBottom: '0.5rem',
-          scrollbarWidth: 'none', /* Firefox */
-          msOverflowStyle: 'none'  /* IE/Edge */
+          overflowX: 'auto',
+          paddingBottom: '0.8rem',
+          paddingRight: '1rem'
         }}>
           <style>{`
             .mobile-categories div::-webkit-scrollbar {
-              display: none;
+              height: 4px;
+            }
+            .mobile-categories div::-webkit-scrollbar-track {
+              background: rgba(255, 255, 255, 0.05);
+              border-radius: 4px;
+            }
+            .mobile-categories div::-webkit-scrollbar-thumb {
+              background: rgba(30, 181, 58, 0.5);
+              border-radius: 4px;
             }
           `}</style>
           {['All', ...categories].map(c => (
@@ -460,8 +464,9 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
                     </div>
                     <button 
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
-                        if (cycle.isInstock) router.push(`/rides/rentals/${cycle.id}`);
+                        router.push(`/rides/rentals/${cycle.id}`);
                       }}
                       style={{ 
                         background: cycle.isInstock ? '#1eb53a' : 'transparent', 
@@ -470,7 +475,9 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
                         padding: '0.6rem 1.5rem', 
                         borderRadius: '24px', 
                         fontWeight: 'bold', 
-                        cursor: cycle.isInstock ? 'pointer' : 'default',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        zIndex: 10,
                         transition: 'opacity 0.2s'
                       }}
                       onMouseOver={(e) => { if(cycle.isInstock) e.currentTarget.style.opacity = '0.8' }}

@@ -2,7 +2,8 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { StickyBottomBar } from './StickyBottomBar';
-import Masonry from '@/components/react-bits/Masonry';
+import { ImageSlider } from './ImageSlider';
+import { SectionAccordion } from './SectionAccordion';
 import styles from './RidePageLayout.module.css';
 
 interface Section {
@@ -68,9 +69,9 @@ export function RidePageLayout({
         <h1 className={styles.pageTitle}>{title}</h1>
       </header>
 
-      {/* Top Image Slider via Masonry */}
+      {/* Top Image Slider via Embla Carousel */}
       <section className={styles.sliderSection}>
-        <Masonry items={sliderImages.slice(0, visibleImagesCount)} />
+        <ImageSlider images={sliderImages} />
       </section>
 
       <main className={styles.mainContent}>
@@ -89,12 +90,11 @@ export function RidePageLayout({
           <div className={styles.sectionBody}>{itinerary}</div>
         </section>
 
-        {additionalSections.map((section, index) => (
-          <section key={index} className={styles.section}>
-            <h2 className={styles.sectionTitle}>{section.title}</h2>
-            <div className={styles.sectionBody}>{section.content}</div>
+        {additionalSections && additionalSections.length > 0 && (
+          <section className={styles.section}>
+            <SectionAccordion sections={additionalSections} />
           </section>
-        ))}
+        )}
       </main>
 
       {isFormVisible && (

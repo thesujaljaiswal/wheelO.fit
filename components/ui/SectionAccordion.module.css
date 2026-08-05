@@ -1,0 +1,106 @@
+.accordionSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.accordionItem {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.accordionItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(30, 181, 58, 0.3);
+}
+
+.accordionOpen {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(30, 181, 58, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.accordionHeader {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--foreground, #fff);
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.accordionHeader:hover {
+  color: var(--primary, #1eb53a);
+}
+
+.accordionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: #fff;
+  transition: transform 0.3s, background 0.3s, color 0.3s;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+
+.accordionHeader:hover .accordionIcon {
+  background: var(--primary, #1eb53a);
+  color: #000;
+}
+
+.accordionOpen .accordionIcon {
+  transform: rotate(45deg);
+  background: var(--primary, #1eb53a);
+  color: #000;
+}
+
+.accordionContentWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordionOpen .accordionContentWrapper {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.accordionContentInner {
+  overflow: hidden;
+}
+
+.accordionContent {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 0 16px 16px;
+}
+
+@media (max-width: 768px) {
+  .accordionHeader {
+    font-size: 1.1rem;
+    padding: 20px;
+  }
+  .accordionContent {
+    padding: 0 20px 20px;
+  }
+}
