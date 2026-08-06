@@ -126,10 +126,10 @@ async function scrape() {
     return true;
   });
 
-  unique.sort((a, b) => (b.likes + 3 * b.comments) - (a.likes + 3 * a.comments));
+  unique.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   const top4 = unique.slice(0, 4);
 
-  console.log(`[Scraper] Successfully found ${top4.length} top reels.`);
+  console.log(`[Scraper] Successfully found ${top4.length} latest reels.`);
 
   if (top4.length === 0) {
     console.error('[Scraper] Failed to find reels. Make sure your internet is working.');

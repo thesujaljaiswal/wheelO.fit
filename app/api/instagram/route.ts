@@ -19,7 +19,7 @@ export interface Post {
 // In-memory cache (survives within a single serverless instance lifetime)
 let cachedPosts: Post[] = [];
 let lastFetchTime = 0;
-const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 min (DB reads are cheap)
+const CACHE_DURATION_MS = 0; // Disabled cache so it updates instantly after scrape
 
 export async function GET() {
   const now = Date.now();
@@ -31,7 +31,7 @@ export async function GET() {
 
   try {
     const reels = await prisma.instagramReel.findMany({
-      orderBy: [{ likes: 'desc' }],
+      orderBy: [{ timestamp: 'desc' }],
       take: 4,
     });
 
