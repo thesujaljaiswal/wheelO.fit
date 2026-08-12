@@ -15,16 +15,18 @@ export default function ContactPage() {
         <div className={styles.textBlock}>
           <h2>Contact Information</h2>
           <p>
-            <strong>Email:</strong> wheelofitclub@gmail.com
+            <strong>Address:</strong> <br />
+            BMC parking lot, Next to Raheja Artesia,<br />
+            Hind cycle marg, Worli, Mumbai 400030
           </p>
           <p>
-            <strong>Phone:</strong> +91 88790 45474
+            <strong>Ph.no:</strong> +91 8879045474
           </p>
           <p>
-            <strong>Studio Address:</strong> <br />
-            123 Marine Drive,<br />
-            Mumbai, Maharashtra 400020<br />
-            India
+            <strong>Email us at:</strong> wheelofitclub@gmail.com
+          </p>
+          <p>
+            <strong>Instagram page:</strong> <a href="https://instagram.com/wheelo.fit" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none' }}>@wheelo.fit</a>
           </p>
           <br />
           <h2>Business Hours</h2>

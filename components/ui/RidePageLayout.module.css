@@ -1,5 +1,4 @@
 .layoutContainer {
-  padding-bottom: 80px; /* Space for the sticky bottom bar */
   min-height: 100vh;
   background-color: var(--background, #000); /* Assuming dark theme as per project style */
   color: var(--foreground, #fff);

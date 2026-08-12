@@ -44,6 +44,11 @@ export function ImageSlider({ images }: ImageSliderProps) {
             const isActive = index === selectedIndex;
             return (
               <div className={styles.slide} key={img.id}>
+                {/* Blurred Background Layer */}
+                <img src={img.img} alt="" className={styles.bgImage} />
+                <div className={styles.bgOverlay} />
+                
+                {/* Main Foreground Image */}
                 <motion.img 
                   src={img.img} 
                   alt="Gallery image"

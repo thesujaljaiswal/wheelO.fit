@@ -8,14 +8,24 @@ import { TestimonialsSection } from '@/components/landing/Testimonials';
 import { InstagramWidget } from '@/components/landing/InstagramWidget';
 
 const galleryImages = [
-  { src: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=800&auto=format&fit=crop', alt: 'Cycling group' },
-  { src: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=800&auto=format&fit=crop', alt: 'Bicycles' },
-  { src: 'https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?q=80&w=800&auto=format&fit=crop', alt: 'Event people' },
-  { src: 'https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=800&auto=format&fit=crop', alt: 'Person on bike' },
-  { src: 'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?q=80&w=800&auto=format&fit=crop', alt: 'Community' },
-  { src: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=800&auto=format&fit=crop', alt: 'Riding at sunset' },
-  { src: 'https://images.unsplash.com/photo-1475503572774-15a45e5d60b9?q=80&w=800&auto=format&fit=crop', alt: 'Happy community' },
-  { src: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop', alt: 'Team' },
+  // Cycling classes visuals (Under 1MB)
+  { src: '/cycling classes visuals/cycling-classes/Wheelofit cycling classes customer-1.jpg', alt: 'Cycling classes' },
+  { src: '/cycling classes visuals/cycling-classes/Wheelofit cycling classes child-1.jpg', alt: 'Kids learning to cycle' },
+  { src: '/cycling classes visuals/cycling-classes/Wheelofit cycling classes child-2.jpg', alt: 'Kids learning to cycle 2' },
+  { src: '/cycling classes visuals/cycling-classes/Wheelofit cycling classes customer-2.jpg', alt: 'Cycling classes' },
+  { src: '/cycling classes visuals/cycling-classes/Wheelofit cycling classes customer-3.jpg', alt: 'Cycling classes' },
+  { src: '/cycling classes visuals/cycling-classes/Wheelofit National park cycling ride solo-tour.jpg', alt: 'National park ride' },
+  { src: '/cycling classes visuals/cycling-classes/wheelofit-customer-4.jpg', alt: 'Cycling classes customer' },
+
+  // Midnight cycling (Optimized size)
+  { src: '/midnight-cycling/20260206_234829_Original.jpg', alt: 'Midnight ride in Mumbai' },
+  { src: '/midnight-cycling/394f1e8d-0834-4654-877d-b26fc02f1964.jpg', alt: 'Community ride' },
+
+  // Sunday morning cycling (Under 1MB)
+  { src: '/sunday-morning-cycling/IMG_1301.jpeg', alt: 'Sunday morning cycling' },
+  { src: '/sunday-morning-cycling/96234e23-b6af-466f-9045-abadd274fd8f.jpeg', alt: 'Coastal route' },
+  { src: '/sunday-morning-cycling/cdec0adf-d6bb-4445-be4c-8480d493c13b.jpeg', alt: 'Morning sunrise' },
+  { src: '/sunday-morning-cycling/A60632F4-8123-4B6A-8E8B-71EF9C10DB3E.jpeg', alt: 'Sunday morning coastal' }
 ];
 
 export default async function Home() {

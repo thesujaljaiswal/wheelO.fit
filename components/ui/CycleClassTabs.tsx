@@ -17,20 +17,54 @@ export default function CycleClassTabs() {
     switch (activeTab) {
       case 'carry':
         return (
-          <ol style={{ paddingLeft: '1.5rem', lineHeight: '2' }}>
-            <li>Bottle of water</li>
+          <ul style={{ paddingLeft: '1.5rem', lineHeight: '2' }}>
+            <li>A Water bottle</li>
             <li>Hand towel</li>
-            <li>Medicine if any</li>
-          </ol>
+          </ul>
         );
       case 'wear':
-        return <p>Comfortable activewear, sports shoes. Avoid loose clothing near the chain.</p>;
+        return <p>Comfortable T-shirt/Top and Track pants, Sports shoes. Avoid Loose/Baggy clothing near the chain.</p>;
       case 'terms':
         return <p>Classes are non-refundable. Please arrive 10 minutes early. Safety gear is mandatory.</p>;
       case 'consent':
         return <p><a href="#" style={{ color: '#3b82f6', textDecoration: 'underline' }}>Click here to download the consent form</a>. Must be signed before your first class.</p>;
       case 'faqs':
-        return <p><strong>Do I need my own cycle?</strong> No for adults, yes for kids.</p>;
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div>
+              <strong>1) Where do you conduct your cycling classes?</strong>
+              <p>We have our ground centres in all over Western Mumbai. Borivali, Kandivali, Malad, Goregaon, Andheri, Matunga/Dadar and Worli.</p>
+            </div>
+            <div>
+              <strong>2) Will I get a bicycle of my height?</strong>
+              <p>Yes, absolutely! Before confirming your session, we'll ask for your height so we can arrange a bicycle that's the right fit for you. Once you arrive at the venue, our trainers will adjust the seat height and make any necessary adjustments to ensure you're comfortable and ready to learn with confidence.</p>
+            </div>
+            <div>
+              <strong>3) What is the duration of each session?</strong>
+              <p>Each session will last an hour. In case you are late and we have a session later, your session will be cut short.</p>
+            </div>
+            <div>
+              <strong>4) How many sessions do I need to learn cycling properly?</strong>
+              <p>Generally, it takes 7 to 8 sessions to learn cycling properly with balancing and turnings.</p>
+            </div>
+            <div>
+              <strong>5) Do you offer trial sessions?</strong>
+              <p>Yes, we do. However, all trial sessions are paid, as each class includes personalized guidance and dedicated time from our experienced trainers. We do not offer free trial classes.</p>
+            </div>
+            <div>
+              <strong>6) Is there a guarantee that I will learn cycling?</strong>
+              <p>Our experienced trainers have successfully taught 500+ beginners to ride a bicycle with confidence. With personalized guidance, patience, and regular practice, we'll support you throughout your learning journey until you're able to ride independently.</p>
+            </div>
+            <div>
+              <strong>7) How often should I attend cycling sessions?</strong>
+              <p>For the best results, we recommend attending sessions regularly. If your schedule doesn't allow you to come every day, 2–3 sessions per week are enough to ensure steady progress and help you learn cycling with confidence.</p>
+            </div>
+            <div>
+              <strong>8) Are these cycling classes only available in Mumbai?</strong>
+              <p>Yes, our cycling classes are in Mumbai only.</p>
+            </div>
+          </div>
+        );
       default:
         return null;
     }

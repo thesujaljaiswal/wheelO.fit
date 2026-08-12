@@ -6,11 +6,11 @@ import { RidePageLayout } from '@/components/ui/RidePageLayout';
 import styles from '@/components/ui/RidePageLayout.module.css';
 
 const sliderImages = [
-  { id: "1", img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop", height: 400 },
-  { id: "2", img: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=600&auto=format&fit=crop", height: 250 },
-  { id: "3", img: "https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?q=80&w=600&auto=format&fit=crop", height: 600 },
-  { id: "4", img: "https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=600&auto=format&fit=crop", height: 350 },
-  { id: "5", img: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?q=80&w=600&auto=format&fit=crop", height: 450 },
+  { id: "1", img: "/sunday-morning-cycling/IMG_1301.jpeg", height: 400 },
+  { id: "2", img: "/sunday-morning-cycling/96234e23-b6af-466f-9045-abadd274fd8f.jpeg", height: 250 },
+  { id: "3", img: "/sunday-morning-cycling/cdec0adf-d6bb-4445-be4c-8480d493c13b.jpeg", height: 600 },
+  { id: "4", img: "/sunday-morning-cycling/A60632F4-8123-4B6A-8E8B-71EF9C10DB3E.jpeg", height: 350 },
+  { id: "5", img: "/sunday-morning-cycling/IMG_1303.jpeg", height: 450 },
 ];
 
 export default async function SundayMorningPage() {
@@ -21,8 +21,11 @@ export default async function SundayMorningPage() {
 
   const overview = (
     <div>
-      <p>Embrace the quiet of the early morning with our Sunday sunrise rides. Experience the city waking up as we pedal through scenic routes and coastal roads.</p>
-      <p>These rides are perfect for all skill levels, ending with a group breakfast at local cafes to start your Sunday the right way.</p>
+      <p>Start your Sunday on two wheels with a refreshing 15 km cycling experience through some of Mumbai’s most scenic coastal stretches. Our Sunday Morning Ride is designed for riders who want to enjoy the city at a relaxed pace while soaking in the fresh morning air, beautiful views, and vibrant cycling atmosphere.</p>
+      <p style={{ fontWeight: 'bold', margin: '1rem 0' }}>🚴 Ride Route -- Worli → Worli Seaface → Worli Promenade Cycling Track → Shivaji Park → Worli</p>
+      <p>The ride begins at Worli and takes you along the scenic Worli Seaface, where you can ride through the cycling track and enjoy the cool morning breeze and beautiful views of the Arabian Sea. It’s one of the highlights of ride, offering a peaceful and enjoyable stretch away from the usual city rush.</p>
+      <p>A group photo session is also planned at Worli Promenade, giving you the perfect opportunity to capture the morning, the beautiful surroundings, and memories with fellow riders. The route then continues towards Shivaji Park before heading back to the starting point at Worli.</p>
+      <p>Whether you're a regular cyclist or simply looking for an active and refreshing way to spend your Sunday morning, this ride offers the perfect combination of cycling, scenic views, fitness, and community.</p>
     </div>
   );
 
@@ -74,9 +77,13 @@ export default async function SundayMorningPage() {
       title: 'Things to carry',
       content: (
         <ul className={styles.list}>
-          <li><span style={{color: '#1eb53a'}}>✦</span> Water bottle</li>
-          <li><span style={{color: '#1eb53a'}}>✦</span> Comfortable activewear</li>
-          <li><span style={{color: '#1eb53a'}}>✦</span> Sunglasses and sunscreen</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Identity Proof (Mandatory)</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Water Bottle Min 1 litre</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Snacks/Drinks (optional)</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Medicines (if any)</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Camera, Cell Phone (Optional)</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Dry fruits and chocolates</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> A small bag to carry these stuffs.</li>
         </ul>
       )
     },
@@ -84,20 +91,52 @@ export default async function SundayMorningPage() {
       title: 'Disclaimer & Policies',
       content: (
         <div>
-          <p><strong>Disclaimer:</strong> Safety first. Riders must follow all traffic rules.</p>
-          <p style={{marginTop: '10px'}}><strong>Cancellation Policy:</strong> 100% refund if cancelled 48 hours prior to the event. No refund within 48 hours.</p>
+          <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
+            <li>If you are unable to complete the ride, rented cycles must be returned to the starting point at your own expense.</li>
+            <li>Smoking and alcohol consumption are strictly prohibited during the ride.</li>
+            <li>Please avoid wearing or carrying expensive jewellery and valuables.</li>
+            <li>Activities or the route may be changed or cancelled due to weather or other unavoidable circumstances.</li>
+            <li>Follow all instructions given by our coordinators. Wheelo.fit is not responsible for any injuries or accidents that may occur during the ride.</li>
+            <li>Participants are responsible for any damage caused to rented cycles during the ride.</li>
+          </ul>
         </div>
       )
     },
     {
       title: 'FAQs',
       content: (
-        <div>
-          <p><strong>Q: Is breakfast included?</strong><br/>A: A basic breakfast or morning refreshment is included. You can purchase additional items directly.</p>
-          <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <Link href="/faq" style={{ color: 'var(--primary, #1eb53a)', textDecoration: 'none', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              View all FAQs <span>&rarr;</span>
-            </Link>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div>
+            <strong>1) What is the route?</strong>
+            <p>Worli (Meeting point) - Worli Seaface - Promenade Cycling track - Shivaji Park - Worli</p>
+          </div>
+          <div>
+            <strong>2) What is the difficulty level of the route?</strong>
+            <p>The ride is moderate in difficulty, with most of the route being flat and suitable for riders with basic cycling experience.</p>
+          </div>
+          <div>
+            <strong>3) I’m very tall/short. Will I get a cycle suitable for my height?</strong>
+            <p>Yes. Please inform us about your height and any specific requirements while booking. We’ll do our best to arrange a suitable cycle for your comfort.</p>
+          </div>
+          <div>
+            <strong>4) Can I come alone?</strong>
+            <p>Yes, many of our participants are solo travellers.</p>
+          </div>
+          <div>
+            <strong>5) Is the ride safe for female solo travellers?</strong>
+            <p>Absolutely! Our team stays with the group throughout the ride, and our events are popular among solo female riders, with around 50% female participation.</p>
+          </div>
+          <div>
+            <strong>6) What if I’m unable to complete the ride?</strong>
+            <p>Our experienced coordinators will make sure you complete the ride. In case you not able to, you need to transfer the cycles back to the start point.</p>
+          </div>
+          <div>
+            <strong>7) What should I wear for the ride?</strong>
+            <p>We recommend wearing comfortable outfit like Tee-shirt and Track/shorts.</p>
+          </div>
+          <div>
+            <strong>8) Will I be able to complete the ride if I haven’t cycled for a long time?</strong>
+            <p>Absolutely! We’ve had riders return to cycling after 10+ years and successfully complete the ride. We also include regular breaks along the route, making the experience comfortable and enjoyable rather than hectic one.</p>
           </div>
         </div>
       )

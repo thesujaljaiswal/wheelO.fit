@@ -6,19 +6,19 @@ const services = [
   {
     title: 'Cycle Classes',
     description: 'Join our high-energy indoor cycling sessions designed for all fitness levels. Burn calories and build endurance with expert instructors.',
-    image: '/carousel_classes.png',
+    image: '/cycling classes visuals/cycling-classes/Wheelofit services-img1.jpg',
     href: '/rides/cycle-classes'
   },
   {
     title: 'Mumbai Midnight Cycling',
     description: 'Explore the empty streets of Mumbai under the moonlight. A safe, guided, and unforgettable nocturnal adventure.',
-    image: '/carousel_midnight.png',
+    image: '/midnight-cycling/IMG_9065_Original.jpg',
     href: '/rides/midnight-rides'
   },
   {
     title: 'Sunday Morning Ride',
     description: 'Breathe in the fresh morning air with our community. Scenic routes perfect for a refreshing start to your Sunday.',
-    image: '/carousel_sunday.png',
+    image: '/sunday-morning-cycling/IMG_1303.jpeg',
     href: '/rides/sunday-morning'
   },
   {

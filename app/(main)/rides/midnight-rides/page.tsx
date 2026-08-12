@@ -6,11 +6,11 @@ import { RidePageLayout } from '@/components/ui/RidePageLayout';
 import styles from '@/components/ui/RidePageLayout.module.css';
 
 const sliderImages = [
-  { id: "1", img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop", height: 400 },
-  { id: "2", img: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=600&auto=format&fit=crop", height: 250 },
-  { id: "3", img: "https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?q=80&w=600&auto=format&fit=crop", height: 600 },
-  { id: "4", img: "https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=600&auto=format&fit=crop", height: 350 },
-  { id: "5", img: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?q=80&w=600&auto=format&fit=crop", height: 450 },
+  { id: "1", img: "/midnight-cycling/IMG_9065_Original.jpg", height: 400 },
+  { id: "2", img: "/midnight-cycling/20260206_234829_Original.jpg", height: 250 },
+  { id: "3", img: "/midnight-cycling/394f1e8d-0834-4654-877d-b26fc02f1964.jpg", height: 600 },
+  { id: "4", img: "/midnight-cycling/20260215_003440_Original.jpg", height: 350 },
+  { id: "5", img: "/midnight-cycling/0b1ae5c3-bb49-47ca-9f3c-2053da15b1c7.JPG", height: 450 },
 ];
 
 export default async function MidnightRidesPage() {
@@ -21,8 +21,12 @@ export default async function MidnightRidesPage() {
 
   const overview = (
     <div>
-      <p>There's nothing quite like the freedom of the city streets at midnight. Join our vibrant community for weekly nocturnal adventures under the city lights.</p>
-      <p>Our midnight rides are fully escorted with safety vehicles and experienced group leaders, ensuring a safe, exhilarating experience for everyone.</p>
+      <p>What makes a true Mumbaikar? It’s the spirit of a city that never stops. And what better way to experience that spirit than on two wheels, when Mumbai comes alive in a completely different way?</p>
+      <p>Whether you’re new to Mumbai, looking for a different weekend plan, or simply want to explore the city after hours, Our Mumbai Midnight Cycling Experience is made for you. Ride through the city’s iconic streets, enjoy the cool Mumbai breeze, meet new people, and create unforgettable memories along the way.</p>
+      <p>Our guided route takes you through some of Mumbai’s most iconic landmarks, including Haji Ali, Tardeo, Wilson College, Mantralaya, Gateway Of India, Taj Mahal Palace, Marine Drive and Charni Chowpatty, before we make our way back to Worli.</p>
+      <p>But this experience is more than just cycling. Along the way, we take planned breaks, play fun games, socialize with fellow riders, and enjoy Mumbai’s vibrant atmosphere together.</p>
+      <p>So, leave the usual weekend plans behind and explore Mumbai after hours, and take home memories worth sharing.</p>
+      <p style={{ textAlign: 'center', marginTop: '1rem', fontWeight: 'bold' }}>Worli – Gateway of India – Worli</p>
     </div>
   );
 
@@ -31,19 +35,18 @@ export default async function MidnightRidesPage() {
       <div className={styles.incCard}>
         <h3>Inclusions</h3>
         <ul className={`${styles.list} ${styles.incList}`}>
-          <li>Geared Bicycle</li>
-          <li>Helmet</li>
-          <li>Reflective Vest</li>
-          <li>Midnight Snacks & Chai</li>
-          <li>First Aid & Mechanical Support</li>
+          <li>Gear/Non-gear Cycles</li>
+          <li>A juice bottle</li>
+          <li>First Aid</li>
+          <li>Expertise and Ride support</li>
+          <li>Helmets (limited)</li>
         </ul>
       </div>
       <div className={styles.excCard}>
         <h3>Exclusions</h3>
         <ul className={`${styles.list} ${styles.excList}`}>
-          <li>Travel to start point</li>
-          <li>Personal expenses</li>
-          <li>Any items not mentioned in inclusions</li>
+          <li>Anything other than the above-mentioned things</li>
+          <li>Any Personal Expenses</li>
         </ul>
       </div>
     </div>
@@ -52,24 +55,28 @@ export default async function MidnightRidesPage() {
   const itinerary = (
     <div className={styles.timeline}>
       <div className={styles.timelineItem}>
-        <span className={styles.timelineTime}>11:30 PM</span>
-        Assemble at the starting point, brief introduction and safety instructions.
+        <span className={styles.timelineTime}>10:30 PM</span>
+        Meet at Worli for orientation, cycle allocation & refreshments
       </div>
       <div className={styles.timelineItem}>
-        <span className={styles.timelineTime}>12:00 AM</span>
-        Ride begins! Pedal through the empty, beautiful streets.
+        <span className={styles.timelineTime}>11:00 PM</span>
+        Ride begins from Worli
       </div>
       <div className={styles.timelineItem}>
-        <span className={styles.timelineTime}>01:30 AM</span>
-        Mid-point break for Chai and snacks.
+        <span className={styles.timelineTime}>11:45 PM</span>
+        Short halt at Haji Ali
       </div>
       <div className={styles.timelineItem}>
-        <span className={styles.timelineTime}>03:00 AM</span>
-        Reach the destination, click group pictures.
+        <span className={styles.timelineTime}>1:30 AM</span>
+        Continue towards Marine Drive via Gateway of India
       </div>
       <div className={styles.timelineItem}>
-        <span className={styles.timelineTime}>03:30 AM</span>
-        Ride concludes.
+        <span className={styles.timelineTime}>2:00 AM</span>
+        Refresh, relax & enjoy the Marine Drive views
+      </div>
+      <div className={styles.timelineItem}>
+        <span className={styles.timelineTime}>3:30 AM</span>
+        Return to Worli and safely drop off the cycles
       </div>
     </div>
   );
@@ -79,10 +86,13 @@ export default async function MidnightRidesPage() {
       title: 'Things to carry',
       content: (
         <ul className={styles.list}>
-          <li><span style={{color: '#1eb53a'}}>✦</span> Water bottle (At least 1 liter)</li>
-          <li><span style={{color: '#1eb53a'}}>✦</span> Comfortable riding gear (shorts/track pants, t-shirt)</li>
-          <li><span style={{color: '#1eb53a'}}>✦</span> A small backpack</li>
-          <li><span style={{color: '#1eb53a'}}>✦</span> Personal medicines (if any)</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Identity Proof (Mandatory)</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Water Bottle Min 1 litre</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Snacks/Drinks (optional)</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Medicines (if any)</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Camera, Cell Phone (Optional)</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> Dry fruits and chocolates</li>
+          <li><span style={{color: '#1eb53a'}}>✦</span> A small bag to carry these stuffs.</li>
         </ul>
       )
     },
@@ -90,21 +100,52 @@ export default async function MidnightRidesPage() {
       title: 'Disclaimer & Policies',
       content: (
         <div>
-          <p><strong>Disclaimer:</strong> Cycling involves physical exertion and inherent risks. Participants must ensure they are medically fit.</p>
-          <p style={{marginTop: '10px'}}><strong>Cancellation Policy:</strong> 100% refund if cancelled 48 hours prior to the event. No refund within 48 hours.</p>
+          <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
+            <li>If you are unable to complete the ride, rented cycles must be returned to the starting point at your own expense.</li>
+            <li>Smoking and alcohol consumption are strictly prohibited during the ride.</li>
+            <li>Please avoid wearing or carrying expensive jewellery and valuables.</li>
+            <li>Activities or the route may be changed or cancelled due to weather or other unavoidable circumstances.</li>
+            <li>Follow all instructions given by our coordinators. Wheelo.fit is not responsible for any injuries or accidents that may occur during the ride.</li>
+            <li>Participants are responsible for any damage caused to rented cycles during the ride.</li>
+          </ul>
         </div>
       )
     },
     {
       title: 'FAQs',
       content: (
-        <div>
-          <p><strong>Q: Do I need to bring my own cycle?</strong><br/>A: No, geared cycles are included in the package unless you choose the BYOC (Bring Your Own Cycle) ticket.</p>
-          <p style={{marginTop: '10px'}}><strong>Q: Is it safe for solo female riders?</strong><br/>A: Absolutely! We have female ride leaders and a support vehicle accompanying the group at all times.</p>
-          <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <Link href="/faq" style={{ color: 'var(--primary, #1eb53a)', textDecoration: 'none', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              View all FAQs <span>&rarr;</span>
-            </Link>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div>
+            <strong>1) What is the route?</strong>
+            <p>Worli - Nehru Planetarium - Haji Ali - Tardeo - Wilson College - Taraporewala Aquarium - Trident Hotel - Mantralaya - Gateway of India - Marine Drive - Charni Chowpatty</p>
+          </div>
+          <div>
+            <strong>2) What is the difficulty level of the route?</strong>
+            <p>The ride is moderate in difficulty, with most of the route being flat and suitable for riders with basic cycling experience.</p>
+          </div>
+          <div>
+            <strong>3) I’m very tall/short. Will I get a cycle suitable for my height?</strong>
+            <p>Yes. Please inform us about your height and any specific requirements while booking. We’ll do our best to arrange a suitable cycle for your comfort.</p>
+          </div>
+          <div>
+            <strong>4) Can I come alone?</strong>
+            <p>Yes, many of our participants are solo travellers.</p>
+          </div>
+          <div>
+            <strong>5) Is the ride safe for female solo travellers?</strong>
+            <p>Absolutely! Our team stays with the group throughout the ride, and our events are popular among solo female riders, with around 50% female participation.</p>
+          </div>
+          <div>
+            <strong>6) What if I’m unable to complete the ride?</strong>
+            <p>Our experienced coordinators will make sure you complete the ride. In case you not able to, you need to transfer the cycles back to the start point.</p>
+          </div>
+          <div>
+            <strong>7) What should I wear for the ride?</strong>
+            <p>We recommend wearing comfortable, breathable, and bright-coloured clothing for better visibility and comfort during the ride.</p>
+          </div>
+          <div>
+            <strong>8) Will I be able to complete the ride if I haven’t cycled for a long time?</strong>
+            <p>Absolutely! We’ve had riders return to cycling after 10+ years and successfully complete the ride. We also include regular breaks along the route, making the experience comfortable and enjoyable rather than hectic one.</p>
           </div>
         </div>
       )

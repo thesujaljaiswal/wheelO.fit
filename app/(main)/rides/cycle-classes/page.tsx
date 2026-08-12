@@ -7,11 +7,11 @@ import { ImageSlider } from '@/components/ui/ImageSlider';
 import EnquireModalFAB from '@/components/ui/EnquireModalFAB';
 
 const happyCustomerImages = [
-  { id: "1", img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop", height: 400 },
-  { id: "2", img: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=600&auto=format&fit=crop", height: 250 },
-  { id: "3", img: "https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?q=80&w=600&auto=format&fit=crop", height: 600 },
-  { id: "4", img: "https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=600&auto=format&fit=crop", height: 350 },
-  { id: "5", img: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?q=80&w=600&auto=format&fit=crop", height: 450 },
+  { id: "1", img: "/cycling classes visuals/cycling-classes/Wheelofit cycling classes customer-1.jpg", height: 400 },
+  { id: "2", img: "/cycling classes visuals/cycling-classes/Wheelofit cycling classes child-1.jpg", height: 250 },
+  { id: "3", img: "/cycling classes visuals/cycling-classes/Wheelofit National park cycling ride solo-tour.jpg", height: 600 },
+  { id: "4", img: "/cycling classes visuals/cycling-classes/Wheelofit cycling classes testimonial-img4.jpg", height: 350 },
+  { id: "5", img: "/cycling classes visuals/cycling-classes/Wheelofit cycling classes customer-2.jpg", height: 450 },
 ];
 
 export default async function CycleClassesPage() {
@@ -25,28 +25,36 @@ export default async function CycleClassesPage() {
       
       <div className={styles.content} style={{ display: 'block' }}>
         <div className={styles.description}>
-          <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--primary)' }}>Are you looking to learn outdoor cycling?</h2>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '2rem', color: '#fff' }}>You're in the right place!</h3>
+          <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--primary)' }}>Learn to Ride a Cycle with Confidence</h2>
           
           <p>
-            Our cycling classes are best suited for kids <strong>and adults across Mumbai, Thane, Navi Mumbai, Delhi, Bangalore, Kolkata</strong> who want to learn cycling. These classes can be taken by anyone aged between 6-64 years of age looking to learn cycling from scratch or just brush up their cycling skills. For the past 5 years, we have taught over 2500 people to cycle across 4 cities.
+            Whether you're learning to cycle for the very first time or looking to improve your riding skills, Wheelo.fit is here to guide you every step of the way.
           </p>
           <p>
-            Students will learn about choosing a bicycle, basic parts of a bike, essential equipment, as well as how to safely and comfortably ride your bike in various traffic conditions, terrain and climates. We also conduct cycling classes for those looking to build confidence to cycle independently on the road.
+            Our personalized cycling classes are designed for children and adults aged 5 to 75 years, making it easy for anyone to learn in a safe, supportive, and enjoyable environment. With experienced instructors and 1000+ successful learners across Mumbai, we help you build confidence and become an independent rider at your own pace.
+          </p>
+
+          <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#fff', marginTop: '2rem' }}>What You'll Learn</h3>
+          <ul style={{ listStyleType: 'none', padding: 0, margin: '0 0 2rem 0' }}>
+            <li style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}><span style={{ color: 'var(--primary)' }}>✔</span> Choosing the right bicycle based on your height and comfort</li>
+            <li style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}><span style={{ color: 'var(--primary)' }}>✔</span> Understanding the essential parts of a bicycle and how they work</li>
+            <li style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}><span style={{ color: 'var(--primary)' }}>✔</span> Maintaining proper balance, posture, and riding techniques</li>
+            <li style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}><span style={{ color: 'var(--primary)' }}>✔</span> Using basic safety equipment and following road safety practices</li>
+            <li style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}><span style={{ color: 'var(--primary)' }}>✔</span> Building confidence to ride comfortably on roads and in different riding conditions</li>
+          </ul>
+          
+          <p>
+            Whether your goal is fitness, commuting, recreation, or simply fulfilling a lifelong dream of learning to cycle, our instructors will ensure you enjoy every step of the journey.
           </p>
           <p>
-            Whatsapp or call us on +91 8928041081 to know more!
+            Enrol in our cycling classes today and start a journey towards fitness, freedom, and fun! For more information, feel free to contact us via WhatsApp or by calling at +91 8879045474
           </p>
           
           <div style={{ marginTop: '2rem', marginBottom: '2rem', padding: '1rem 1.5rem', background: 'var(--surface)', borderLeft: '4px solid var(--primary)', borderRadius: '4px' }}>
             <p style={{ margin: 0, fontSize: '1rem', color: '#ccc' }}>
-              <strong>Please note:</strong> We do not provide kids bicycles for private classes. They have to be arranged by clients as it is not possible for our trainers to ride and carry them around.
+              <strong>Please Note:</strong> We do not provide bicycles for children who are below 4'3" (130 cm) in height. They have to be arranged by clients, as it is not feasible for our trainers to transport and carry smaller bicycles during the training sessions.
             </p>
           </div>
-          
-          <p style={{ color: '#ccc', fontStyle: 'italic', marginBottom: '2rem' }}>
-            Whether you want to <strong>learn cycling</strong> or just <strong>brush up your cycling skills</strong>, we accommodate all skill levels during each class.
-          </p>
 
           <CycleClassTabs />
         </div>

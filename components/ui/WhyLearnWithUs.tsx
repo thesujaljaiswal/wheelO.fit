@@ -4,20 +4,20 @@ export default function WhyLearnWithUs() {
   const features = [
     {
       icon: "📋",
-      title: "Customized Cycling Lessons",
-      description: "Our cycling classes are customized as per your personal skill level",
+      title: "One-to-One Training",
+      description: "Our cycling classes are private/one to one with trainers.",
       color: "#34d399"
     },
     {
       icon: "🧰",
-      title: "Safety First",
-      description: "We believe you can learn cycling without falling",
+      title: "Safety first",
+      description: "We believe learning cycling can be safe and fall-free.",
       color: "#fbbf24"
     },
     {
       icon: "🚲",
-      title: "Experienced Tutors",
-      description: "We are patient and understand the basics of cycling.",
+      title: "Experienced trainers",
+      description: "Our patient instructors will guide you from basics to advance.",
       color: "#06b6d4"
     }
   ];
