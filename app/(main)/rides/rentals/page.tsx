@@ -70,7 +70,7 @@ export default async function RentalsPage() {
   return (
     <main>
       <div className={styles.hero} style={{ flexDirection: 'column', textAlign: 'center' }}>
-        <img src="/rentals-hero.png" alt="Bicycle Rentals" className={styles.heroImage} />
+        <img src="/carousel_rental.png" alt="Bicycle Rentals" className={styles.heroImage} />
         <div className={styles.heroOverlay}></div>
         <h1 className={styles.title} style={{ marginBottom: '1rem' }}>Bicycle Rentals</h1>
         <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.25rem', maxWidth: '800px', margin: '0 auto 2rem', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
