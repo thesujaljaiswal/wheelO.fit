@@ -60,3 +60,6 @@ next-env.d.ts
 *.swp
 *.swo
 *~
+
+# Instagram Scraper Session
+.ig-session/

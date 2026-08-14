@@ -66,16 +66,23 @@ function parseNode(node) {
 }
 
 async function scrape() {
+  const path = require('path');
+  const userDataDir = path.join(__dirname, '..', '.ig-session');
+
+  console.log(`\n======================================================`);
+  console.log(`[Scraper] ATTENTION: A browser window will now open.`);
+  console.log(`[Scraper] PLEASE DO NOT CLOSE THE BROWSER WINDOW!`);
+  console.log(`======================================================\n`);
+
   console.log(`[Scraper] Launching browser to scrape @${INSTAGRAM_USERNAME}...`);
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({
-    userAgent:
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+  const browser = await chromium.launchPersistentContext(userDataDir, {
+    headless: false,
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
     viewport: { width: 1280, height: 800 },
     locale: 'en-US',
   });
 
-  const page = await context.newPage();
+  const page = browser.pages().length > 0 ? browser.pages()[0] : await browser.newPage();
   const reels = [];
 
   page.on('response', async (response) => {
@@ -85,7 +92,6 @@ async function scrape() {
 
     try {
       const json = await response.json();
-
       const edges =
         json?.data?.user?.edge_owner_to_timeline_media?.edges ||
         json?.data?.xdt_api__v1__feed__user_timeline_graphql_connection?.edges ||
@@ -104,18 +110,24 @@ async function scrape() {
     } catch { /* ignore */ }
   });
 
-  console.log(`[Scraper] Navigating to Instagram (using your trusted local connection)...`);
+  console.log(`[Scraper] Navigating to Instagram...`);
   await page.goto(`https://www.instagram.com/${INSTAGRAM_USERNAME}/reels/`, {
     waitUntil: 'domcontentloaded',
-    timeout: 30000,
+    timeout: 60000,
   });
-  await page.waitForTimeout(5000);
+  
+  console.log(`[Scraper] Waiting 15 seconds to collect data...`);
+  console.log(`[Scraper] IF YOU SEE A LOGIN SCREEN, PLEASE LOG IN NOW. Your session will be saved for next time!`);
+  await page.waitForTimeout(15000);
 
-  await page.goto(`https://www.instagram.com/${INSTAGRAM_USERNAME}/`, {
-    waitUntil: 'domcontentloaded',
-    timeout: 30000,
-  });
-  await page.waitForTimeout(5000);
+  if (reels.length === 0) {
+    console.log(`[Scraper] Attempting to load main profile page as fallback...`);
+    await page.goto(`https://www.instagram.com/${INSTAGRAM_USERNAME}/`, {
+      waitUntil: 'domcontentloaded',
+      timeout: 60000,
+    });
+    await page.waitForTimeout(10000);
+  }
 
   await browser.close();
 
