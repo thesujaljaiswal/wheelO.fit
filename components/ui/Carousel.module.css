@@ -126,6 +126,10 @@
 }
 
 @media (max-width: 768px) {
+  .carouselContainer {
+    height: 65vh;
+    min-height: 400px;
+  }
   .title {
     font-size: 2.5rem;
   }

@@ -74,6 +74,12 @@
   color: white;
 }
 
+.socialLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .bottomSection {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 30px;

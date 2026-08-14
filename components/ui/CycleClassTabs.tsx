@@ -9,7 +9,6 @@ export default function CycleClassTabs() {
     { id: 'carry', label: 'Things to carry' },
     { id: 'wear', label: 'Things to wear' },
     { id: 'terms', label: 'Terms & Conditions' },
-    { id: 'consent', label: 'Download Consent form' },
     { id: 'faqs', label: 'FAQs' }
   ];
 
@@ -25,9 +24,7 @@ export default function CycleClassTabs() {
       case 'wear':
         return <p>Comfortable T-shirt/Top and Track pants, Sports shoes. Avoid Loose/Baggy clothing near the chain.</p>;
       case 'terms':
-        return <p>Classes are non-refundable. Please arrive 10 minutes early. Safety gear is mandatory.</p>;
-      case 'consent':
-        return <p><a href="#" style={{ color: '#3b82f6', textDecoration: 'underline' }}>Click here to download the consent form</a>. Must be signed before your first class.</p>;
+        return <p>Classes are non-refundable. Please arrive 10 minutes early.</p>;
       case 'faqs':
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

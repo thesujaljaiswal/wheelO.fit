@@ -74,9 +74,9 @@ export default async function RentalsPage() {
         <div className={styles.heroOverlay}></div>
         <h1 className={styles.title} style={{ marginBottom: '1rem' }}>Bicycle Rentals</h1>
         <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.25rem', maxWidth: '800px', margin: '0 auto 2rem', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
-          Discover the joy of riding with our premium fleet of cycles. Whether you're hitting the trails or just going for a casual weekend spin, we have the perfect ride for you. Well-maintained, comfortable, and ready for your next adventure.
+          Discover our premium fleet of cycles. Well-maintained and comfortable, we have the perfect ride for hitting the trails or a casual weekend spin.
         </p>
-        <div style={{ display: 'inline-block', background: 'rgba(30, 181, 58, 0.2)', border: '1px solid var(--primary, #1eb53a)', padding: '12px 24px', borderRadius: '8px', color: '#fff', backdropFilter: 'blur(5px)' }}>
+        <div className={styles.noticeBox}>
           <strong>Important Note:</strong> For Weekly, Hourly, or Daily rentals, please <strong>DM us</strong> directly for custom bookings!
         </div>
       </div>

@@ -19,13 +19,13 @@ export default async function CycleClassesPage() {
     <main>
       {/* Happy Customers (Top Banner) */}
       <div style={{ paddingTop: '100px', paddingBottom: '2rem', background: '#000' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '2rem', textAlign: 'center', color: '#fff' }}>Cycle Classes - Happy Customers</h1>
+        <h1 style={{ fontSize: 'clamp(2rem, 5vw + 1rem, 3rem)', fontWeight: 'bold', marginBottom: '2rem', textAlign: 'center', color: '#fff' }}>Cycling classes in Mumbai</h1>
         <ImageSlider images={happyCustomerImages} />
       </div>
       
       <div className={styles.content} style={{ display: 'block' }}>
         <div className={styles.description}>
-          <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--primary)' }}>Learn to Ride a Cycle with Confidence</h2>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', marginBottom: '1rem', color: 'var(--primary)' }}>Learn to Ride a Cycle with Confidence</h2>
           
           <p>
             Whether you're learning to cycle for the very first time or looking to improve your riding skills, Wheelo.fit is here to guide you every step of the way.
@@ -64,7 +64,7 @@ export default async function CycleClassesPage() {
       
       {/* Glimpses of cycling learners */}
       <div style={{ padding: '4rem 5%', background: '#0a0a0a', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '3rem' }}>Glimpses of cycling learners</h2>
+        <h2 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', fontWeight: 'bold', marginBottom: '3rem' }}>Glimpses of cycling learners</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
           {[
             { id: 1, title: 'First Pedal Strokes' },
@@ -129,10 +129,12 @@ export default async function CycleClassesPage() {
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(30,181,58,0.05) 0%, transparent 70%)', zIndex: 0, pointerEvents: 'none' }}></div>
         
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '3rem', textAlign: 'center' }}>Hear from our <span style={{ color: 'var(--primary)' }}>Happy Learners</span></h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-            
+          <h2 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', fontWeight: 'bold', marginBottom: '3rem', textAlign: 'center' }}>Our <span style={{ color: 'var(--primary)' }}>Testimonials</span></h2>
+          <div className={styles.marqueeTrack}>
             {[
+              { name: 'Rahul Desai', initials: 'RD', text: 'The trainers were extremely patient and professional. I learned how to ride confidently in just a few sessions. Highly recommended!' },
+              { name: 'Sneha K.', initials: 'SK', text: 'My 8-year-old was struggling with balance, but the team here made learning so fun. He now rides every day without training wheels.' },
+              { name: 'Amit Verma', initials: 'AV', text: 'Fantastic experience! The focus on safety and correct posture helped me get over my fear of riding on the main roads. Thank you!' },
               { name: 'Rahul Desai', initials: 'RD', text: 'The trainers were extremely patient and professional. I learned how to ride confidently in just a few sessions. Highly recommended!' },
               { name: 'Sneha K.', initials: 'SK', text: 'My 8-year-old was struggling with balance, but the team here made learning so fun. He now rides every day without training wheels.' },
               { name: 'Amit Verma', initials: 'AV', text: 'Fantastic experience! The focus on safety and correct posture helped me get over my fear of riding on the main roads. Thank you!' }
@@ -141,12 +143,11 @@ export default async function CycleClassesPage() {
               className={styles.testimonialCard}
               style={{ 
                 background: 'linear-gradient(145deg, rgba(255,255,255,0.03), rgba(0,0,0,0.5))', 
-                padding: '2.5rem', 
                 borderRadius: '24px', 
                 border: '1px solid rgba(255,255,255,0.05)',
                 display: 'flex',
                 flexDirection: 'column',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
               }}
               >
                 <div style={{ display: 'flex', gap: '4px', marginBottom: '1.5rem' }}>

@@ -35,7 +35,6 @@ export function ServicesSection() {
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>Our <span className="text-gradient">Services</span></h2>
-          <p className={styles.subtitle}>Everything you need to fuel your cycling passion.</p>
         </div>
         <div className={styles.grid}>
           {services.map((service, index) => (

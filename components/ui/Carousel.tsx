@@ -23,10 +23,20 @@ export function Carousel({ slides }: CarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const autoplayRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const startAutoplay = useCallback(() => {
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+    autoplayRef.current = setInterval(() => {
+      if (emblaApi) emblaApi.scrollNext();
+    }, 4000);
+  }, [emblaApi]);
+
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi, setSelectedIndex]);
+    startAutoplay();
+  }, [emblaApi, setSelectedIndex, startAutoplay]);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -34,15 +44,14 @@ export function Carousel({ slides }: CarouselProps) {
     emblaApi.on('select', onSelect);
     emblaApi.on('reInit', onSelect);
 
-    const autoplay = setInterval(() => {
-      emblaApi.scrollNext();
-    }, 8000);
+    startAutoplay();
+
     return () => {
-      clearInterval(autoplay);
+      if (autoplayRef.current) clearInterval(autoplayRef.current);
       emblaApi.off('select', onSelect);
       emblaApi.off('reInit', onSelect);
     };
-  }, [emblaApi, onSelect]);
+  }, [emblaApi, onSelect, startAutoplay]);
 
   return (
     <div className={styles.carouselContainer}>

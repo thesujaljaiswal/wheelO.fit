@@ -1,18 +1,40 @@
 "use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useEffect } from 'react';
+import { motion, useInView, animate } from 'framer-motion';
 import { Users, Bike, CalendarDays } from 'lucide-react';
 
 const stats = [
-  { icon: Users, label: 'Active members', value: '4000+' },
-  { icon: Bike, label: 'Available cycles', value: '200+' },
-  { icon: CalendarDays, label: 'Events hosted', value: '250+' },
+  { icon: Users, label: 'Active members', value: 4000, suffix: '+' },
+  { icon: Bike, label: 'Available cycles', value: 200, suffix: '+' },
+  { icon: CalendarDays, label: 'Events hosted', value: 250, suffix: '+' },
 ];
+
+function AnimatedNumber({ value, suffix = '' }: { value: number, suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  
+  useEffect(() => {
+    if (isInView && ref.current) {
+      const controls = animate(0, value, {
+        duration: 1,
+        ease: "easeOut",
+        onUpdate: (latest) => {
+          if (ref.current) {
+            ref.current.textContent = Math.round(latest).toString() + suffix;
+          }
+        }
+      });
+      return controls.stop;
+    }
+  }, [value, suffix, isInView]);
+
+  return <span ref={ref}>0{suffix}</span>;
+}
 
 export function AboutSection() {
   return (
-    <section style={{ padding: '8rem 2rem', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ padding: '4rem 2rem', position: 'relative', overflow: 'hidden' }}>
       {/* Background glowing effects */}
       <div style={{ position: 'absolute', top: '10%', left: '5%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(74,222,128,0.05) 0%, rgba(0,0,0,0) 70%)', borderRadius: '50%', filter: 'blur(40px)', zIndex: 0 }} />
       <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(74,222,128,0.03) 0%, rgba(0,0,0,0) 70%)', borderRadius: '50%', filter: 'blur(60px)', zIndex: 0 }} />
@@ -33,7 +55,7 @@ export function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            style={{ maxWidth: '800px', fontSize: '1.25rem', color: 'rgba(240, 247, 242, 0.7)', lineHeight: '1.8' }}
+            style={{ maxWidth: '800px', fontSize: 'clamp(1rem, 4vw, 1.25rem)', color: 'rgba(240, 247, 242, 0.8)', lineHeight: '1.6' }}
           >
             Wheelo.fit is more than a cycling brand — it’s a community built around learning, exploration, and unforgettable experiences. Whether you’re learning to ride for the first time, exploring Mumbai through our guided cycling tours, or renting a cycle for your personal rides, we bring together safety, quality, and a welcoming community to create experiences you’ll always remember. Every ride is about building confidence, making connections, and enjoying the journey.
           </motion.p>
@@ -80,7 +102,7 @@ export function AboutSection() {
                 <stat.icon style={{ color: '#4ade80' }} size={32} />
               </div>
               <h3 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '0.5rem', color: '#fff' }}>
-                {stat.value}
+                <AnimatedNumber value={stat.value} suffix={stat.suffix} />
               </h3>
               <p style={{ color: 'rgba(240, 247, 242, 0.6)', fontSize: '1.1rem' }}>
                 {stat.label}

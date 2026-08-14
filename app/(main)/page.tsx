@@ -38,13 +38,13 @@ export default async function Home() {
     <main>
       <HeroCarousel />
       <AboutSection />
-      <section style={{ padding: '6rem 2rem', textAlign: 'center' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', marginBottom: '4rem' }}>
-          <h2 style={{ fontSize: '3.5rem', fontWeight: 'bold', marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
+      <section style={{ padding: '4rem 2rem', textAlign: 'center' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', fontWeight: 'bold', marginBottom: '1rem', letterSpacing: '-0.02em' }}>
             Step Into <span className="text-gradient">Our World</span>
           </h2>
-          <p style={{ fontSize: '1.25rem', color: 'rgba(240, 247, 242, 0.7)', lineHeight: '1.6' }}>
-            More than a gallery—this is the heartbeat of our community. Explore the rides, the faces, and the moments that bring the Wheelo family together.
+          <p style={{ fontSize: '1.25rem', color: 'rgba(240, 247, 242, 0.7)', lineHeight: '1' }}>
+            Discover the rides and moments that bring the Wheelo community together.
           </p>
         </div>
         <div style={{ width: '100%', height: '700px', position: 'relative', overflow: 'hidden', maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 100%)' }}>
