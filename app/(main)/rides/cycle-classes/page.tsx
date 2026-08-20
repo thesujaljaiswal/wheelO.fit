@@ -5,6 +5,7 @@ import CycleClassTabs from '@/components/ui/CycleClassTabs';
 import WhyLearnWithUs from '@/components/ui/WhyLearnWithUs';
 import { ImageSlider } from '@/components/ui/ImageSlider';
 import EnquireModalFAB from '@/components/ui/EnquireModalFAB';
+import WhatsAppFAB from '@/components/ui/WhatsAppFAB';
 import CycleClassesTestimonials from '@/components/ui/CycleClassesTestimonials';
 
 const happyCustomerImages = [
@@ -126,6 +127,7 @@ export default async function CycleClassesPage() {
 
       <CycleClassesTestimonials />
       <EnquireModalFAB />
+      <WhatsAppFAB />
     </main>
   );
 }
