@@ -99,7 +99,7 @@ export function RidePageLayout({
 
       {isFormVisible && (
         <div className={styles.modalOverlay} onClick={() => setIsFormVisible(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} data-lenis-prevent>
             <button 
               className={styles.modalCloseBtn} 
               onClick={() => setIsFormVisible(false)}

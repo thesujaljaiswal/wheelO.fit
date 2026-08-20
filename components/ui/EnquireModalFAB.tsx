@@ -85,7 +85,7 @@ export default function EnquireModalFAB() {
           padding: '20px'
         }}>
           {/* Modal Content Box */}
-          <div className="modal-no-scrollbar" style={{
+          <div className="modal-no-scrollbar" data-lenis-prevent style={{
             background: '#111',
             borderRadius: '24px',
             width: '100%',
@@ -94,7 +94,8 @@ export default function EnquireModalFAB() {
             overflowY: 'auto',
             border: '1px solid rgba(255,255,255,0.1)',
             boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
-            position: 'relative'
+            position: 'relative',
+            WebkitOverflowScrolling: 'touch'
           }}>
             {/* Close Button */}
             <button 
