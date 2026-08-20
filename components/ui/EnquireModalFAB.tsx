@@ -47,7 +47,7 @@ export default function EnquireModalFAB() {
           fontWeight: 'bold',
           cursor: 'pointer',
           boxShadow: '0 10px 25px rgba(30,181,58,0.4)',
-          zIndex: 999,
+          zIndex: 90,
           display: 'flex',
           alignItems: 'center',
           gap: '10px',

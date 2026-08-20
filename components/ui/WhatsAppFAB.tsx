@@ -26,7 +26,7 @@ export default function WhatsAppFAB() {
         textDecoration: 'none',
         cursor: 'pointer',
         boxShadow: '0 10px 25px rgba(37, 211, 102, 0.4)',
-        zIndex: 999,
+        zIndex: 90,
         display: 'flex',
         alignItems: 'center',
         gap: '10px',
