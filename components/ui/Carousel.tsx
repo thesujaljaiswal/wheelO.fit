@@ -68,6 +68,8 @@ export function Carousel({ slides }: CarouselProps) {
                     initial={{ scale: 1 }}
                     animate={{ scale: isActive ? 1.05 : 1 }}
                     transition={{ duration: 8, ease: "linear" }}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    loading={index === 0 ? "eager" : "lazy"}
                   />
                   <div className={styles.overlay} />
                 </div>

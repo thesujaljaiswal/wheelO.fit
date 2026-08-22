@@ -1,51 +1,19 @@
 import React from 'react';
-import prisma from '@/lib/prisma';
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { getPaginatedUpcomingEvents } from '../actions/infiniteScrollActions';
+import InfiniteEventList from '../components/InfiniteEventList';
 
 export default async function ResponsesPage() {
-  const events = await prisma.event.findMany({
-    include: {
-      registrations: {
-        where: { paymentStatus: 'SUCCESS' }
-      }
-    },
-    orderBy: { date: 'desc' }
-  });
+  // Fetch the first 10 upcoming events
+  const initialEvents = await getPaginatedUpcomingEvents(0, 10);
 
   return (
     <div>
-      <h1 style={{ marginTop: 0 }}>View Responses</h1>
+      <h1 style={{ marginTop: 0 }}>Upcoming Events & Responses</h1>
       <p style={{ color: '#aaa', marginBottom: '2rem' }}>
-        Select an event to view all user registrations and data.
+        Manage your active events, view responses, and take attendance.
       </p>
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {events.length === 0 ? (
-          <p style={{ color: '#888' }}>No events yet.</p>
-        ) : events.map((event: { id: string; title: string; date: Date; timeSlot: string; eventType: string; registrations: unknown[] }) => (
-          <Link key={event.id} href={`/admin/responses/${event.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-            <div style={{ background: '#1a1a1a', padding: '1.5rem', borderRadius: '8px', border: '1px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', transition: 'background 0.2s ease', cursor: 'pointer' }}>
-              <div style={{ flex: '1 1 min-content', minWidth: '250px' }}>
-                <h2 style={{ marginTop: 0, marginBottom: '0.5rem', fontSize: '1.3rem', wordBreak: 'break-word' }}>
-                  {event.title}
-                </h2>
-                <div style={{ fontSize: '0.9rem', color: '#ccc', display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1rem' }}>
-                  <span><strong>Date:</strong> {new Date(event.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
-                  <span><strong>Time:</strong> {event.timeSlot}</span>
-                  <span><strong>Type:</strong> {event.eventType}</span>
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ background: '#333', padding: '0.5rem 1rem', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
-                  {event.registrations.length} Responses
-                </div>
-                <ArrowRight size={20} color="#888" />
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <InfiniteEventList initialEvents={initialEvents} fetchAction={getPaginatedUpcomingEvents} />
     </div>
   );
 }

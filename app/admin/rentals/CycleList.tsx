@@ -1,13 +1,58 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { toggleCycleActive, deleteCycle } from './actions';
 import EditCycleModal from './EditCycleModal';
+import { getPaginatedCycles } from '../actions/infiniteScrollActions';
 
 import type { CycleData, PricingOption } from './EditCycleModal';
 
-export default function CycleList({ cycles }: { cycles: CycleData[] }) {
+export default function CycleList({ cycles: initialCycles }: { cycles: CycleData[] }) {
+  const [cycles, setCycles] = useState<CycleData[]>(initialCycles);
   const [editingCycle, setEditingCycle] = useState<CycleData | null>(null);
+  
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(initialCycles.length === 10);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const loadingRef = useRef<HTMLDivElement>(null);
+  const BATCH_SIZE = 10;
+
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore) return;
+    
+    setLoading(true);
+    try {
+      const nextBatch = await getPaginatedCycles(cycles.length, BATCH_SIZE);
+      
+      if (nextBatch.length > 0) {
+        setCycles(prev => [...prev, ...nextBatch]);
+      }
+      
+      if (nextBatch.length < BATCH_SIZE) {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Failed to load more:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [cycles.length, loading, hasMore]);
+
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+
+    observerRef.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        loadMore();
+      }
+    }, { rootMargin: '100px' });
+
+    if (loadingRef.current) {
+      observerRef.current.observe(loadingRef.current);
+    }
+
+    return () => observerRef.current?.disconnect();
+  }, [loadMore, hasMore]);
 
   if (cycles.length === 0) {
     return <p style={{ color: '#888' }}>No cycles in inventory yet.</p>;
@@ -30,15 +75,21 @@ export default function CycleList({ cycles }: { cycles: CycleData[] }) {
                 Edit
               </button>
               <button 
-                onClick={() => toggleCycleActive(c.id, c.isActive)}
+                onClick={async () => {
+                  await toggleCycleActive(c.id, c.isActive);
+                  // Optimistic update
+                  setCycles(cycles.map(cycle => cycle.id === c.id ? { ...cycle, isActive: !cycle.isActive } : cycle));
+                }}
                 style={{ background: c.isActive ? '#333' : '#1eb53a', color: '#fff', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
               >
                 {c.isActive ? 'Deactivate' : 'Activate'}
               </button>
               <button 
-                onClick={() => {
+                onClick={async () => {
                   if (confirm('Are you sure you want to delete this cycle type?')) {
-                    deleteCycle(c.id);
+                    await deleteCycle(c.id);
+                    // Optimistic update
+                    setCycles(cycles.filter(cycle => cycle.id !== c.id));
                   }
                 }}
                 style={{ background: '#ff4d4d22', color: '#ff4d4d', border: '1px solid #ff4d4d', padding: '0.4rem 0.8rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
@@ -58,8 +109,22 @@ export default function CycleList({ cycles }: { cycles: CycleData[] }) {
         </div>
       ))}
 
+      {hasMore && (
+        <div ref={loadingRef} style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
+          Loading more cycles...
+        </div>
+      )}
+      {!hasMore && cycles.length > 0 && (
+        <div style={{ padding: '1rem', textAlign: 'center', color: '#555', fontSize: '0.9rem' }}>
+          End of inventory.
+        </div>
+      )}
+
       {editingCycle && (
-        <EditCycleModal cycle={editingCycle} onClose={() => setEditingCycle(null)} />
+        <EditCycleModal 
+          cycle={editingCycle} 
+          onClose={() => setEditingCycle(null)} 
+        />
       )}
     </div>
   );

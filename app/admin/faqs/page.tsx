@@ -1,9 +1,14 @@
 import React from 'react';
 import FAQClientView from './FAQClientView';
-import { getFAQs } from './actions';
+import prisma from '@/lib/prisma';
+import { FAQItem } from './FAQClientView';
 
 export default async function AdminFAQPage() {
-  const faqs = await getFAQs();
+  const prismaFAQ = prisma as unknown as { fAQ: { findMany: (args: unknown) => Promise<FAQItem[]> } };
+  const faqs = await prismaFAQ.fAQ.findMany({
+    orderBy: { order: 'asc' },
+    take: 10
+  });
 
   return (
     <div>

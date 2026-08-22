@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { updateBookingStatus } from '../actions';
 import RefundButton from '@/app/admin/components/RefundButton';
+import { getPaginatedBookings } from '../../actions/infiniteScrollActions';
 
 export interface BookingData {
   id: string;
@@ -13,13 +14,57 @@ export interface BookingData {
   quantity: number;
   startDate: Date | string;
   endDate: Date | string;
-  transactionId?: string;
-  cycle?: { type: string };
+  transactionId?: string | null;
+  cycle?: { type: string } | null;
 }
 
-export default function BookingList({ bookings }: { bookings: BookingData[] }) {
-  const [pendingAction, setPendingAction] = React.useState<{ id: string, action: string } | null>(null);
+export default function BookingList({ bookings: initialBookings }: { bookings: BookingData[] }) {
+  const [bookings, setBookings] = useState<BookingData[]>(initialBookings);
+  const [pendingAction, setPendingAction] = useState<{ id: string, action: string } | null>(null);
   
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(initialBookings.length === 10);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const loadingRef = useRef<HTMLDivElement>(null);
+  const BATCH_SIZE = 10;
+
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore) return;
+    
+    setLoading(true);
+    try {
+      const nextBatch = await getPaginatedBookings(bookings.length, BATCH_SIZE);
+      
+      if (nextBatch.length > 0) {
+        setBookings(prev => [...prev, ...nextBatch]);
+      }
+      
+      if (nextBatch.length < BATCH_SIZE) {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Failed to load more:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [bookings.length, loading, hasMore]);
+
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+
+    observerRef.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        loadMore();
+      }
+    }, { rootMargin: '100px' });
+
+    if (loadingRef.current) {
+      observerRef.current.observe(loadingRef.current);
+    }
+
+    return () => observerRef.current?.disconnect();
+  }, [loadMore, hasMore]);
+
   if (bookings.length === 0) {
     return <p style={{ color: '#888' }}>No bookings found.</p>;
   }
@@ -87,6 +132,8 @@ export default function BookingList({ bookings }: { bookings: BookingData[] }) {
                     onClick={async () => {
                       setPendingAction({ id: b.id, action: 'RETURNED' });
                       await updateBookingStatus(b.id, 'RETURNED');
+                      // Optimistic update
+                      setBookings(bookings.map(booking => booking.id === b.id ? { ...booking, status: 'RETURNED' } : booking));
                       setPendingAction(null);
                     }}
                     disabled={pendingAction !== null}
@@ -99,6 +146,8 @@ export default function BookingList({ bookings }: { bookings: BookingData[] }) {
                       if (confirm('Cancel this booking without refunding?')) {
                         setPendingAction({ id: b.id, action: 'CANCELLED' });
                         await updateBookingStatus(b.id, 'CANCELLED');
+                        // Optimistic update
+                        setBookings(bookings.map(booking => booking.id === b.id ? { ...booking, status: 'CANCELLED' } : booking));
                         setPendingAction(null);
                       }
                     }}
@@ -116,6 +165,17 @@ export default function BookingList({ bookings }: { bookings: BookingData[] }) {
           </div>
         </div>
       ))}
+      
+      {hasMore && (
+        <div ref={loadingRef} style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
+          Loading more bookings...
+        </div>
+      )}
+      {!hasMore && bookings.length > 0 && (
+        <div style={{ padding: '1rem', textAlign: 'center', color: '#555', fontSize: '0.9rem' }}>
+          End of bookings list.
+        </div>
+      )}
     </div>
   );
 }

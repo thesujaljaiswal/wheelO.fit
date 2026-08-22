@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { createEvent } from './actions';
+import React, { useState } from 'react';
+import { createEvent } from '../actions/eventActions';
 
 export default function CreateEventForm() {
   const [error, setError] = useState<string | null>(null);

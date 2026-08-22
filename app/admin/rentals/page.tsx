@@ -13,7 +13,8 @@ export default async function AdminRentalsPage() {
       findMany: (args: unknown) => Promise<import('./EditCycleModal').CycleData[]>
     }
   }).rentalCycle.findMany({
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' },
+    take: 10
   });
 
   return (

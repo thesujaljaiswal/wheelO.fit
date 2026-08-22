@@ -15,7 +15,8 @@ export default async function AdminRentalsBookingsPage() {
     orderBy: { createdAt: 'desc' },
     include: {
       cycle: true
-    }
+    },
+    take: 10
   });
 
   return (

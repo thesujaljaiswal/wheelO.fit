@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Reorder } from 'framer-motion';
 import { GripVertical } from 'lucide-react';
 import { createFAQ, updateFAQ, deleteFAQ, updateFAQOrder } from './actions';
+import { getPaginatedFAQs } from '../actions/infiniteScrollActions';
 
 export interface FAQItem {
   id: string;
@@ -18,11 +19,59 @@ export default function FAQClientView({ faqs }: { faqs: FAQItem[] }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [items, setItems] = useState(faqs);
   const [prevFaqs, setPrevFaqs] = useState(faqs);
+  
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(faqs.length === 10);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const loadingRef = useRef<HTMLDivElement>(null);
+  const BATCH_SIZE = 10;
 
   if (faqs !== prevFaqs) {
     setPrevFaqs(faqs);
     setItems(faqs);
+    setHasMore(faqs.length === 10);
   }
+
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore) return;
+    
+    setLoading(true);
+    try {
+      const nextBatch = await getPaginatedFAQs(items.length, BATCH_SIZE);
+      
+      if (nextBatch.length > 0) {
+        setItems(prev => {
+          // Avoid duplicates
+          const newItems = nextBatch.filter((newItem: FAQItem) => !prev.some(p => p.id === newItem.id));
+          return [...prev, ...newItems];
+        });
+      }
+      
+      if (nextBatch.length < BATCH_SIZE) {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Failed to load more:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [items.length, loading, hasMore]);
+
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+
+    observerRef.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        loadMore();
+      }
+    }, { rootMargin: '100px' });
+
+    if (loadingRef.current) {
+      observerRef.current.observe(loadingRef.current);
+    }
+
+    return () => observerRef.current?.disconnect();
+  }, [loadMore, hasMore]);
 
   const openCreateModal = () => {
     setEditingFAQ(null);
@@ -106,6 +155,12 @@ export default function FAQClientView({ faqs }: { faqs: FAQItem[] }) {
             <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>No FAQs found. Add one!</div>
           )}
         </Reorder.Group>
+        
+        {hasMore && (
+          <div ref={loadingRef} style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
+            Loading more FAQs...
+          </div>
+        )}
       </div>
 
       {isModalOpen && (

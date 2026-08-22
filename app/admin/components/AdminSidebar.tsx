@@ -35,16 +35,6 @@ export default function AdminSidebar({ role, username, isOpen, closeSidebar }: A
           Dashboard
         </Link>
         
-        <Link 
-          href="/admin/events" 
-          onClick={closeSidebar}
-          style={{ 
-            color: pathname === '/admin/events' && !pathname.includes('/attendance') ? '#fff' : '#888',
-            textDecoration: 'none',
-            fontWeight: pathname === '/admin/events' && !pathname.includes('/attendance') ? 'bold' : 'normal'
-          }}>
-          Manage Events
-        </Link>
 
         <Link 
           href="/admin/attendance" 
@@ -66,6 +56,17 @@ export default function AdminSidebar({ role, username, isOpen, closeSidebar }: A
             fontWeight: pathname === '/admin/responses' ? 'bold' : 'normal'
           }}>
           View Responses
+        </Link>
+
+        <Link 
+          href="/admin/event-history" 
+          onClick={closeSidebar}
+          style={{ 
+            color: pathname === '/admin/event-history' ? '#fff' : '#888',
+            textDecoration: 'none',
+            fontWeight: pathname === '/admin/event-history' ? 'bold' : 'normal'
+          }}>
+          Event History
         </Link>
 
         <Link 
