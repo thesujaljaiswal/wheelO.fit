@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { BookingForm } from '@/components/ui/BookingForm';
+import { AsyncBookingForm as BookingForm } from '@/components/ui/AsyncBookingForm';
 import prisma from '@/lib/prisma';
 import { RidePageLayout } from '@/components/ui/RidePageLayout';
 import styles from '@/components/ui/RidePageLayout.module.css';

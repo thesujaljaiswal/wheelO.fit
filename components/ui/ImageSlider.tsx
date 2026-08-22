@@ -14,15 +14,30 @@ export function ImageSlider({ images }: ImageSliderProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const [slidesInView, setSlidesInView] = useState<number[]>([0]);
+
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
+    setSlidesInView((prev) => {
+      const inView = emblaApi.slidesInView();
+      return Array.from(new Set([...prev, ...inView]));
+    });
   }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.on('select', onSelect);
+    emblaApi.on('slidesInView', () => {
+      setSlidesInView((prev) => {
+        const inView = emblaApi.slidesInView();
+        return Array.from(new Set([...prev, ...inView]));
+      });
+    });
     emblaApi.on('reInit', onSelect);
+    
+    // Initial trigger
+    setSlidesInView(Array.from(new Set([...emblaApi.slidesInView(), 0])));
 
     const autoplay = setInterval(() => {
       emblaApi.scrollNext();
@@ -31,6 +46,7 @@ export function ImageSlider({ images }: ImageSliderProps) {
       clearInterval(autoplay);
       emblaApi.off('select', onSelect);
       emblaApi.off('reInit', onSelect);
+      emblaApi.off('slidesInView', onSelect);
     };
   }, [emblaApi, onSelect]);
 
@@ -42,23 +58,37 @@ export function ImageSlider({ images }: ImageSliderProps) {
         <div className={styles.container}>
           {images.map((img, index) => {
             const isActive = index === selectedIndex;
+            const hasBeenViewed = slidesInView.includes(index);
+            
             return (
               <div className={styles.slide} key={img.id}>
-                {/* Blurred Background Layer */}
-                <Image src={img.img} alt="" className={styles.bgImage} fill priority={index === 0} style={{ objectFit: 'cover' }} />
-                <div className={styles.bgOverlay} />
-                
-                {/* Main Foreground Image */}
-                <motion.img 
-                  src={img.img} 
-                  alt="Gallery image"
-                  className={styles.image} 
-                  initial={{ scale: 1 }}
-                  animate={{ scale: isActive ? 1.05 : 1 }}
-                  transition={{ duration: 4, ease: "linear" }}
-                  fetchPriority={index === 0 ? "high" : "auto"}
-                  loading={index === 0 ? "eager" : "lazy"}
-                />
+                {hasBeenViewed ? (
+                  <>
+                    {/* Blurred Background Layer */}
+                    <Image 
+                      src={encodeURI(img.img)} 
+                      alt="" 
+                      className={styles.bgImage} 
+                      fill 
+                      priority={index === 0} 
+                      sizes="(max-width: 768px) 100vw, 1200px"
+                      style={{ objectFit: 'cover' }} 
+                    />
+                    <div className={styles.bgOverlay} />
+                    
+                    {/* Main Foreground Image */}
+                    <div className={`${styles.imageWrapper} ${isActive ? styles.activeScale : ''}`}>
+                      <Image 
+                        src={encodeURI(img.img)}
+                        alt="Gallery image"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 1200px"
+                        priority={index === 0}
+                        style={{ objectFit: 'contain' }}
+                      />
+                    </div>
+                  </>
+                ) : null}
               </div>
             );
           })}

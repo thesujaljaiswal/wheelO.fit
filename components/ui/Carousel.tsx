@@ -5,6 +5,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BlurText } from '../react-bits/BlurText';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './Carousel.module.css';
 
 interface CarouselSlide {
@@ -23,6 +24,8 @@ export function Carousel({ slides }: CarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const [slidesInView, setSlidesInView] = useState<number[]>([0]);
+
   const autoplayRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const startAutoplay = useCallback(() => {
@@ -35,13 +38,25 @@ export function Carousel({ slides }: CarouselProps) {
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
+    setSlidesInView((prev) => {
+      const inView = emblaApi.slidesInView();
+      return Array.from(new Set([...prev, ...inView]));
+    });
     startAutoplay();
   }, [emblaApi, setSelectedIndex, startAutoplay]);
 
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.on('select', onSelect);
+    emblaApi.on('slidesInView', () => {
+      setSlidesInView((prev) => {
+        const inView = emblaApi.slidesInView();
+        return Array.from(new Set([...prev, ...inView]));
+      });
+    });
     emblaApi.on('reInit', onSelect);
+    
+    setSlidesInView(Array.from(new Set([...emblaApi.slidesInView(), 0])));
 
     startAutoplay();
 
@@ -49,6 +64,7 @@ export function Carousel({ slides }: CarouselProps) {
       if (autoplayRef.current) clearInterval(autoplayRef.current);
       emblaApi.off('select', onSelect);
       emblaApi.off('reInit', onSelect);
+      emblaApi.off('slidesInView', onSelect);
     };
   }, [emblaApi, onSelect, startAutoplay]);
 
@@ -58,21 +74,35 @@ export function Carousel({ slides }: CarouselProps) {
         <div className={styles.container}>
           {slides.map((slide, index) => {
             const isActive = index === selectedIndex;
+            const hasBeenViewed = slidesInView.includes(index);
+            
             return (
               <Link href={slide.link} className={styles.slide} key={slide.id}>
-                <div className={styles.imageWrapper}>
-                  <motion.img 
-                    src={slide.image} 
-                    alt={slide.title} 
-                    className={styles.image} 
-                    initial={{ scale: 1 }}
-                    animate={{ scale: isActive ? 1.05 : 1 }}
-                    transition={{ duration: 8, ease: "linear" }}
-                    fetchPriority={index === 0 ? "high" : "auto"}
-                    loading={index === 0 ? "eager" : "lazy"}
-                  />
-                  <div className={styles.overlay} />
-                </div>
+                {hasBeenViewed ? (
+                  <>
+                    <div className={styles.imageWrapper}>
+                      <motion.div
+                        className={styles.image}
+                        initial={{ scale: 1 }}
+                        animate={{ scale: isActive ? 1.05 : 1 }}
+                        transition={{ duration: 8, ease: "linear" }}
+                        style={{ position: 'relative', width: '100%', height: '100%' }}
+                      >
+                        <Image 
+                          src={encodeURI(slide.image)} 
+                          alt={slide.title} 
+                          fill
+                          sizes="(max-width: 768px) 100vw, 1200px"
+                          priority={index === 0}
+                          style={{ objectFit: 'cover' }}
+                        />
+                      </motion.div>
+                      <div className={styles.overlay} />
+                    </div>
+                  </>
+                ) : (
+                  <div className={styles.imageWrapper} style={{ background: '#000' }} />
+                )}
                 
                 <div className={styles.content}>
                   <AnimatePresence mode="wait">
