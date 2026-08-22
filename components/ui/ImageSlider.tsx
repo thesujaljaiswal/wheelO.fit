@@ -45,7 +45,7 @@ export function ImageSlider({ images }: ImageSliderProps) {
             return (
               <div className={styles.slide} key={img.id}>
                 {/* Blurred Background Layer */}
-                <Image src={img.img} alt="" className={styles.bgImage} fill unoptimized priority={index === 0} style={{ objectFit: 'cover' }} />
+                <Image src={img.img} alt="" className={styles.bgImage} fill priority={index === 0} style={{ objectFit: 'cover' }} />
                 <div className={styles.bgOverlay} />
                 
                 {/* Main Foreground Image */}

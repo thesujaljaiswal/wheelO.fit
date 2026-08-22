@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import CycleClassForm from './CycleClassForm';
+import dynamic from 'next/dynamic';
+const CycleClassForm = dynamic(() => import('./CycleClassForm'), { ssr: false });
 
 export default function EnquireModalFAB() {
   const [isOpen, setIsOpen] = useState(false);
