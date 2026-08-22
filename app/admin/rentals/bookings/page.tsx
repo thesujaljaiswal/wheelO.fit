@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminRentalsBookingsPage() {
   const bookings = await (prisma as any).rentalBooking.findMany({
+    where: { status: 'CONFIRMED' },
     orderBy: { createdAt: 'desc' },
     include: {
       cycle: true

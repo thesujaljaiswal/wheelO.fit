@@ -7,10 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "sync-reels": "node scripts/scrape-instagram.js"
+    "sync-reels": "node scripts/scrape-instagram.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@phonepe-pg/pg-sdk-node": "^2.0.6",
     "@prisma/client": "^6.19.3",
     "@use-gesture/react": "^10.3.1",
     "@yudiel/react-qr-scanner": "^2.6.0",

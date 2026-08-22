@@ -104,12 +104,33 @@ export async function deleteCycle(id: string) {
   }
 }
 
+import { refundPhonePePayment } from '@/lib/phonepe';
+
 export async function updateBookingStatus(id: string, status: string) {
   try {
+    const booking = await (prisma as any).rentalBooking.findUnique({
+      where: { id }
+    });
+
+    if (!booking) throw new Error('Booking not found');
+
+    // If marked as RETURNED and payment was SUCCESS, trigger the partial deposit refund
+    if (status === 'RETURNED' && booking.status === 'CONFIRMED' && booking.paymentStatus === 'SUCCESS') {
+      const depositAmountInPaise = booking.quantity * 1000 * 100;
+      if (booking.transactionId) {
+        const refundResult = await refundPhonePePayment(booking.transactionId, depositAmountInPaise);
+        if (!refundResult.success) {
+          console.error(`Failed to refund deposit for booking ${id}:`, refundResult.error);
+          // We could potentially return an error here, or just log it and proceed
+        }
+      }
+    }
+
     await (prisma as any).rentalBooking.update({
       where: { id },
       data: { status }
     });
+    
     revalidatePath('/admin/rentals/bookings');
   } catch (error) {
     console.error(error);

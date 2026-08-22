@@ -2,12 +2,15 @@ import React from 'react';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 
+import RefundButton from '@/app/admin/components/RefundButton';
+
 export default async function EventResponsesPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   const event = await prisma.event.findUnique({
     where: { id: resolvedParams.id },
     include: {
       registrations: {
+        where: { paymentStatus: 'SUCCESS' },
         orderBy: { name: 'asc' }
       }
     }
@@ -52,8 +55,10 @@ export default async function EventResponsesPage({ params }: { params: Promise<{
                   <th style={{ padding: '0.8rem 1rem' }}>Email</th>
                   <th style={{ padding: '0.8rem 1rem' }}>Phone</th>
                   <th style={{ padding: '0.8rem 1rem' }}>Ticket Code</th>
+                  <th style={{ padding: '0.8rem 1rem' }}>Transaction ID</th>
                   <th style={{ padding: '0.8rem 1rem' }}>Status</th>
                   <th style={{ padding: '0.8rem 1rem' }}>Date Registered</th>
+                  <th style={{ padding: '0.8rem 1rem' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -63,6 +68,7 @@ export default async function EventResponsesPage({ params }: { params: Promise<{
                     <td style={{ padding: '0.8rem 1rem' }}>{reg.email}</td>
                     <td style={{ padding: '0.8rem 1rem' }}>{reg.phone}</td>
                     <td style={{ padding: '0.8rem 1rem', fontFamily: 'monospace' }}>{reg.ticketCode || '-'}</td>
+                    <td style={{ padding: '0.8rem 1rem', fontFamily: 'monospace', fontSize: '0.8rem' }}>{reg.transactionId || '-'}</td>
                     <td style={{ padding: '0.8rem 1rem' }}>
                       {reg.isPresent ? (
                         <span style={{ color: '#4ade80', fontWeight: 'bold' }}>Present</span>
@@ -71,6 +77,11 @@ export default async function EventResponsesPage({ params }: { params: Promise<{
                       )}
                     </td>
                     <td style={{ padding: '0.8rem 1rem' }}>{new Date(reg.createdAt).toLocaleString()}</td>
+                    <td style={{ padding: '0.8rem 1rem' }}>
+                      {reg.transactionId && (
+                        <RefundButton transactionId={reg.transactionId} type="event" />
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

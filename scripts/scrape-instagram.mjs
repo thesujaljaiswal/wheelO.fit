@@ -2,9 +2,14 @@
 // Run locally via `npm run sync-reels` to bypass Instagram's cloud blocking.
 // It scrapes your reels using your home internet and pushes them straight to MongoDB.
 
-require('dotenv').config();
-const { chromium } = require('playwright');
-const { PrismaClient } = require('@prisma/client');
+import 'dotenv/config';
+import { chromium } from 'playwright';
+import { PrismaClient } from '@prisma/client';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const prisma = new PrismaClient();
 const INSTAGRAM_USERNAME = 'wheelo.fit';
@@ -66,7 +71,6 @@ function parseNode(node) {
 }
 
 async function scrape() {
-  const path = require('path');
   const userDataDir = path.join(__dirname, '..', '.ig-session');
 
   console.log(`\n======================================================`);

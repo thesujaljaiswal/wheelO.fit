@@ -26,6 +26,7 @@ model Event {
   date          DateTime
   timeSlot      String
   ageLimit      String?
+  price         Int            @default(0) // Added for PhonePe
   isActive      Boolean        @default(true)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
@@ -43,6 +44,9 @@ model Registration {
   additionalNames String[] @default([])
   ticketCode      String?  @unique
   isPresent       Boolean  @default(false)
+  paymentStatus   String   @default("PENDING") // PENDING, SUCCESS, FAILED
+  transactionId   String?
+  amount          Int      @default(0)
   createdAt       DateTime @default(now())
 }
 
@@ -124,6 +128,9 @@ model RentalBooking {
   email           String
   phone           String
   status          String   @default("CONFIRMED") // CONFIRMED, CANCELLED, RETURNED
+  paymentStatus   String   @default("PENDING") // PENDING, SUCCESS, FAILED
+  transactionId   String?
+  totalAmount     Int      @default(0)
   createdAt       DateTime @default(now())
 }
 model FAQ {

@@ -53,29 +53,30 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
     setMessage(null);
     const form = e.currentTarget;
     const formData = new FormData(form);
+    formData.append('type', 'rental');
     formData.append('cycleId', selectedCycleId);
     formData.append('startDate', selectedDate);
     formData.append('durationValue', selectedPricing.durationValue.toString());
     formData.append('durationUnit', selectedPricing.durationUnit);
     formData.append('quantity', quantity.toString());
+    formData.append('price', selectedPricing.price.toString());
     
-    const res = await bookRental(formData);
-    
-    if (res?.error) {
-      setMessage({ type: 'error', text: res.error });
-    } else if (res?.success) {
-      setMessage({ type: 'success', text: res.success });
-      form.reset();
-      setSelectedDate('');
-      if (!preselectedCycleId) setSelectedCycleId('');
-      setSelectedPricing(null);
-      setQuantity(1);
-      if (!preselectedCycleId) setStep(1); else setStep(2);
-      
-      // Refresh availability
-      getCycleAvailabilityMap(selectedCycleId, currentMonth, currentYear).then(res => {
-        if (res) setAvailabilityMap(res);
+    try {
+      const response = await fetch('/api/payment/initiate', {
+        method: 'POST',
+        body: formData,
       });
+
+      const res = await response.json();
+
+      if (!response.ok || res.error) {
+        setMessage({ type: 'error', text: res.error || 'Payment initiation failed' });
+      } else if (res.success && res.redirectUrl) {
+        // Redirect to PhonePe or Success Page
+        window.location.href = res.redirectUrl;
+      }
+    } catch (err: any) {
+      setMessage({ type: 'error', text: 'An unexpected error occurred.' });
     }
     
     setPending(false);
@@ -403,6 +404,27 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
               <label className={styles.label}>Phone</label>
               <input type="tel" name="phone" required className={styles.input} />
             </div>
+
+            {selectedPricing && (
+              <div style={{ marginTop: '2rem', padding: '1.5rem', background: '#222', borderRadius: '8px', border: '1px solid #444' }}>
+                <h4 style={{ margin: '0 0 1rem 0', color: '#fff' }}>Payment Summary</h4>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', color: '#ccc' }}>
+                  <span>Rental Fee (₹{selectedPricing.price} × {selectedPricing.durationValue} {selectedPricing.durationUnit.toLowerCase()} × {quantity} cycles)</span>
+                  <span>₹{selectedPricing.price * selectedPricing.durationValue * quantity}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', color: '#ccc' }}>
+                  <span>Refundable Security Deposit (₹1000 × {quantity} cycles)</span>
+                  <span>₹{1000 * quantity}</span>
+                </div>
+                <div style={{ borderTop: '1px solid #444', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', color: '#1eb53a', fontSize: '1.2rem' }}>
+                  <span>Total Amount</span>
+                  <span>₹{(selectedPricing.price * selectedPricing.durationValue * quantity) + (1000 * quantity)}</span>
+                </div>
+                <p style={{ margin: '1rem 0 0 0', fontSize: '0.8rem', color: '#888' }}>
+                  * The security deposit will be automatically refunded to your original payment method when the cycle is returned.
+                </p>
+              </div>
+            )}
             
             <div style={{ marginTop: '2rem', display: 'flex', flexWrap: 'wrap-reverse', gap: '1rem', justifyContent: 'space-between', alignItems: 'center' }}>
               <button type="button" onClick={() => setStep(3)} style={{ background: '#333', color: '#fff', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '6px', cursor: 'pointer' }}>&larr; Back</button>

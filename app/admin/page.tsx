@@ -7,18 +7,19 @@ export default async function AdminDashboard() {
   const [totalEvents, activeEvents, totalRegistrations, upcomingEvents, recentRegistrations] = await Promise.all([
     prisma.event.count(),
     prisma.event.count({ where: { isActive: true } }),
-    prisma.registration.count(),
+    prisma.registration.count({ where: { paymentStatus: 'SUCCESS' } }),
     prisma.event.findMany({
       where: { date: { gte: new Date() } },
       orderBy: { date: 'asc' },
       take: 4,
       include: {
         _count: {
-          select: { registrations: true }
+          select: { registrations: { where: { paymentStatus: 'SUCCESS' } } }
         }
       }
     }),
     prisma.registration.findMany({
+      where: { paymentStatus: 'SUCCESS' },
       orderBy: { createdAt: 'desc' },
       take: 5,
       include: {

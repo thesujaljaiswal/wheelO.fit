@@ -7,7 +7,7 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
   
   const cycle = await (prisma as any).rentalCycle.findUnique({
     where: { id },
-    include: { bookings: true }
+    include: { bookings: { where: { status: 'CONFIRMED' } } }
   });
 
   if (!cycle) {

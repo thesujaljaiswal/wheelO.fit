@@ -14,13 +14,29 @@ const sliderImages = [
 ];
 
 export default async function SundayMorningPage() {
-  const events = await prisma.event.findMany({
+  const dbEvents = await prisma.event.findMany({
     where: { eventType: 'SUNDAY', isActive: true, date: { gte: new Date() } },
-    orderBy: { date: 'asc' }
+    orderBy: { date: 'asc' },
+    select: { id: true, title: true, date: true, timeSlot: true, price: true }
   });
 
+  // Fetch global pricing set by Admin
+  const globalEvent = await prisma.event.findFirst({
+    where: { eventType: 'SUNDAY', price: { gt: 0 } },
+    orderBy: { updatedAt: 'desc' }
+  });
+  const globalPrice = globalEvent?.price || 649;
+
+  const events = dbEvents.map(e => ({
+    id: e.id,
+    title: e.title,
+    date: e.date,
+    timeSlot: e.timeSlot,
+    price: globalPrice
+  }));
+
   const overview = (
-    <div>
+    <div key="overview">
       <p>Start your Sunday on two wheels with a refreshing 15 km cycling experience through some of Mumbai’s most scenic coastal stretches. Our Sunday Morning Ride is designed for riders who want to enjoy the city at a relaxed pace while soaking in the fresh morning air, beautiful views, and vibrant cycling atmosphere.</p>
       <p style={{ fontWeight: 'bold', margin: '1rem 0' }}>🚴 Ride Route -- Worli → Worli Seaface → Worli Promenade Cycling Track → Shivaji Park → Worli</p>
       <p>The ride begins at Worli and takes you along the scenic Worli Seaface, where you can ride through the cycling track and enjoy the cool morning breeze and beautiful views of the Arabian Sea. It’s one of the highlights of ride, offering a peaceful and enjoyable stretch away from the usual city rush.</p>
@@ -30,7 +46,7 @@ export default async function SundayMorningPage() {
   );
 
   const inclusionsExclusions = (
-    <div className={styles.grid2Col}>
+    <div key="inc-exc" className={styles.grid2Col}>
       <div className={styles.incCard}>
         <h3>Inclusions</h3>
         <ul className={`${styles.list} ${styles.incList}`}>
@@ -52,7 +68,7 @@ export default async function SundayMorningPage() {
   );
 
   const itinerary = (
-    <div className={styles.timeline}>
+    <div key="itinerary" className={styles.timeline}>
       <div className={styles.timelineItem}>
         <span className={styles.timelineTime}>06:00 AM</span>
         Assemble at the starting point, brief introduction.
@@ -76,7 +92,7 @@ export default async function SundayMorningPage() {
     {
       title: 'Things to carry',
       content: (
-        <ul className={styles.list}>
+        <ul key="carry" className={styles.list}>
           <li><span style={{color: '#1eb53a'}}>✦</span> Identity Proof (Mandatory)</li>
           <li><span style={{color: '#1eb53a'}}>✦</span> Water Bottle Min 1 litre</li>
           <li><span style={{color: '#1eb53a'}}>✦</span> Snacks/Drinks (optional)</li>
@@ -90,7 +106,7 @@ export default async function SundayMorningPage() {
     {
       title: 'Disclaimer & Policies',
       content: (
-        <div>
+        <div key="policies">
           <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
             <li>If you are unable to complete the ride, rented cycles must be returned to the starting point at your own expense.</li>
             <li>Smoking and alcohol consumption are strictly prohibited during the ride.</li>
@@ -105,7 +121,7 @@ export default async function SundayMorningPage() {
     {
       title: 'FAQs',
       content: (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div key="faqs" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <strong>1) What is the route?</strong>
             <p>Worli (Meeting point) - Worli Seaface - Promenade Cycling track - Shivaji Park - Worli</p>
@@ -152,7 +168,7 @@ export default async function SundayMorningPage() {
       additionalSections={additionalSections}
       sliderImages={sliderImages}
       priceText="₹649"
-      bookingForm={<BookingForm title="Book Your Spot" buttonText="Register Now" events={events} />}
+      bookingForm={<BookingForm key="booking-form" title="Book Your Spot" buttonText="Register Now" events={events} />}
     />
   );
 }

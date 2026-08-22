@@ -3,13 +3,14 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './BookingForm.module.css';
-import { registerForEvent } from '@/app/(main)/rides/actions';
+import { registerForEvent } from '@/app/(main)/rides/actions'; // Kept for reference but not used in new flow
 
 type EventData = {
   id: string;
   title: string;
   date: Date;
   timeSlot: string;
+  price?: number;
 };
 
 type BookingFormProps = {
@@ -41,17 +42,37 @@ export function BookingForm({ title, events = [], buttonText = 'Book Now' }: Boo
       return;
     }
     formData.append('eventId', selectedEventId);
+    formData.append('type', 'event');
 
-    const res = await registerForEvent(formData);
-    
-    if (res?.error) {
-      setError(res.error);
-    } else if (res?.success) {
-      if (res.ticketCode) {
-        router.push(`/ticket/${res.ticketCode}`);
-      } else {
-        setSuccess(res.success);
+    try {
+      const response = await fetch('/api/payment/initiate', {
+        method: 'POST',
+        body: formData
+      });
+      const res = await response.json();
+
+      if (res.error) {
+        setError(res.error);
+        setPending(false);
+        return;
       }
+
+      if (res.success) {
+        if (res.redirectUrl) {
+          if (res.redirectUrl.startsWith('http')) {
+            // External redirect to PhonePe
+            window.location.href = res.redirectUrl;
+          } else {
+            // Internal redirect
+            router.push(res.redirectUrl);
+          }
+        } else {
+          setSuccess('Booking created successfully.');
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setError('An error occurred while initiating payment.');
     }
     
     setPending(false);
@@ -183,7 +204,12 @@ export function BookingForm({ title, events = [], buttonText = 'Book Now' }: Boo
         </div>
 
         <button type="submit" disabled={pending} className={styles.submitBtn}>
-          {pending ? 'Submitting...' : buttonText}
+          {pending 
+            ? 'Submitting...' 
+            : selectedEvent && selectedEvent.price
+              ? `${buttonText} • ₹${selectedEvent.price * ticketCount}`
+              : buttonText
+          }
         </button>
       </form>
     </div>

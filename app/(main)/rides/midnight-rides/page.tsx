@@ -14,13 +14,33 @@ const sliderImages = [
 ];
 
 export default async function MidnightRidesPage() {
-  const events = await prisma.event.findMany({
-    where: { eventType: 'MIDNIGHT', isActive: true, date: { gte: new Date() } },
-    orderBy: { date: 'asc' }
+  const dbEvents = await prisma.event.findMany({
+    where: {
+      eventType: 'MIDNIGHT',
+      isActive: true,
+      date: { gte: new Date() }
+    },
+    orderBy: { date: 'asc' },
+    select: { id: true, title: true, date: true, timeSlot: true, price: true }
   });
 
+  // Fetch global pricing set by Admin
+  const globalEvent = await prisma.event.findFirst({
+    where: { eventType: 'MIDNIGHT', price: { gt: 0 } },
+    orderBy: { updatedAt: 'desc' }
+  });
+  const globalPrice = globalEvent?.price || 749;
+
+  const events = dbEvents.map(e => ({
+    id: e.id,
+    title: e.title,
+    date: e.date,
+    timeSlot: e.timeSlot,
+    price: globalPrice
+  }));
+
   const overview = (
-    <div>
+    <div key="overview">
       <p>What makes a true Mumbaikar? It’s the spirit of a city that never stops. And what better way to experience that spirit than on two wheels, when Mumbai comes alive in a completely different way?</p>
       <p>Whether you’re new to Mumbai, looking for a different weekend plan, or simply want to explore the city after hours, Our Mumbai Midnight Cycling Experience is made for you. Ride through the city’s iconic streets, enjoy the cool Mumbai breeze, meet new people, and create unforgettable memories along the way.</p>
       <p>Our guided route takes you through some of Mumbai’s most iconic landmarks, including Haji Ali, Tardeo, Wilson College, Mantralaya, Gateway Of India, Taj Mahal Palace, Marine Drive and Charni Chowpatty, before we make our way back to Worli.</p>
@@ -31,7 +51,7 @@ export default async function MidnightRidesPage() {
   );
 
   const inclusionsExclusions = (
-    <div className={styles.grid2Col}>
+    <div key="inc-exc" className={styles.grid2Col}>
       <div className={styles.incCard}>
         <h3>Inclusions</h3>
         <ul className={`${styles.list} ${styles.incList}`}>
@@ -53,7 +73,7 @@ export default async function MidnightRidesPage() {
   );
 
   const itinerary = (
-    <div className={styles.timeline}>
+    <div key="itinerary" className={styles.timeline}>
       <div className={styles.timelineItem}>
         <span className={styles.timelineTime}>10:30 PM</span>
         Meet at Worli for orientation, cycle allocation & refreshments
@@ -85,7 +105,7 @@ export default async function MidnightRidesPage() {
     {
       title: 'Things to carry',
       content: (
-        <ul className={styles.list}>
+        <ul key="carry" className={styles.list}>
           <li><span style={{color: '#1eb53a'}}>✦</span> Identity Proof (Mandatory)</li>
           <li><span style={{color: '#1eb53a'}}>✦</span> Water Bottle Min 1 litre</li>
           <li><span style={{color: '#1eb53a'}}>✦</span> Snacks/Drinks (optional)</li>
@@ -99,7 +119,7 @@ export default async function MidnightRidesPage() {
     {
       title: 'Disclaimer & Policies',
       content: (
-        <div>
+        <div key="policies">
           <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
             <li>If you are unable to complete the ride, rented cycles must be returned to the starting point at your own expense.</li>
             <li>Smoking and alcohol consumption are strictly prohibited during the ride.</li>
@@ -114,7 +134,7 @@ export default async function MidnightRidesPage() {
     {
       title: 'FAQs',
       content: (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div key="faqs" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <strong>1) What is the route?</strong>
             <p>Worli - Nehru Planetarium - Haji Ali - Tardeo - Wilson College - Taraporewala Aquarium - Trident Hotel - Mantralaya - Gateway of India - Marine Drive - Charni Chowpatty</p>
@@ -163,6 +183,7 @@ export default async function MidnightRidesPage() {
       priceText="₹749"
       bookingForm={
         <BookingForm 
+          key="booking-form"
           title="Book Your Spot"
           buttonText="Register Now"
           events={events}

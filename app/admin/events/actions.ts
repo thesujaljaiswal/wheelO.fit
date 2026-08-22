@@ -30,6 +30,14 @@ export async function createEvent(formData: FormData) {
   const date = new Date(dateStr);
 
   try {
+    // Inherit the latest price for this event type
+    const latestEvent = await prisma.event.findFirst({
+      where: { eventType },
+      orderBy: { createdAt: 'desc' }
+    });
+    
+    const price = latestEvent?.price || 0;
+
     await prisma.event.create({
       data: {
         title,
@@ -37,6 +45,7 @@ export async function createEvent(formData: FormData) {
         date,
         timeSlot,
         ageLimit: ageLimit || null,
+        price,
         isActive: true
       }
     });

@@ -113,6 +113,17 @@ export default function AdminSidebar({ role, username, isOpen, closeSidebar }: A
         </Link>
 
         <Link 
+          href="/admin/pricing" 
+          onClick={closeSidebar}
+          style={{ 
+            color: pathname.startsWith('/admin/pricing') ? '#fff' : '#888',
+            textDecoration: 'none',
+            fontWeight: pathname.startsWith('/admin/pricing') ? 'bold' : 'normal'
+          }}>
+          Event Pricing
+        </Link>
+
+        <Link 
           href="/admin/faqs" 
           onClick={closeSidebar}
           style={{ 

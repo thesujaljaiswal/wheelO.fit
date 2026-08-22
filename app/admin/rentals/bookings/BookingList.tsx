@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { updateBookingStatus } from '../actions';
+import RefundButton from '@/app/admin/components/RefundButton';
 
 export default function BookingList({ bookings }: { bookings: any[] }) {
   const [pendingAction, setPendingAction] = React.useState<{ id: string, action: string } | null>(null);
@@ -82,7 +83,7 @@ export default function BookingList({ bookings }: { bookings: any[] }) {
                   </button>
                   <button 
                     onClick={async () => {
-                      if (confirm('Cancel this booking?')) {
+                      if (confirm('Cancel this booking without refunding?')) {
                         setPendingAction({ id: b.id, action: 'CANCELLED' });
                         await updateBookingStatus(b.id, 'CANCELLED');
                         setPendingAction(null);
@@ -93,6 +94,9 @@ export default function BookingList({ bookings }: { bookings: any[] }) {
                   >
                     {pendingAction?.id === b.id && pendingAction?.action === 'CANCELLED' ? <><span className="btn-spinner" style={{ borderTopColor: '#ff4d4d' }}></span> Cancelling...</> : 'Cancel Booking'}
                   </button>
+                  {b.transactionId && (
+                    <RefundButton transactionId={b.transactionId} type="rental" />
+                  )}
                 </>
               )}
             </div>

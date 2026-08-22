@@ -6,7 +6,9 @@ import { ArrowRight } from 'lucide-react';
 export default async function AttendanceDashboardPage() {
   const events = await prisma.event.findMany({
     include: {
-      registrations: true
+      registrations: {
+        where: { paymentStatus: 'SUCCESS' }
+      }
     },
     orderBy: { date: 'desc' }
   });
