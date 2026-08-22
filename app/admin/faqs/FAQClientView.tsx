@@ -1,24 +1,35 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Reorder } from 'framer-motion';
 import { GripVertical } from 'lucide-react';
 import { createFAQ, updateFAQ, deleteFAQ, updateFAQOrder } from './actions';
 
-export default function FAQClientView({ faqs }: { faqs: any[] }) {
+export interface FAQItem {
+  id: string;
+  question: string;
+  answer: string;
+  isActive: boolean;
+}
+
+export default function FAQClientView({ faqs }: { faqs: FAQItem[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingFAQ, setEditingFAQ] = useState<any>(null);
+  const [editingFAQ, setEditingFAQ] = useState<FAQItem | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [items, setItems] = useState(faqs);
+  const [prevFaqs, setPrevFaqs] = useState(faqs);
 
-  useEffect(() => { setItems(faqs); }, [faqs]);
+  if (faqs !== prevFaqs) {
+    setPrevFaqs(faqs);
+    setItems(faqs);
+  }
 
   const openCreateModal = () => {
     setEditingFAQ(null);
     setIsModalOpen(true);
   };
 
-  const openEditModal = (faq: any) => {
+  const openEditModal = (faq: FAQItem) => {
     setEditingFAQ(faq);
     setIsModalOpen(true);
   };
@@ -44,7 +55,7 @@ export default function FAQClientView({ faqs }: { faqs: any[] }) {
     }
   };
 
-  const handleReorder = async (newOrder: any[]) => {
+  const handleReorder = async (newOrder: FAQItem[]) => {
     setItems(newOrder);
     await updateFAQOrder(newOrder.map(item => item.id));
   };

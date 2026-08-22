@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './ServiceCard.module.css';
 
 interface ServiceCardProps {
@@ -14,7 +15,7 @@ export function ServiceCard({ title, description, image, href }: ServiceCardProp
   const CardContent = (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
-        <img src={image} alt={title} className={styles.image} />
+        <Image src={image} alt={title} className={styles.image} fill unoptimized style={{ objectFit: 'cover' }} />
         <div className={styles.overlay} />
       </div>
       <div className={styles.content}>

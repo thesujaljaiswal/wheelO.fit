@@ -35,7 +35,7 @@ export default function PrivacyPolicy() {
 
         <h2>3. Data Protection and Security</h2>
         <p>
-          We implement a variety of standard security measures to maintain the safety of your personal information. All sensitive payment information is transmitted via Secure Socket Layer (SSL) technology and encrypted into our payment gateway providers' databases, accessible only by those authorized with special access rights to such systems.
+          We implement a variety of standard security measures to maintain the safety of your personal information. All sensitive payment information is transmitted via Secure Socket Layer (SSL) technology and encrypted into our payment gateway providers&apos; databases, accessible only by those authorized with special access rights to such systems.
         </p>
 
         <h2>4. Sharing Your Information</h2>
@@ -50,7 +50,7 @@ export default function PrivacyPolicy() {
 
         <h2>6. Changes to This Privacy Policy</h2>
         <p>
-          We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.
+          We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last Updated&quot; date.
         </p>
 
         <h2>7. Contact Us</h2>

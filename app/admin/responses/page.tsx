@@ -23,7 +23,7 @@ export default async function ResponsesPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {events.length === 0 ? (
           <p style={{ color: '#888' }}>No events yet.</p>
-        ) : events.map((event: any) => (
+        ) : events.map((event: { id: string; title: string; date: Date; timeSlot: string; eventType: string; registrations: unknown[] }) => (
           <Link key={event.id} href={`/admin/responses/${event.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
             <div style={{ background: '#1a1a1a', padding: '1.5rem', borderRadius: '8px', border: '1px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', transition: 'background 0.2s ease', cursor: 'pointer' }}>
               <div style={{ flex: '1 1 min-content', minWidth: '250px' }}>

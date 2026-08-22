@@ -57,13 +57,13 @@ export default function CreateCycleForm() {
         <div style={{ flex: '1 1 200px' }}>
           <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Tyre Size</label>
           <select name="tyreSize" required style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }}>
-            <option value="14 Inches (3'0 - 3'6)">14 Inches (3'0 - 3'6)</option>
-            <option value="16 Inches (3'6 - 3'1)">16 Inches (3'6 - 3'1)</option>
-            <option value="20 Inches (4'0 - 4'7)">20 Inches (4'0 - 4'7)</option>
-            <option value="24 Inches (4'6 - 5'2)">24 Inches (4'6 - 5'2)</option>
-            <option value="26 Inches (5'0 - 6'6)">26 Inches (5'0 - 6'6)</option>
-            <option value="27.5 Inches (5'4 - 6'2)">27.5 Inches (5'4 - 6'2)</option>
-            <option value="29 Inches (5'8 - 6'4)">29 Inches (5'8 - 6'4)</option>
+            <option value="14 Inches (3'0 - 3'6)">14 Inches (3&apos;0 - 3&apos;6)</option>
+            <option value="16 Inches (3'6 - 3'1)">16 Inches (3&apos;6 - 3&apos;1)</option>
+            <option value="20 Inches (4'0 - 4'7)">20 Inches (4&apos;0 - 4&apos;7)</option>
+            <option value="24 Inches (4'6 - 5'2)">24 Inches (4&apos;6 - 5&apos;2)</option>
+            <option value="26 Inches (5'0 - 6'6)">26 Inches (5&apos;0 - 6&apos;6)</option>
+            <option value="27.5 Inches (5'4 - 6'2)">27.5 Inches (5&apos;4 - 6&apos;2)</option>
+            <option value="29 Inches (5'8 - 6'4)">29 Inches (5&apos;8 - 6&apos;4)</option>
           </select>
         </div>
 

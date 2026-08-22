@@ -4,7 +4,20 @@ import React from 'react';
 import { updateBookingStatus } from '../actions';
 import RefundButton from '@/app/admin/components/RefundButton';
 
-export default function BookingList({ bookings }: { bookings: any[] }) {
+export interface BookingData {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  status: string;
+  quantity: number;
+  startDate: Date | string;
+  endDate: Date | string;
+  transactionId?: string;
+  cycle?: { type: string };
+}
+
+export default function BookingList({ bookings }: { bookings: BookingData[] }) {
   const [pendingAction, setPendingAction] = React.useState<{ id: string, action: string } | null>(null);
   
   if (bookings.length === 0) {

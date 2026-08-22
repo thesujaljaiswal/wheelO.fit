@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from '../rides.module.css';
-import CycleClassForm from '@/components/ui/CycleClassForm';
 import CycleClassTabs from '@/components/ui/CycleClassTabs';
 import WhyLearnWithUs from '@/components/ui/WhyLearnWithUs';
 import { ImageSlider } from '@/components/ui/ImageSlider';
@@ -30,13 +29,13 @@ export default async function CycleClassesPage() {
           <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', marginBottom: '1rem', color: 'var(--primary)' }}>Learn to Ride a Cycle with Confidence</h2>
           
           <p>
-            Whether you're learning to cycle for the very first time or looking to improve your riding skills, Wheelo.fit is here to guide you every step of the way.
+            Whether you&apos;re learning to cycle for the very first time or looking to improve your riding skills, Wheelo.fit is here to guide you every step of the way.
           </p>
           <p>
             Our personalized cycling classes are designed for children and adults aged 5 to 75 years, making it easy for anyone to learn in a safe, supportive, and enjoyable environment. With experienced instructors and 1000+ successful learners across Mumbai, we help you build confidence and become an independent rider at your own pace.
           </p>
 
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#fff', marginTop: '2rem' }}>What You'll Learn</h3>
+          <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#fff', marginTop: '2rem' }}>What You&apos;ll Learn</h3>
           <ul style={{ listStyleType: 'none', padding: 0, margin: '0 0 2rem 0' }}>
             <li style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}><span style={{ color: 'var(--primary)' }}>✔</span> Choosing the right bicycle based on your height and comfort</li>
             <li style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}><span style={{ color: 'var(--primary)' }}>✔</span> Understanding the essential parts of a bicycle and how they work</li>
@@ -54,7 +53,7 @@ export default async function CycleClassesPage() {
           
           <div style={{ marginTop: '2rem', marginBottom: '2rem', padding: '1rem 1.5rem', background: 'var(--surface)', borderLeft: '4px solid var(--primary)', borderRadius: '4px' }}>
             <p style={{ margin: 0, fontSize: '1rem', color: '#ccc' }}>
-              <strong>Please Note:</strong> We do not provide bicycles for children who are below 4'3" (130 cm) in height. They have to be arranged by clients, as it is not feasible for our trainers to transport and carry smaller bicycles during the training sessions.
+              <strong>Please Note:</strong> We do not provide bicycles for children who are below 4&apos;3&quot; (130 cm) in height. They have to be arranged by clients, as it is not feasible for our trainers to transport and carry smaller bicycles during the training sessions.
             </p>
           </div>
 

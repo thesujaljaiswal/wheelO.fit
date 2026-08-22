@@ -21,7 +21,7 @@ export default async function CareersPage() {
         <div className={styles.textBlock}>
           <h2>Why Work With Us?</h2>
           <p>
-            At Wheelo.fit, we don't just ride together; we grow together. We offer a fast-paced, highly collaborative environment where your ideas actually matter. 
+            At Wheelo.fit, we don&apos;t just ride together; we grow together. We offer a fast-paced, highly collaborative environment where your ideas actually matter. 
           </p>
           <p>
             Perks include unlimited studio classes, free cycle rentals, comprehensive health insurance, flexible working hours, and a green-commute allowance.
@@ -33,7 +33,7 @@ export default async function CareersPage() {
             <div className={styles.glassCard} style={{ textAlign: 'center', padding: '40px' }}>
               <h3 style={{ color: 'var(--foreground)', marginBottom: '10px' }}>No Open Positions</h3>
               <p style={{ color: 'var(--foreground)', opacity: 0.8 }}>
-                We currently don't have any open roles, but we are always on the lookout for great talent. Check back soon!
+                We currently don&apos;t have any open roles, but we are always on the lookout for great talent. Check back soon!
               </p>
             </div>
           ) : (

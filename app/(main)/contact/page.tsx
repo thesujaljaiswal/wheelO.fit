@@ -7,7 +7,7 @@ export default function ContactPage() {
       <div className={styles.hero}>
         <h1 className={styles.title}>Get In Touch</h1>
         <p className={styles.subtitle}>
-          Have a question about our classes, midnight rides, or cycle rentals? Drop us a message and we'll get back to you as soon as possible.
+          Have a question about our classes, midnight rides, or cycle rentals? Drop us a message and we&apos;ll get back to you as soon as possible.
         </p>
       </div>
 

@@ -3,7 +3,13 @@
 import React, { useState } from 'react';
 import styles from './Footer.module.css';
 
-export function FAQAccordion({ faqs }: { faqs: any[] }) {
+interface FAQ {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   if (!faqs || faqs.length === 0) return null;

@@ -23,7 +23,7 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
         if (result.success) {
           (e.target as HTMLFormElement).reset();
         }
-      } catch (error) {
+      } catch {
         setMessage({ text: 'Something went wrong. Please try again.', isError: true });
       }
     });

@@ -1,4 +1,4 @@
-import { StandardCheckoutClient, Env, StandardCheckoutPayRequest } from '@phonepe-pg/pg-sdk-node';
+import { StandardCheckoutClient, Env, StandardCheckoutPayRequest, RefundRequest } from '@phonepe-pg/pg-sdk-node';
 
 const PHONEPE_CLIENT_ID = process.env.PHONEPE_CLIENT_ID!;
 const PHONEPE_CLIENT_SECRET = process.env.PHONEPE_CLIENT_SECRET!;
@@ -72,7 +72,6 @@ export async function verifyPhonePePayment(merchantOrderId: string): Promise<{
 export async function refundPhonePePayment(merchantOrderId: string, amountInPaise: number): Promise<{ success: boolean; state?: string; error?: string }> {
   try {
     const client = getPhonePeClient();
-    const { RefundRequest } = require('@phonepe-pg/pg-sdk-node');
     
     // We must generate a unique merchantRefundId for this refund request
     const refundOrderId = `RFND_${Date.now()}_${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
@@ -90,8 +89,9 @@ export async function refundPhonePePayment(merchantOrderId: string, amountInPais
       success: response.state === 'COMPLETED' || response.state === 'PENDING', // PENDING is fine as refunds can take time
       state: response.state,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('PhonePe Refund Error:', error);
-    return { success: false, error: error.message || 'Refund failed' };
+    const errorMessage = error instanceof Error ? error.message : 'Refund failed';
+    return { success: false, error: errorMessage };
   }
 }

@@ -11,7 +11,7 @@ export default function QRScanner({ eventId }: { eventId: string }) {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [facingMode, setFacingMode] = useState<'environment' | 'user'>('environment');
 
-  const handleScan = async (result: any) => {
+  const handleScan = async (result: { rawValue: string }[]) => {
     if (!result || !result[0]) return;
     const rawValue = result[0].rawValue;
     

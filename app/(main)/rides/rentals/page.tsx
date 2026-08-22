@@ -5,10 +5,16 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { SectionAccordion } from '@/components/ui/SectionAccordion';
 
+import Image from 'next/image';
+import { CycleData } from './RentalsView';
+
+type CycleBooking = { startDate: Date; endDate: Date; quantity: number };
+type CycleWithBookings = Omit<CycleData, 'isInstock' | 'nextAvailableDate'> & { bookings: CycleBooking[] };
+
 export const dynamic = 'force-dynamic';
 
 export default async function RentalsPage() {
-  const cycles = await (prisma as any).rentalCycle.findMany({
+  const cycles = await (prisma as unknown as { rentalCycle: { findMany: (args: unknown) => Promise<(CycleWithBookings & Record<string, unknown>)[]> } }).rentalCycle.findMany({
     where: { isActive: true },
     orderBy: { createdAt: 'desc' },
     include: { bookings: { where: { status: 'CONFIRMED' } } }
@@ -16,15 +22,14 @@ export default async function RentalsPage() {
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
 
-  const cyclesWithStockInfo = cycles.map((cycle: any) => {
+  const cyclesWithStockInfo = cycles.map((cycle: CycleWithBookings & Record<string, unknown>) => {
     let isInstock = cycle.quantity > 0;
     let nextAvailableDate: string | null = null;
     
     if (isInstock && cycle.bookings && cycle.bookings.length > 0) {
       // Helper to get booked quantity for a specific date
-      const getBookedQty = (date: Date) => cycle.bookings.reduce((sum: number, b: any) => {
+      const getBookedQty = (date: Date) => cycle.bookings.reduce((sum: number, b: CycleBooking) => {
          const bStart = new Date(b.startDate); bStart.setHours(0,0,0,0);
          const bEnd = new Date(b.endDate); bEnd.setHours(23,59,59,999);
          if (date >= bStart && date <= bEnd) {
@@ -70,7 +75,7 @@ export default async function RentalsPage() {
   return (
     <main>
       <div className={styles.hero} style={{ flexDirection: 'column', textAlign: 'center' }}>
-        <img src="/carousel_rental.png" alt="Bicycle Rentals" className={styles.heroImage} />
+        <Image src="/carousel_rental.png" alt="Bicycle Rentals" className={styles.heroImage} width={1920} height={1080} priority />
         <div className={styles.heroOverlay}></div>
         <h1 className={styles.title} style={{ marginBottom: '1rem' }}>Bicycle Rentals</h1>
         <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '1.25rem', maxWidth: '800px', margin: '0 auto 2rem', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>

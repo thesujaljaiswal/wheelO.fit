@@ -62,7 +62,7 @@ export default async function EventResponsesPage({ params }: { params: Promise<{
                 </tr>
               </thead>
               <tbody>
-                {event.registrations.map((reg: any) => (
+                {event.registrations.map((reg: { id: string; name: string; email: string; phone: string; ticketCode: string | null; transactionId: string | null; isPresent: boolean; createdAt: Date }) => (
                   <tr key={reg.id} style={{ borderBottom: '1px solid #333' }}>
                     <td style={{ padding: '0.8rem 1rem' }}>{reg.name}</td>
                     <td style={{ padding: '0.8rem 1rem' }}>{reg.email}</td>

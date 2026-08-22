@@ -1,6 +1,5 @@
 import React from 'react';
 import prisma from '@/lib/prisma';
-import styles from '../admin.module.css';
 import Link from 'next/link';
 import ToggleStatusBtn from './ToggleStatusBtn';
 
@@ -19,7 +18,10 @@ export default async function AdminCycleClassesPage(props: {
     whereClause = { contacted: true };
   }
 
-  const inquiries = await (prisma as any).cycleClassInquiry.findMany({
+  type CycleClassInquiry = { id: string; name: string; email: string; phone: string; experienceLevel?: string; message?: string; contacted: boolean; createdAt: Date; };
+  
+  const prismaInquiry = prisma as unknown as { cycleClassInquiry: { findMany: (args: unknown) => Promise<CycleClassInquiry[]> } };
+  const inquiries = await prismaInquiry.cycleClassInquiry.findMany({
     where: whereClause,
     orderBy: { createdAt: 'desc' }
   });
@@ -54,7 +56,7 @@ export default async function AdminCycleClassesPage(props: {
               </tr>
             </thead>
             <tbody>
-              {inquiries.map((inquiry: any) => (
+              {inquiries.map((inquiry: CycleClassInquiry) => (
                 <tr key={inquiry.id} style={{ borderBottom: '1px solid #333' }}>
                   <td style={{ padding: '1rem', borderBottom: '1px solid #444' }}><strong>{inquiry.name}</strong></td>
                   <td style={{ padding: '1rem', borderBottom: '1px solid #444' }}>

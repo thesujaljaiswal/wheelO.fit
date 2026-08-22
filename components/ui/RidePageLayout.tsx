@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StickyBottomBar } from './StickyBottomBar';
 import { ImageSlider } from './ImageSlider';
 import { SectionAccordion } from './SectionAccordion';
@@ -32,25 +32,11 @@ export function RidePageLayout({
   bookingForm,
   priceText,
 }: RidePageLayoutProps) {
-  const bookingRef = useRef<HTMLDivElement>(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [visibleImagesCount, setVisibleImagesCount] = useState(10); // default for SSR/desktop
 
   const handleBookNowClick = () => {
     setIsFormVisible(true);
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setVisibleImagesCount(window.innerWidth < 768 ? 5 : 10);
-    };
-    
-    // Set initial size
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     if (isFormVisible) {

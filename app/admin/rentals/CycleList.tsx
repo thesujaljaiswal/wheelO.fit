@@ -4,8 +4,10 @@ import React, { useState } from 'react';
 import { toggleCycleActive, deleteCycle } from './actions';
 import EditCycleModal from './EditCycleModal';
 
-export default function CycleList({ cycles }: { cycles: any[] }) {
-  const [editingCycle, setEditingCycle] = useState<any>(null);
+import type { CycleData, PricingOption } from './EditCycleModal';
+
+export default function CycleList({ cycles }: { cycles: CycleData[] }) {
+  const [editingCycle, setEditingCycle] = useState<CycleData | null>(null);
 
   if (cycles.length === 0) {
     return <p style={{ color: '#888' }}>No cycles in inventory yet.</p>;
@@ -47,7 +49,7 @@ export default function CycleList({ cycles }: { cycles: any[] }) {
           </div>
           
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-            {c.pricing.map((p: any, i: number) => (
+            {c.pricing.map((p: PricingOption, i: number) => (
               <div key={i} style={{ background: '#111', padding: '0.3rem 0.6rem', borderRadius: '4px', fontSize: '0.8rem', color: '#ccc', border: '1px solid #333' }}>
                 {p.durationLabel}: ₹{p.price}
               </div>

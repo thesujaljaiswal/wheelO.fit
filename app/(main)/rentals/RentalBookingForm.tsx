@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getCycleAvailabilityMap, bookRental } from './actions';
+import { getCycleAvailabilityMap } from './actions';
 import styles from '@/components/ui/BookingForm.module.css';
 
-export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel }: { cycles: any[], preselectedCycleId?: string, onCancel?: () => void }) {
+import { CycleData } from '@/app/(main)/rides/rentals/RentalsView';
+
+export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel }: { cycles: CycleData[], preselectedCycleId?: string, onCancel?: () => void }) {
   const [step, setStep] = useState(preselectedCycleId ? 2 : 1);
   const [selectedCycleId, setSelectedCycleId] = useState(preselectedCycleId || '');
   const [availabilityMap, setAvailabilityMap] = useState<Record<string, number>>({});
@@ -12,7 +14,7 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   
-  const [selectedPricing, setSelectedPricing] = useState<any>(null);
+  const [selectedPricing, setSelectedPricing] = useState<CycleData['pricing'][0] | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedDate, setSelectedDate] = useState('');
   
@@ -21,8 +23,10 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
 
   useEffect(() => {
     if (preselectedCycleId) {
-      setSelectedCycleId(preselectedCycleId);
-      setStep(2);
+      Promise.resolve().then(() => {
+        setSelectedCycleId(preselectedCycleId);
+        setStep(2);
+      });
     }
   }, [preselectedCycleId]);
 
@@ -37,9 +41,11 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
   // Reset selections when cycle changes
   useEffect(() => {
     if (selectedCycleId) {
-      setSelectedPricing(null);
-      setQuantity(1);
-      setSelectedDate('');
+      Promise.resolve().then(() => {
+        setSelectedPricing(null);
+        setQuantity(1);
+        setSelectedDate('');
+      });
     }
   }, [selectedCycleId]);
 
@@ -75,7 +81,7 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
         // Redirect to PhonePe or Success Page
         window.location.href = res.redirectUrl;
       }
-    } catch (err: any) {
+    } catch {
       setMessage({ type: 'error', text: 'An unexpected error occurred.' });
     }
     
@@ -120,7 +126,7 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
       // If a package is selected, find the minimum availability across the whole duration
       if (selectedPricing && minAvailForDuration > 0) {
         // Approximate days if MONTHS (assuming 30 days per month)
-        let durationDays = selectedPricing.durationUnit === 'MONTHS' ? selectedPricing.durationValue * 30 : selectedPricing.durationValue;
+        const durationDays = selectedPricing.durationUnit === 'MONTHS' ? selectedPricing.durationValue * 30 : selectedPricing.durationValue;
         for (let i = 0; i < durationDays; i++) {
           const dt = new Date(dateObj);
           dt.setDate(dt.getDate() + i);
@@ -138,7 +144,7 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
 
       if (selectedDate && selectedPricing) {
         const start = new Date(selectedDate);
-        let durationDays = selectedPricing.durationUnit === 'MONTHS' ? selectedPricing.durationValue * 30 : selectedPricing.durationValue;
+        const durationDays = selectedPricing.durationUnit === 'MONTHS' ? selectedPricing.durationValue * 30 : selectedPricing.durationValue;
         
         const end = new Date(start);
         end.setDate(end.getDate() + durationDays - 1);
@@ -336,7 +342,7 @@ export default function RentalBookingForm({ cycles, preselectedCycleId, onCancel
             <div className={styles.field}>
               <label className={styles.label}>Pricing Package</label>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {selectedCycle.pricing.map((p: any, i: number) => {
+                {selectedCycle.pricing.map((p: CycleData['pricing'][0], i: number) => {
                   const isSelected = selectedPricing?.durationValue === p.durationValue && selectedPricing?.durationUnit === p.durationUnit;
                   return (
                     <div 

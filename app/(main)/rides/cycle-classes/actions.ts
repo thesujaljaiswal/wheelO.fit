@@ -19,7 +19,7 @@ export async function submitCycleClassInquiry(formData: FormData) {
 
   try {
     // We are casting it because prisma client might not have type definitions loaded immediately due to locked file during generate.
-    await (prisma as any).cycleClassInquiry.create({
+    await (prisma as unknown as { cycleClassInquiry: { create: (args: unknown) => Promise<unknown> } }).cycleClassInquiry.create({
       data: {
         name,
         email,

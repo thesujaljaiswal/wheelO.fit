@@ -3,6 +3,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import styles from './ImageSlider.module.css';
 
 interface ImageSliderProps {
@@ -20,7 +21,6 @@ export function ImageSlider({ images }: ImageSliderProps) {
 
   useEffect(() => {
     if (!emblaApi) return;
-    onSelect();
     emblaApi.on('select', onSelect);
     emblaApi.on('reInit', onSelect);
 
@@ -45,7 +45,7 @@ export function ImageSlider({ images }: ImageSliderProps) {
             return (
               <div className={styles.slide} key={img.id}>
                 {/* Blurred Background Layer */}
-                <img src={img.img} alt="" className={styles.bgImage} />
+                <Image src={img.img} alt="" className={styles.bgImage} fill unoptimized style={{ objectFit: 'cover' }} />
                 <div className={styles.bgOverlay} />
                 
                 {/* Main Foreground Image */}

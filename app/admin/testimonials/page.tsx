@@ -25,7 +25,7 @@ export default async function TestimonialsPage() {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {testimonials.length === 0 ? (
               <p style={{ color: '#888' }}>No testimonials added yet.</p>
-            ) : testimonials.map((testimonial: any) => (
+            ) : testimonials.map((testimonial: import('./TestimonialListItem').TestimonialData) => (
               <TestimonialListItem key={testimonial.id} testimonial={testimonial} />
             ))}
           </ul>

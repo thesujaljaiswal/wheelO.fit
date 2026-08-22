@@ -5,7 +5,18 @@ import TicketDownload from './TicketDownload';
 export default async function TicketPage({ params }: { params: Promise<{ ticketCode: string }> }) {
   const { ticketCode } = await params;
 
-  const registration = await (prisma as any).registration.findUnique({
+  const registration = await (prisma as unknown as {
+    registration: {
+      findUnique: (args: unknown) => Promise<{
+        ticketCode: string | null;
+        name: string;
+        email: string;
+        ticketCount: number;
+        additionalNames: string[];
+        event: { title: string; date: Date; timeSlot: string; };
+      } | null>;
+    }
+  }).registration.findUnique({
     where: { ticketCode },
     include: { event: true },
   });

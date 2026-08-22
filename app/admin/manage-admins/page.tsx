@@ -36,7 +36,7 @@ export default async function ManageAdminsPage() {
         <div style={{ background: '#1a1a1a', padding: '2rem', borderRadius: '8px', border: '1px solid #333' }}>
           <h2 style={{ marginTop: 0, marginBottom: '1.5rem', fontSize: '1.2rem' }}>Existing Admins</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {admins.map((admin: any) => (
+            {admins.map((admin: { id: string; username: string; role: string; createdAt: Date }) => (
               <AdminListItem 
                 key={admin.id} 
                 admin={admin} 

@@ -6,7 +6,12 @@ import styles from '../admin.module.css';
 
 export default async function ManageEventsPage() {
   const events = await prisma.event.findMany({
-    orderBy: { date: 'desc' }
+    orderBy: { date: 'desc' },
+    include: {
+      _count: {
+        select: { registrations: true }
+      }
+    }
   });
 
   return (
@@ -27,7 +32,7 @@ export default async function ManageEventsPage() {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {events.length === 0 ? (
               <p style={{ color: '#888' }}>No events created yet.</p>
-            ) : events.map((event: any) => (
+            ) : events.map((event) => (
               <EventListItem key={event.id} event={event} />
             ))}
           </ul>

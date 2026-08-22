@@ -30,7 +30,7 @@ export function TestimonialsSection({ testimonials }: { testimonials: Testimonia
       <div className={styles.container}>
         <div className={`${styles.header} font-mono`}>
           <h2 className={`${styles.title} uppercase tracking-widest`}>What <span className="text-gradient">Riders Say</span></h2>
-          <p className={`${styles.subtitle} text-sm opacity-80`}>Don't just take our word for it. Hear from the community that makes Wheelo special.</p>
+          <p className={`${styles.subtitle} text-sm opacity-80`}>Don&apos;t just take our word for it. Hear from the community that makes Wheelo special.</p>
         </div>
 
         <div className={styles.embla} ref={emblaRef}>
@@ -42,7 +42,7 @@ export function TestimonialsSection({ testimonials }: { testimonials: Testimonia
                     {'★'.repeat(testimonial.rating)}{'☆'.repeat(5 - testimonial.rating)}
                   </div>
                   <div className={`${styles.content} font-mono text-sm`}>
-                    "{testimonial.content}"
+                    &quot;{testimonial.content}&quot;
                   </div>
                   <div className={styles.author}>
                     <div className={`${styles.avatar} border border-[var(--primary)] rounded-none bg-[var(--surface)] font-mono`}>

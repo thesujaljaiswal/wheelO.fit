@@ -23,8 +23,8 @@ export default async function AttendanceDashboardPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {events.length === 0 ? (
           <p style={{ color: '#888' }}>No events yet.</p>
-        ) : events.map((event: any) => {
-          const presentCount = event.registrations.filter((r: any) => r.isPresent).length;
+        ) : events.map((event: { id: string; title: string; date: Date; timeSlot: string; eventType: string; registrations: { isPresent: boolean }[] }) => {
+          const presentCount = event.registrations.filter(r => r.isPresent).length;
           
           return (
             <Link key={event.id} href={`/admin/attendance/${event.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>

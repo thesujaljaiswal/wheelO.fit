@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import RentalBookingForm from '@/app/(main)/rentals/RentalBookingForm';
 import HeightChartModal from '../HeightChartModal';
 
-export default function CycleDetailView({ cycle }: { cycle: any }) {
+import Image from 'next/image';
+import { CycleData } from '../RentalsView';
+
+export default function CycleDetailView({ cycle }: { cycle: CycleData }) {
   const [isHeightChartOpen, setIsHeightChartOpen] = useState(false);
   const [isMobileFormOpen, setIsMobileFormOpen] = useState(false);
 
@@ -89,7 +91,7 @@ export default function CycleDetailView({ cycle }: { cycle: any }) {
             
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 0' }}>
               {cycle.imageUrl ? (
-                <img src={cycle.imageUrl} alt={cycle.type} style={{ width: '100%', maxHeight: '350px', objectFit: 'contain' }} />
+                <Image src={cycle.imageUrl} alt={cycle.type} width={600} height={400} style={{ width: '100%', maxHeight: '350px', objectFit: 'contain' }} />
               ) : (
                 <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>No Image</div>
               )}
@@ -113,8 +115,8 @@ export default function CycleDetailView({ cycle }: { cycle: any }) {
               <span style={{ fontSize: '0.75rem', color: '#aaa', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.4rem' }}>Monthly Rent Starts from</span>
               <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#fff' }}>
                 ₹{cycle.pricing && cycle.pricing.length > 0 
-                    ? (cycle.pricing.find((p: any) => p.durationLabel?.toLowerCase() === '1 month')?.price 
-                       || Math.max(...cycle.pricing.map((p: any) => p.price)))
+                    ? (cycle.pricing.find(p => p.durationLabel?.toLowerCase() === '1 month')?.price 
+                       || Math.max(...cycle.pricing.map(p => p.price)))
                     : '---'}/mo
               </span>
             </div>

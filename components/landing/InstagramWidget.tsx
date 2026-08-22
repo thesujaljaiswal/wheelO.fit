@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
+import Image from 'next/image';
+
 const proxyImage = (url: string) =>
   `/api/image-proxy?url=${encodeURIComponent(url)}`;
-import { Play, Heart, MessageCircle, ExternalLink } from 'lucide-react';
+import { Play, Heart, MessageCircle } from 'lucide-react';
 import styles from './InstagramWidget.module.css';
 
 interface Post {
@@ -62,8 +64,8 @@ export function InstagramWidget() {
         } else {
           setError(true);
         }
-      } catch (err: any) {
-        if (err.name !== 'AbortError') {
+      } catch (err: unknown) {
+        if (err instanceof Error && err.name !== 'AbortError') {
           console.error('[InstagramWidget] fetch failed:', err);
           setError(true);
         }
@@ -142,11 +144,13 @@ export function InstagramWidget() {
                 className={`${styles.postCard} blueprint-border p-2`}
               >
                 <div className={styles.imageWrapper}>
-                  <img
+                  <Image
                     src={error ? post.image : proxyImage(post.image)}
                     alt={post.caption || 'Wheelo.fit Instagram post'}
                     className={styles.image}
-                    loading="lazy"
+                    fill
+                    unoptimized
+                    style={{ objectFit: 'cover' }}
                   />
 
                   {post.type === 'reel' && (

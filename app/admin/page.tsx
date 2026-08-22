@@ -65,7 +65,7 @@ export default async function AdminDashboard() {
             <p style={{ color: '#888', fontSize: '0.9rem' }}>No upcoming events scheduled.</p>
           ) : (
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {upcomingEvents.map((event: any) => (
+              {upcomingEvents.map((event: { id: string; title: string; date: Date; timeSlot: string; _count: { registrations: number } }) => (
                 <li key={event.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '1rem', borderBottom: '1px solid #222' }}>
                   <div>
                     <div style={{ fontWeight: 'bold', marginBottom: '0.2rem', wordBreak: 'break-word' }}>{event.title}</div>
@@ -93,7 +93,7 @@ export default async function AdminDashboard() {
             <p style={{ color: '#888', fontSize: '0.9rem' }}>No recent registrations.</p>
           ) : (
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {recentRegistrations.map((reg: any) => (
+              {recentRegistrations.map((reg: { id: string; name: string; createdAt: Date; event: { title: string } }) => (
                 <li key={reg.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '1rem', borderBottom: '1px solid #222' }}>
                   <div>
                     <div style={{ fontWeight: 'bold', marginBottom: '0.2rem', wordBreak: 'break-word' }}>{reg.name}</div>

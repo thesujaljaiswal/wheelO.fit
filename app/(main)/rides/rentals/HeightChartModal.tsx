@@ -139,7 +139,7 @@ export default function HeightChartModal({ isOpen, onClose }: { isOpen: boolean;
             <h4 style={{ color: '#1eb53a', margin: '0 0 0.5rem 0', fontSize: '0.95rem' }}>Please note:</h4>
             <p style={{ color: '#888', fontSize: '0.85rem', margin: '0 0 0.25rem 0' }}><strong style={{ color: '#ccc' }}>Step 1.</strong> Note your height on the left side of the scale.</p>
             <p style={{ color: '#888', fontSize: '0.85rem', margin: '0 0 0.25rem 0' }}><strong style={{ color: '#ccc' }}>Step 2.</strong> Check the closest tyre size to your height on the right side.</p>
-            <p style={{ color: '#1eb53a', fontSize: '0.85rem', margin: '0.5rem 0 0 0', fontWeight: 'bold' }}>That's your ideal cycle size!</p>
+            <p style={{ color: '#1eb53a', fontSize: '0.85rem', margin: '0.5rem 0 0 0', fontWeight: 'bold' }}>That&apos;s your ideal cycle size!</p>
           </div>
         </div>
 

@@ -20,7 +20,7 @@ export default function CreateJobPostingForm() {
         await createJobPosting({ title, description, isActive });
         setMessage('Job posting created successfully.');
         (e.target as HTMLFormElement).reset();
-      } catch (error) {
+      } catch {
         setMessage('Failed to create job posting.');
       }
     });

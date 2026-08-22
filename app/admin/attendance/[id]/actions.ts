@@ -15,8 +15,8 @@ export async function getEventAttendance(eventId: string) {
   
   if (!event) throw new Error('Event not found');
   
-  const presentCount = event.registrations.reduce((acc, r) => r.isPresent ? acc + ((r as any).ticketCount || 1) : acc, 0);
-  const totalCount = event.registrations.reduce((acc, r) => acc + ((r as any).ticketCount || 1), 0);
+  const presentCount = event.registrations.reduce((acc, r) => r.isPresent ? acc + ((r as { ticketCount?: number }).ticketCount || 1) : acc, 0);
+  const totalCount = event.registrations.reduce((acc, r) => acc + ((r as { ticketCount?: number }).ticketCount || 1), 0);
   
   return { event, presentCount, totalCount };
 }

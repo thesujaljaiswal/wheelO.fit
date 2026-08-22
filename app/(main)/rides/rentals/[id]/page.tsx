@@ -2,10 +2,15 @@ import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import CycleDetailView from './CycleDetailView';
 
+import { CycleData } from '../RentalsView';
+
 export default async function CycleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   
-  const cycle = await (prisma as any).rentalCycle.findUnique({
+  type CycleBooking = { startDate: Date; endDate: Date; quantity: number };
+  type CycleWithBookings = Omit<CycleData, 'isInstock' | 'nextAvailableDate'> & { bookings: CycleBooking[] };
+  
+  const cycle = await (prisma as unknown as { rentalCycle: { findUnique: (args: unknown) => Promise<CycleWithBookings | null> } }).rentalCycle.findUnique({
     where: { id },
     include: { bookings: { where: { status: 'CONFIRMED' } } }
   });
@@ -19,7 +24,7 @@ export default async function CycleDetailPage({ params }: { params: Promise<{ id
   let isInstock = true;
   let nextAvailableDate = null;
 
-  const getBookedQty = (date: Date) => cycle.bookings.reduce((sum: number, b: any) => {
+  const getBookedQty = (date: Date) => cycle.bookings.reduce((sum: number, b: CycleBooking) => {
     const bStart = new Date(b.startDate); bStart.setHours(0,0,0,0);
     const bEnd = new Date(b.endDate); bEnd.setHours(23,59,59,999);
     if (date >= bStart && date <= bEnd) {

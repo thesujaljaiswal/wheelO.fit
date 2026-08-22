@@ -62,30 +62,33 @@ const OptionWheel = ({
 
   const remPx = typeof window !== 'undefined' ? parseFloat(getComputedStyle(document.documentElement).fontSize) || 16 : 16;
 
-  onChangeRef.current = onChange;
-  onItemSelectRef.current = onItemSelect;
-  cfgRef.current = {
-    count: items.length,
-    items,
-    rowH: Math.max(fontSize * spacing * remPx, 1),
-    curve,
-    tilt,
-    blur,
-    fade,
-    minOpacity,
-    side,
-    loop,
-    smoothing,
-    draggable,
-    soundUrl,
-    soundVolume
-  };
+  useEffect(() => {
+    onChangeRef.current = onChange;
+    onItemSelectRef.current = onItemSelect;
+    cfgRef.current = {
+      count: items.length,
+      items,
+      rowH: Math.max(fontSize * spacing * remPx, 1),
+      curve,
+      tilt,
+      blur,
+      fade,
+      minOpacity,
+      side,
+      loop,
+      smoothing,
+      draggable,
+      soundUrl,
+      soundVolume
+    };
+  });
 
-  const runFrame = useCallback(now => {
+  const runFrame = useCallback(function runFrameFunc(now) {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
     const cfg = cfgRef.current;
-    const tau = Math.max(cfg.smoothing, 1) / 1000;
+    if (!cfg || !cfg.items) return; // Prevent run before effect
+    const tau = Math.max(cfg.smoothing || 200, 1) / 1000;
     const k = 1 - Math.exp(-dt / tau);
 
     const target = targetRef.current;
@@ -99,8 +102,8 @@ const OptionWheel = ({
     const n = cfg.count;
     const mirror = cfg.side === 'right' ? -1 : 1;
     
-    const tiltRad = (cfg.tilt * Math.PI) / 180;
-    const R = tiltRad > 0.0005 ? cfg.rowH / tiltRad : 0;
+    const tiltRad = ((cfg.tilt || 0) * Math.PI) / 180;
+    const R = tiltRad > 0.0005 ? (cfg.rowH || 1) / tiltRad : 0;
     for (let i = 0; i < n; i++) {
       const el = els[i];
       if (!el) continue;
@@ -111,21 +114,21 @@ const OptionWheel = ({
       }
       const dist = Math.abs(d);
       let x = 0;
-      let y = d * cfg.rowH;
+      let y = d * (cfg.rowH || 1);
       let rot = 0;
       if (R > 0) {
         const ang = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, d * tiltRad));
         y = R * Math.sin(ang);
-        x = -mirror * R * (1 - Math.cos(ang)) * cfg.curve;
+        x = -mirror * R * (1 - Math.cos(ang)) * (cfg.curve || 1);
         rot = (mirror * ang * 180) / Math.PI;
       }
       el.style.transform = `translate(${x.toFixed(2)}px, calc(${y.toFixed(2)}px - 50%)) rotate(${rot.toFixed(3)}deg)`;
-      el.style.opacity = String(Math.max(cfg.minOpacity, 1 - dist * cfg.fade));
-      el.style.filter = cfg.blur > 0 ? `blur(${(dist * cfg.blur).toFixed(2)}px)` : 'none';
+      el.style.opacity = String(Math.max(cfg.minOpacity || 0.05, 1 - dist * (cfg.fade || 0.25)));
+      el.style.filter = (cfg.blur || 0) > 0 ? `blur(${(dist * cfg.blur).toFixed(2)}px)` : 'none';
       el.style.setProperty('--ow-p', Math.max(0, 1 - Math.min(dist, 1)).toFixed(4));
     }
 
-    rafRef.current = settled ? null : requestAnimationFrame(runFrame);
+    rafRef.current = settled ? null : requestAnimationFrame(runFrameFunc);
   }, []);
 
   const startLoop = useCallback(() => {

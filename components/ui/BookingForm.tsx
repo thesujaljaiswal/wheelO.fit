@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './BookingForm.module.css';
-import { registerForEvent } from '@/app/(main)/rides/actions'; // Kept for reference but not used in new flow
+
 
 type EventData = {
   id: string;

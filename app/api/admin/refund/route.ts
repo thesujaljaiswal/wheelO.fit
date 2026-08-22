@@ -14,14 +14,14 @@ export async function POST(req: NextRequest) {
     let amountInPaise = 0;
 
     if (type === 'event') {
-      record = await (prisma as any).registration.findFirst({
+      record = await prisma.registration.findFirst({
         where: { transactionId }
       });
       if (!record) return NextResponse.json({ error: 'Registration not found' }, { status: 404 });
       if (record.paymentStatus !== 'SUCCESS') return NextResponse.json({ error: 'Cannot refund a non-successful payment' }, { status: 400 });
       amountInPaise = record.amount * 100;
     } else if (type === 'rental') {
-      record = await (prisma as any).rentalBooking.findFirst({
+      record = await prisma.rentalBooking.findFirst({
         where: { transactionId }
       });
       if (!record) return NextResponse.json({ error: 'Rental not found' }, { status: 404 });
@@ -37,12 +37,12 @@ export async function POST(req: NextRequest) {
     if (refundResult.success) {
       // Update DB to reflect refund
       if (type === 'event') {
-        await (prisma as any).registration.update({
+        await prisma.registration.update({
           where: { id: record.id },
           data: { paymentStatus: 'REFUNDED', isPresent: false }
         });
       } else if (type === 'rental') {
-        await (prisma as any).rentalBooking.update({
+        await prisma.rentalBooking.update({
           where: { id: record.id },
           data: { paymentStatus: 'REFUNDED', status: 'CANCELLED' }
         });
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: refundResult.error || 'Failed to initiate refund with PhonePe' }, { status: 500 });
     }
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Refund API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }

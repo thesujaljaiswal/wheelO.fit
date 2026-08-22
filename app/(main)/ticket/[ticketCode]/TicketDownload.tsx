@@ -19,12 +19,14 @@ type TicketData = {
 export default function TicketDownload({ ticket }: { ticket: TicketData }) {
   const ticketRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
-  const [qrUrl, setQrUrl] = useState('');
+  const [origin, setOrigin] = useState('');
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    setQrUrl(`${window.location.origin}/ticket/${ticket.ticketCode}`);
-  }, [ticket.ticketCode]);
+    Promise.resolve().then(() => setOrigin(window.location.origin));
+  }, []);
+
+  const qrUrl = origin ? `${origin}/ticket/${ticket.ticketCode}` : '';
 
   const handleDownload = async () => {
     if (ticketRef.current === null) {
@@ -53,8 +55,12 @@ export default function TicketDownload({ ticket }: { ticket: TicketData }) {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     
-    const rotateX = ((y - centerY) / centerY) * -10; // Max rotation 10deg
-    const rotateY = ((x - centerX) / centerX) * 10;
+    let rotateX = ((y - centerY) / centerY) * -10;
+    let rotateY = ((x - centerX) / centerX) * 10;
+    
+    // Clamp values to prevent abrupt flips
+    rotateX = Math.max(-15, Math.min(15, rotateX));
+    rotateY = Math.max(-15, Math.min(15, rotateY));
     
     setTilt({ x: rotateX, y: rotateY });
   };
@@ -63,7 +69,7 @@ export default function TicketDownload({ ticket }: { ticket: TicketData }) {
     setTilt({ x: 0, y: 0 });
   };
 
-  const TicketContent = ({ isFixed }: { isFixed?: boolean }) => (
+  const renderTicketContent = (isFixed?: boolean) => (
     <>
       <div className={styles.ticketInner}>
         <div className={styles.circleTopRight}></div>
@@ -125,7 +131,7 @@ export default function TicketDownload({ ticket }: { ticket: TicketData }) {
       {/* Hidden fixed template for downloading */}
       <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
         <div ref={ticketRef} className={styles.ticketFixed}>
-          <TicketContent isFixed={true} />
+          {renderTicketContent(true)}
         </div>
       </div>
 
@@ -139,7 +145,7 @@ export default function TicketDownload({ ticket }: { ticket: TicketData }) {
             transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
           }}
         >
-          <TicketContent isFixed={false} />
+          {renderTicketContent(false)}
         </div>
       </div>
 

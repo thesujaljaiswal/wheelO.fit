@@ -4,7 +4,24 @@ import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import HeightChartModal from './HeightChartModal';
 
-export default function RentalsView({ cycles }: { cycles: any[] }) {
+import Image from 'next/image';
+
+export interface CycleData {
+  id: string;
+  category: string;
+  isInstock: boolean;
+  tyreSize: string;
+  speed: string;
+  bikeType: string;
+  brakes: string;
+  pricing: Array<{ durationValue: number; durationUnit: string; price: number; durationLabel?: string }>;
+  type: string;
+  imageUrl?: string;
+  quantity: number;
+  nextAvailableDate?: string | null;
+}
+
+export default function RentalsView({ cycles }: { cycles: CycleData[] }) {
   const router = useRouter();
   
   const [category, setCategory] = useState<string>('All');
@@ -30,9 +47,9 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
     else setter([...arr, item]);
   };
 
-  const getStartingPriceInfo = (cycle: any) => {
+  const getStartingPriceInfo = (cycle: CycleData) => {
     if (!cycle.pricing || cycle.pricing.length === 0) return { price: 0, unit: 'MONTHS' };
-    const basePricing = cycle.pricing.reduce((min: any, p: any) => p.durationValue < min.durationValue ? p : min, cycle.pricing[0]);
+    const basePricing = cycle.pricing.reduce((min, p) => p.durationValue < min.durationValue ? p : min, cycle.pricing[0]);
     return { price: basePricing.price, unit: basePricing.durationUnit };
   };
 
@@ -425,7 +442,7 @@ export default function RentalsView({ cycles }: { cycles: any[] }) {
                   </div>
 
                   {cycle.imageUrl ? (
-                    <img src={cycle.imageUrl} alt={cycle.type} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '2rem' }} />
+                    <Image src={cycle.imageUrl} alt={cycle.type} width={400} height={300} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '2rem' }} />
                   ) : (
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#999' }}>No Image</div>
                   )}

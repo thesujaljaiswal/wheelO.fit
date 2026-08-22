@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { useGesture } from '@use-gesture/react';
 import './DomeGallery.css';
 
@@ -631,7 +632,7 @@ export default function DomeGallery({
                   onClick={onTileClick}
                   onPointerUp={onTilePointerUp}
                 >
-                  <img src={it.src} draggable={false} alt={it.alt} />
+                  <Image src={it.src} alt={it.alt} fill unoptimized style={{ objectFit: 'cover' }} draggable={false} />
                 </div>
               </div>
             ))}

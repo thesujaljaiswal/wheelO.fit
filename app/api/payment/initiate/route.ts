@@ -11,10 +11,10 @@ export async function POST(req: NextRequest) {
     try {
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
       await Promise.all([
-        (prisma as any).registration.deleteMany({
+        prisma.registration.deleteMany({
           where: { paymentStatus: 'PENDING', createdAt: { lt: oneHourAgo } }
         }),
-        (prisma as any).rentalBooking.deleteMany({
+        prisma.rentalBooking.deleteMany({
           where: { paymentStatus: 'PENDING', createdAt: { lt: oneHourAgo } }
         })
       ]);
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
         if (addName) additionalNames.push(addName);
       }
 
-      await (prisma as any).registration.create({
+      await prisma.registration.create({
         data: {
           eventId, name, email, phone, ticketCount, additionalNames,
           paymentStatus: 'PENDING', transactionId: merchantOrderId, amount, ticketCode,
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
         endDate.setDate(endDate.getDate() + (durationValue * 30) - 1);
       }
 
-      await (prisma as any).rentalBooking.create({
+      await prisma.rentalBooking.create({
         data: {
           cycleId,
           startDate,
@@ -116,13 +116,13 @@ export async function POST(req: NextRequest) {
 
     if (amountInPaise === 0) {
       if (type === 'event') {
-        await (prisma as any).registration.updateMany({
+        await prisma.registration.updateMany({
           where: { transactionId: merchantOrderId },
           data: { paymentStatus: 'SUCCESS' },
         });
         return NextResponse.json({ success: true, redirectUrl: `${baseUrl}/ticket/${ticketCode}` });
       } else if (type === 'rental') {
-        await (prisma as any).rentalBooking.updateMany({
+        await prisma.rentalBooking.updateMany({
           where: { transactionId: merchantOrderId },
           data: { paymentStatus: 'SUCCESS', status: 'CONFIRMED' },
         });
@@ -136,10 +136,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, redirectUrl });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error initiating payment:', error);
     return NextResponse.json(
-      { error: 'Failed to initiate payment', details: error.message || String(error) },
+      { error: 'Failed to initiate payment', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

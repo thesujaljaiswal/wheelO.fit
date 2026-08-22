@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import OptionWheel from '../react-bits/OptionWheel';
@@ -66,7 +67,7 @@ export function Navbar() {
       >
         <div className={styles.container}>
           <Link href="/" className={styles.logo}>
-            <img src="/logo.png" alt="Wheelo.fit Logo" className={styles.logoImage} />
+            <Image src="/logo.png" alt="Wheelo.fit Logo" className={styles.logoImage} width={40} height={40} unoptimized />
             Wheelo.fit
           </Link>
           

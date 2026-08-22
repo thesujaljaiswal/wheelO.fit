@@ -6,7 +6,11 @@ import BookingList from './BookingList';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminRentalsBookingsPage() {
-  const bookings = await (prisma as any).rentalBooking.findMany({
+  const bookings = await (prisma as unknown as {
+    rentalBooking: {
+      findMany: (args: unknown) => Promise<import('./BookingList').BookingData[]>
+    }
+  }).rentalBooking.findMany({
     where: { status: 'CONFIRMED' },
     orderBy: { createdAt: 'desc' },
     include: {

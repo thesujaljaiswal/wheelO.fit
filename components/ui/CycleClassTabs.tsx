@@ -34,7 +34,7 @@ export default function CycleClassTabs() {
             </div>
             <div>
               <strong>2) Will I get a bicycle of my height?</strong>
-              <p>Yes, absolutely! Before confirming your session, we'll ask for your height so we can arrange a bicycle that's the right fit for you. Once you arrive at the venue, our trainers will adjust the seat height and make any necessary adjustments to ensure you're comfortable and ready to learn with confidence.</p>
+              <p>Yes, absolutely! Before confirming your session, we&apos;ll ask for your height so we can arrange a bicycle that&apos;s the right fit for you. Once you arrive at the venue, our trainers will adjust the seat height and make any necessary adjustments to ensure you&apos;re comfortable and ready to learn with confidence.</p>
             </div>
             <div>
               <strong>3) What is the duration of each session?</strong>
@@ -50,11 +50,11 @@ export default function CycleClassTabs() {
             </div>
             <div>
               <strong>6) Is there a guarantee that I will learn cycling?</strong>
-              <p>Our experienced trainers have successfully taught 500+ beginners to ride a bicycle with confidence. With personalized guidance, patience, and regular practice, we'll support you throughout your learning journey until you're able to ride independently.</p>
+              <p>Our experienced trainers have successfully taught 500+ beginners to ride a bicycle with confidence. With personalized guidance, patience, and regular practice, we&apos;ll support you throughout your learning journey until you&apos;re able to ride independently.</p>
             </div>
             <div>
               <strong>7) How often should I attend cycling sessions?</strong>
-              <p>For the best results, we recommend attending sessions regularly. If your schedule doesn't allow you to come every day, 2–3 sessions per week are enough to ensure steady progress and help you learn cycling with confidence.</p>
+              <p>For the best results, we recommend attending sessions regularly. If your schedule doesn&apos;t allow you to come every day, 2–3 sessions per week are enough to ensure steady progress and help you learn cycling with confidence.</p>
             </div>
             <div>
               <strong>8) Are these cycling classes only available in Mumbai?</strong>

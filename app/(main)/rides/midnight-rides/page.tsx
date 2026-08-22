@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import { BookingForm } from '@/components/ui/BookingForm';
 import prisma from '@/lib/prisma';
 import { RidePageLayout } from '@/components/ui/RidePageLayout';

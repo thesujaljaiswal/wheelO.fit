@@ -31,7 +31,7 @@ export async function registerForEvent(formData: FormData) {
     const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
     const ticketCode = `TKT-${randomString}`;
 
-    await (prisma as any).registration.create({
+    await (prisma as unknown as { registration: { create: (args: unknown) => Promise<unknown> } }).registration.create({
       data: {
         eventId,
         name,

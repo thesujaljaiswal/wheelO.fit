@@ -25,7 +25,7 @@ export default async function JobPostingsPage() {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {jobPostings.length === 0 ? (
               <p style={{ color: '#888' }}>No job postings created yet.</p>
-            ) : jobPostings.map((job: any) => (
+            ) : jobPostings.map((job: import('./JobPostingListItem').JobPostingData) => (
               <JobPostingListItem key={job.id} job={job} />
             ))}
           </ul>

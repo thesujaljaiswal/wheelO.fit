@@ -8,7 +8,11 @@ import CycleList from './CycleList';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminRentalsPage() {
-  const cycles = await (prisma as any).rentalCycle.findMany({
+  const cycles = await (prisma as unknown as {
+    rentalCycle: {
+      findMany: (args: unknown) => Promise<import('./EditCycleModal').CycleData[]>
+    }
+  }).rentalCycle.findMany({
     orderBy: { createdAt: 'desc' }
   });
 

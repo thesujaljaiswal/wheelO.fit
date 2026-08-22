@@ -156,7 +156,8 @@ async function scrape() {
   
   try {
     const ops = top4.map((r) => {
-      const { id, ...updateData } = r;
+      const updateData = { ...r };
+      delete updateData.id;
       return prisma.instagramReel.upsert({
         where: { id: r.id },
         create: r,

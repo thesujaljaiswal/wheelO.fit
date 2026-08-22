@@ -47,7 +47,7 @@ export default function CycleClassesTestimonials() {
                     {[1,2,3,4,5].map(star => <div key={star} style={{ color: '#1eb53a', fontSize: '1.2rem' }}>★</div>)}
                   </div>
                   <p style={{ color: '#ddd', fontSize: '1.05rem', fontStyle: 'italic', lineHeight: '1.7', marginBottom: '2rem', flex: 1 }}>
-                    "{testimonial.text}"
+                    &quot;{testimonial.text}&quot;
                   </p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem' }}>
                     <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(30,181,58,0.1)', border: '1px solid rgba(30,181,58,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1eb53a', fontWeight: 'bold', fontSize: '1.1rem' }}>

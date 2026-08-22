@@ -42,7 +42,7 @@ export async function createAdmin(formData: FormData) {
 
     revalidatePath('/admin/manage-admins');
     return { success: 'Admin created successfully!' };
-  } catch (error) {
+  } catch {
     return { error: 'Failed to create admin' };
   }
 }
@@ -74,7 +74,7 @@ export async function deleteAdmin(adminId: string) {
 
     revalidatePath('/admin/manage-admins');
     return { success: 'Admin deleted successfully!' };
-  } catch (error) {
+  } catch {
     return { error: 'Failed to delete admin.' };
   }
 }
@@ -107,7 +107,7 @@ export async function editAdmin(adminId: string, formData: FormData) {
       return { error: 'Username already exists.' };
     }
 
-    const updateData: any = { username, role };
+    const updateData: Record<string, string> = { username, role };
     
     if (password && password.length >= 6) {
       updateData.passwordHash = await bcrypt.hash(password, 10);
@@ -122,7 +122,7 @@ export async function editAdmin(adminId: string, formData: FormData) {
 
     revalidatePath('/admin/manage-admins');
     return { success: 'Admin updated successfully!' };
-  } catch (error) {
+  } catch {
     return { error: 'Failed to update admin.' };
   }
 }

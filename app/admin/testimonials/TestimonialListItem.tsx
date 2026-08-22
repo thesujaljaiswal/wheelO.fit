@@ -2,9 +2,17 @@
 
 import React, { useState } from 'react';
 import { updateTestimonial, deleteTestimonial } from './actions';
-import styles from '../admin.module.css';
+export interface TestimonialData {
+  id: string;
+  name: string;
+  role: string | null;
+  content: string;
+  rating: number;
+  avatarUrl: string | null;
+  isActive: boolean;
+}
 
-export default function TestimonialListItem({ testimonial }: { testimonial: any }) {
+export default function TestimonialListItem({ testimonial }: { testimonial: TestimonialData }) {
   const [loading, setLoading] = useState(false);
 
   async function handleToggleStatus() {
@@ -49,7 +57,7 @@ export default function TestimonialListItem({ testimonial }: { testimonial: any 
         <div>
           <h3 style={{ margin: '0 0 0.3rem 0', fontSize: '1.1rem' }}>{testimonial.name} <span style={{fontSize: '0.8rem', color: '#ffcc00'}}>({testimonial.rating}★)</span></h3>
           <p style={{ margin: '0 0 0.5rem 0', color: '#888', fontSize: '0.9rem' }}>{testimonial.role || 'No Role'}</p>
-          <p style={{ margin: '0 0 0.5rem 0', color: '#ddd', fontSize: '0.95rem', fontStyle: 'italic' }}>"{testimonial.content}"</p>
+          <p style={{ margin: '0 0 0.5rem 0', color: '#ddd', fontSize: '0.95rem', fontStyle: 'italic' }}>&quot;{testimonial.content}&quot;</p>
           <span style={{ 
             fontSize: '0.75rem', 
             padding: '2px 6px', 

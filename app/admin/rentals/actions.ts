@@ -61,7 +61,7 @@ export async function createRentalCycle(formData: FormData) {
   }
 
   try {
-    await (prisma as any).rentalCycle.create({
+    await prisma.rentalCycle.create({
       data: {
         type,
         quantity,
@@ -85,7 +85,7 @@ export async function createRentalCycle(formData: FormData) {
 
 export async function toggleCycleActive(id: string, currentStatus: boolean) {
   try {
-    await (prisma as any).rentalCycle.update({
+    await prisma.rentalCycle.update({
       where: { id },
       data: { isActive: !currentStatus }
     });
@@ -97,7 +97,7 @@ export async function toggleCycleActive(id: string, currentStatus: boolean) {
 
 export async function deleteCycle(id: string) {
   try {
-    await (prisma as any).rentalCycle.delete({ where: { id } });
+    await prisma.rentalCycle.delete({ where: { id } });
     revalidatePath('/admin/rentals');
   } catch (error) {
     console.error(error);
@@ -108,7 +108,7 @@ import { refundPhonePePayment } from '@/lib/phonepe';
 
 export async function updateBookingStatus(id: string, status: string) {
   try {
-    const booking = await (prisma as any).rentalBooking.findUnique({
+    const booking = await prisma.rentalBooking.findUnique({
       where: { id }
     });
 
@@ -126,7 +126,7 @@ export async function updateBookingStatus(id: string, status: string) {
       }
     }
 
-    await (prisma as any).rentalBooking.update({
+    await prisma.rentalBooking.update({
       where: { id },
       data: { status }
     });
@@ -180,7 +180,7 @@ export async function updateRentalCycle(id: string, formData: FormData) {
     }
   }
 
-  const dataToUpdate: any = {
+  const dataToUpdate: Record<string, unknown> = {
     type,
     quantity,
     category,
@@ -196,7 +196,7 @@ export async function updateRentalCycle(id: string, formData: FormData) {
   }
 
   try {
-    await (prisma as any).rentalCycle.update({
+    await prisma.rentalCycle.update({
       where: { id },
       data: dataToUpdate
     });

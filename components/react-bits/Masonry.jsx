@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
 import { gsap } from 'gsap';
 
 import './Masonry.css';
@@ -275,12 +276,12 @@ const Masonry = ({
           }}
           onClick={() => setPreviewImage(null)}
         >
-          <img 
+          <Image 
             src={previewImage} 
             alt="Preview" 
+            fill
+            unoptimized
             style={{
-              maxHeight: '90vh',
-              maxWidth: '90vw',
               objectFit: 'contain',
               borderRadius: '8px',
               boxShadow: '0 4px 30px rgba(0,0,0,0.5)'

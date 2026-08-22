@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import { BookingForm } from '@/components/ui/BookingForm';
 import prisma from '@/lib/prisma';
 import { RidePageLayout } from '@/components/ui/RidePageLayout';
@@ -41,7 +40,7 @@ export default async function SundayMorningPage() {
       <p style={{ fontWeight: 'bold', margin: '1rem 0' }}>🚴 Ride Route -- Worli → Worli Seaface → Worli Promenade Cycling Track → Shivaji Park → Worli</p>
       <p>The ride begins at Worli and takes you along the scenic Worli Seaface, where you can ride through the cycling track and enjoy the cool morning breeze and beautiful views of the Arabian Sea. It’s one of the highlights of ride, offering a peaceful and enjoyable stretch away from the usual city rush.</p>
       <p>A group photo session is also planned at Worli Promenade, giving you the perfect opportunity to capture the morning, the beautiful surroundings, and memories with fellow riders. The route then continues towards Shivaji Park before heading back to the starting point at Worli.</p>
-      <p>Whether you're a regular cyclist or simply looking for an active and refreshing way to spend your Sunday morning, this ride offers the perfect combination of cycling, scenic views, fitness, and community.</p>
+      <p>Whether you&apos;re a regular cyclist or simply looking for an active and refreshing way to spend your Sunday morning, this ride offers the perfect combination of cycling, scenic views, fitness, and community.</p>
     </div>
   );
 

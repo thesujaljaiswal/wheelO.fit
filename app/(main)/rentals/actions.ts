@@ -1,18 +1,25 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
+
 
 export async function getCycleAvailabilityMap(cycleId: string, month: number, year: number) {
   try {
-    const cycle = await (prisma as any).rentalCycle.findUnique({ where: { id: cycleId } });
+    type RentalCycle = { id: string; isActive: boolean; quantity: number };
+    type RentalBooking = { startDate: Date; endDate: Date; quantity: number };
+    const prismaRental = prisma as unknown as {
+      rentalCycle: { findUnique: (args: unknown) => Promise<RentalCycle | null> };
+      rentalBooking: { findMany: (args: unknown) => Promise<RentalBooking[]> };
+    };
+
+    const cycle = await prismaRental.rentalCycle.findUnique({ where: { id: cycleId } });
     if (!cycle || !cycle.isActive) return null;
 
     const startDate = new Date(year, month, 1);
     // Fetch until the end of the next month to support bookings spanning months
     const endDate = new Date(year, month + 2, 0, 23, 59, 59);
 
-    const bookings = await (prisma as any).rentalBooking.findMany({
+    const bookings = await prismaRental.rentalBooking.findMany({
       where: {
         cycleId,
         status: 'CONFIRMED',
@@ -38,7 +45,7 @@ export async function getCycleAvailabilityMap(cycleId: string, month: number, ye
         // Adjust for local timezone offset when generating string
         const dateStr = new Date(currentDate.getTime() - (currentDate.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
 
-        const overlappingBookings = bookings.filter((b: any) => {
+        const overlappingBookings = bookings.filter((b: RentalBooking) => {
           const bStart = new Date(b.startDate);
           const bEnd = new Date(b.endDate);
           bStart.setHours(0, 0, 0, 0);
@@ -48,7 +55,7 @@ export async function getCycleAvailabilityMap(cycleId: string, month: number, ye
           return cDate >= bStart && cDate <= bEnd;
         });
 
-        const bookedQty = overlappingBookings.reduce((sum: number, b: any) => sum + b.quantity, 0);
+        const bookedQty = overlappingBookings.reduce((sum: number, b: RentalBooking) => sum + b.quantity, 0);
         availabilityMap[dateStr] = Math.max(0, cycle.quantity - bookedQty);
       }
     }
@@ -62,7 +69,14 @@ export async function getCycleAvailabilityMap(cycleId: string, month: number, ye
 
 export async function checkAvailability(cycleId: string, startDateStr: string, durationValue: number, durationUnit: string, requestedQuantity: number) {
   try {
-    const cycle = await (prisma as any).rentalCycle.findUnique({ where: { id: cycleId } });
+    type RentalCycle = { id: string; isActive: boolean; quantity: number };
+    type RentalBooking = { startDate: Date; endDate: Date; quantity: number };
+    const prismaRental = prisma as unknown as {
+      rentalCycle: { findUnique: (args: unknown) => Promise<RentalCycle | null> };
+      rentalBooking: { findMany: (args: unknown) => Promise<RentalBooking[]> };
+    };
+
+    const cycle = await prismaRental.rentalCycle.findUnique({ where: { id: cycleId } });
     if (!cycle || !cycle.isActive) return { available: false, reason: 'Cycle not available.' };
 
     if (requestedQuantity > cycle.quantity) return { available: false, reason: 'Not enough total stock.' };
@@ -80,7 +94,7 @@ export async function checkAvailability(cycleId: string, startDateStr: string, d
     }
 
     // Find overlapping bookings
-    const overlappingBookings = await (prisma as any).rentalBooking.findMany({
+    const overlappingBookings = await prismaRental.rentalBooking.findMany({
       where: {
         cycleId,
         status: 'CONFIRMED',
@@ -91,7 +105,7 @@ export async function checkAvailability(cycleId: string, startDateStr: string, d
       }
     });
 
-    const bookedQuantity = overlappingBookings.reduce((sum: number, b: any) => sum + b.quantity, 0);
+    const bookedQuantity = overlappingBookings.reduce((sum: number, b: RentalBooking) => sum + b.quantity, 0);
     const availableQty = cycle.quantity - bookedQuantity;
 
     if (availableQty >= requestedQuantity) {
@@ -137,7 +151,8 @@ export async function bookRental(formData: FormData) {
   }
 
   try {
-    await (prisma as any).rentalBooking.create({
+    const prismaBooking = prisma as unknown as { rentalBooking: { create: (args: unknown) => Promise<unknown> } };
+    await prismaBooking.rentalBooking.create({
       data: {
         cycleId,
         startDate,

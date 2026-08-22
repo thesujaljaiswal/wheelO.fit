@@ -3,20 +3,44 @@
 import React, { useState } from 'react';
 import { updateRentalCycle } from './actions';
 
-export default function EditCycleModal({ cycle, onClose }: { cycle: any, onClose: () => void }) {
-  const [pricingOptions, setPricingOptions] = useState(
+export interface PricingOption {
+  durationLabel: string;
+  durationValue: number;
+  durationUnit: string;
+  price: number;
+  label?: string;
+  value?: number;
+  unit?: string;
+}
+
+export interface CycleData {
+  id: string;
+  type: string;
+  quantity: number;
+  category?: string;
+  tyreSize?: string;
+  speed?: string;
+  bikeType?: string;
+  brakes?: string;
+  imageUrl?: string;
+  isActive: boolean;
+  pricing: PricingOption[];
+}
+
+export default function EditCycleModal({ cycle, onClose }: { cycle: CycleData, onClose: () => void }) {
+  const [pricingOptions, setPricingOptions] = useState<PricingOption[]>(
     cycle.pricing && cycle.pricing.length > 0 
-      ? cycle.pricing.map((p: any) => ({ label: p.durationLabel, value: p.durationValue, unit: p.durationUnit, price: p.price }))
-      : [{ label: '1 Month', value: 1, unit: 'MONTHS', price: 1400 }]
+      ? cycle.pricing.map((p: PricingOption) => ({ label: p.durationLabel, value: p.durationValue, unit: p.durationUnit, price: p.price, durationLabel: p.durationLabel, durationValue: p.durationValue, durationUnit: p.durationUnit }))
+      : [{ label: '1 Month', value: 1, unit: 'MONTHS', price: 1400, durationLabel: '1 Month', durationValue: 1, durationUnit: 'MONTHS' }]
   );
   const [pending, setPending] = useState(false);
 
   const addPricingOption = () => {
-    setPricingOptions([...pricingOptions, { label: '1 Month', value: 1, unit: 'MONTHS', price: 1400 }]);
+    setPricingOptions([...pricingOptions, { label: '1 Month', value: 1, unit: 'MONTHS', price: 1400, durationLabel: '1 Month', durationValue: 1, durationUnit: 'MONTHS' }]);
   };
 
   const removePricingOption = (index: number) => {
-    setPricingOptions(pricingOptions.filter((_: any, i: number) => i !== index));
+    setPricingOptions(pricingOptions.filter((_: PricingOption, i: number) => i !== index));
   };
 
   const handlePricingChange = (index: number, field: string, val: string | number) => {
@@ -61,13 +85,13 @@ export default function EditCycleModal({ cycle, onClose }: { cycle: any, onClose
             <div style={{ flex: '1 1 200px' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', color: '#ccc' }}>Tyre Size</label>
               <select name="tyreSize" defaultValue={cycle.tyreSize || "26 Inches (5'0 - 6'6)"} required style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #444', background: '#222', color: '#fff' }}>
-                <option value="14 Inches (3'0 - 3'6)">14 Inches (3'0 - 3'6)</option>
-                <option value="16 Inches (3'6 - 3'1)">16 Inches (3'6 - 3'1)</option>
-                <option value="20 Inches (4'0 - 4'7)">20 Inches (4'0 - 4'7)</option>
-                <option value="24 Inches (4'6 - 5'2)">24 Inches (4'6 - 5'2)</option>
-                <option value="26 Inches (5'0 - 6'6)">26 Inches (5'0 - 6'6)</option>
-                <option value="27.5 Inches (5'4 - 6'2)">27.5 Inches (5'4 - 6'2)</option>
-                <option value="29 Inches (5'8 - 6'4)">29 Inches (5'8 - 6'4)</option>
+                <option value="14 Inches (3'0 - 3'6)">14 Inches (3&apos;0 - 3&apos;6)</option>
+                <option value="16 Inches (3'6 - 3'1)">16 Inches (3&apos;6 - 3&apos;1)</option>
+                <option value="20 Inches (4'0 - 4'7)">20 Inches (4&apos;0 - 4&apos;7)</option>
+                <option value="24 Inches (4'6 - 5'2)">24 Inches (4&apos;6 - 5&apos;2)</option>
+                <option value="26 Inches (5'0 - 6'6)">26 Inches (5&apos;0 - 6&apos;6)</option>
+                <option value="27.5 Inches (5'4 - 6'2)">27.5 Inches (5&apos;4 - 6&apos;2)</option>
+                <option value="29 Inches (5'8 - 6'4)">29 Inches (5&apos;8 - 6&apos;4)</option>
               </select>
             </div>
 
@@ -142,7 +166,7 @@ export default function EditCycleModal({ cycle, onClose }: { cycle: any, onClose
               <div style={{ width: '30px' }}></div>
             </div>
 
-            {pricingOptions.map((opt: any, index: number) => (
+            {pricingOptions.map((opt: PricingOption, index: number) => (
               <div key={index} className="pricing-row" style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', alignItems: 'center' }}>
                 <input 
                   type="text" 

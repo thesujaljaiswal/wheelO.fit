@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useTransition } from 'react';
 import { toggleContactedStatus } from './actions';
 
 export default function ToggleStatusBtn({ id, isContacted }: { id: string, isContacted: boolean }) {

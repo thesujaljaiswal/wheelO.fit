@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { createTestimonial } from './actions';
-import styles from '../admin.module.css';
 
 export default function CreateTestimonialForm() {
   const [loading, setLoading] = useState(false);

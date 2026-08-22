@@ -40,7 +40,6 @@ export function Carousel({ slides }: CarouselProps) {
 
   useEffect(() => {
     if (!emblaApi) return;
-    onSelect();
     emblaApi.on('select', onSelect);
     emblaApi.on('reInit', onSelect);
 

@@ -2,10 +2,12 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { FAQItem } from './FAQClientView';
 
-export async function getFAQs() {
+export async function getFAQs(): Promise<FAQItem[]> {
+  const prismaFAQ = prisma as unknown as { fAQ: { findMany: (args: unknown) => Promise<FAQItem[]> } };
   try {
-    return await (prisma as any).fAQ.findMany({
+    return await prismaFAQ.fAQ.findMany({
       orderBy: { order: 'asc' }
     });
   } catch (error) {
@@ -22,7 +24,8 @@ export async function createFAQ(formData: FormData) {
   if (!question || !answer) return { error: 'Question and answer are required' };
 
   try {
-    await (prisma as any).fAQ.create({
+    const prismaFAQ = prisma as unknown as { fAQ: { create: (args: unknown) => Promise<unknown> } };
+    await prismaFAQ.fAQ.create({
       data: {
         question,
         answer,
@@ -45,7 +48,8 @@ export async function updateFAQ(id: string, formData: FormData) {
   const isActive = formData.get('isActive') === 'on' || formData.get('isActive') === 'true';
 
   try {
-    await (prisma as any).fAQ.update({
+    const prismaFAQ = prisma as unknown as { fAQ: { update: (args: unknown) => Promise<unknown> } };
+    await prismaFAQ.fAQ.update({
       where: { id },
       data: {
         question,
@@ -64,7 +68,8 @@ export async function updateFAQ(id: string, formData: FormData) {
 
 export async function deleteFAQ(id: string) {
   try {
-    await (prisma as any).fAQ.delete({
+    const prismaFAQ = prisma as unknown as { fAQ: { delete: (args: unknown) => Promise<unknown> } };
+    await prismaFAQ.fAQ.delete({
       where: { id }
     });
     revalidatePath('/admin/faqs');
@@ -78,8 +83,9 @@ export async function deleteFAQ(id: string) {
 
 export async function updateFAQOrder(orderedIds: string[]) {
   try {
+    const prismaFAQ = prisma as unknown as { fAQ: { update: (args: unknown) => Promise<unknown> } };
     for (let i = 0; i < orderedIds.length; i++) {
-      await (prisma as any).fAQ.update({
+      await prismaFAQ.fAQ.update({
         where: { id: orderedIds[i] },
         data: { order: i }
       });

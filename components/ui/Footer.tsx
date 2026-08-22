@@ -2,8 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import styles from './Footer.module.css';
 
-import prisma from '@/lib/prisma';
-import { FAQAccordion } from './FAQAccordion';
+
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
@@ -50,7 +49,7 @@ export function Footer() {
               <h3>Legal</h3>
               <Link href="/privacy">Privacy Policy</Link>
               <Link href="/terms">Terms of Service</Link>
-              <Link href="/faq">FAQ's</Link>
+              <Link href="/faq">FAQ&apos;s</Link>
             </div>
             <div className={styles.linkColumn}>
               <h3>Socials</h3>

@@ -3,7 +3,15 @@
 import React, { useState } from 'react';
 import { togglePresence } from './actions';
 
-export default function ParticipantList({ registrations, eventId }: { registrations: any[], eventId: string }) {
+export interface RegistrationData {
+  id: string;
+  name: string;
+  additionalNames?: string[];
+  ticketCode?: string | null;
+  isPresent: boolean;
+}
+
+export default function ParticipantList({ registrations, eventId }: { registrations: RegistrationData[], eventId: string }) {
   const [search, setSearch] = useState('');
 
   const flattened = registrations.flatMap(r => {
@@ -24,7 +32,7 @@ export default function ParticipantList({ registrations, eventId }: { registrati
   const handleToggle = async (id: string, current: boolean) => {
     try {
       await togglePresence(id, eventId, current);
-    } catch (err) {
+    } catch {
       alert('Failed to update status');
     }
   };

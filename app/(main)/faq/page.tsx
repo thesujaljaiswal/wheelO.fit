@@ -9,9 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default async function FAQPage() {
-  let faqs = [];
+  let faqs: { question: string; answer: string }[] = [];
   try {
-    faqs = await (prisma as any).fAQ.findMany({
+    const prismaFAQ = prisma as unknown as { fAQ: { findMany: (args: unknown) => Promise<{ question: string; answer: string }[]> } };
+    faqs = await prismaFAQ.fAQ.findMany({
       where: { isActive: true },
       orderBy: { order: 'asc' }
     });
@@ -26,7 +27,7 @@ export default async function FAQPage() {
       </h1>
       
       {faqs.length > 0 ? (
-        <SectionAccordion sections={faqs.map((faq: any) => ({
+        <SectionAccordion sections={faqs.map((faq: { question: string; answer: string }) => ({
           title: faq.question,
           content: <p>{faq.answer}</p>
         }))} />

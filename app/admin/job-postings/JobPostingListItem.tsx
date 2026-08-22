@@ -4,7 +4,14 @@ import React, { useTransition } from 'react';
 import Link from 'next/link';
 import { updateJobPosting, deleteJobPosting } from './actions';
 
-export default function JobPostingListItem({ job }: { job: any }) {
+export interface JobPostingData {
+  id: string;
+  title: string;
+  description: string;
+  isActive: boolean;
+}
+
+export default function JobPostingListItem({ job }: { job: JobPostingData }) {
   const [isPending, startTransition] = useTransition();
 
   const toggleActive = () => {

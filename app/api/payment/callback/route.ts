@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
 
     if (success) {
       if (isRental) {
-        const rental = await (prisma as any).rentalBooking.findFirst({
+        const rental = await prisma.rentalBooking.findFirst({
           where: { transactionId: merchantOrderId },
         });
 
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
         }
 
         if (rental.paymentStatus !== 'SUCCESS') {
-          await (prisma as any).rentalBooking.update({
+          await prisma.rentalBooking.update({
             where: { id: rental.id },
             data: { paymentStatus: 'SUCCESS', status: 'CONFIRMED' },
           });
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.redirect(`${baseUrl}/rentals/success?txn=${merchantOrderId}`, 303);
       } else {
-        const reg = await (prisma as any).registration.findFirst({
+        const reg = await prisma.registration.findFirst({
           where: { transactionId: merchantOrderId },
         });
 
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
         }
 
         if (reg.paymentStatus !== 'SUCCESS') {
-          await (prisma as any).registration.update({
+          await prisma.registration.update({
             where: { id: reg.id },
             data: { paymentStatus: 'SUCCESS' },
           });
@@ -58,18 +58,18 @@ export async function GET(req: NextRequest) {
       console.error('PhonePe payment not successful. State:', state);
       // Delete the pending registration or rental so it doesn't stay in the DB
       if (isRental) {
-        await (prisma as any).rentalBooking.deleteMany({
+        await prisma.rentalBooking.deleteMany({
           where: { transactionId: merchantOrderId },
         });
       } else {
-        await (prisma as any).registration.deleteMany({
+        await prisma.registration.deleteMany({
           where: { transactionId: merchantOrderId },
         });
       }
       return NextResponse.redirect(`${baseUrl}/payment-failed?reason=${state}`, 303);
     }
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Payment callback error:', error);
     return NextResponse.redirect(`${baseUrl}/payment-failed?reason=server_error`, 303);
   }
