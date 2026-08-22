@@ -10,8 +10,33 @@ interface PaymentLinkFormProps {
 export default function PaymentLinkForm({ linkId, amount }: PaymentLinkFormProps) {
   const [loading, setLoading] = useState(false);
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    try {
+      const response = await fetch('/api/payment/initiate', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.success && data.redirectUrl) {
+        window.location.href = data.redirectUrl;
+      } else {
+        alert(data.error || 'Failed to initiate payment');
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+      alert('An error occurred. Please try again.');
+      setLoading(false);
+    }
+  };
+
   return (
-    <form action="/api/payment/initiate" method="POST" onSubmit={() => setLoading(true)} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <input type="hidden" name="type" value="payment_link" />
       <input type="hidden" name="linkId" value={linkId} />
 
