@@ -146,6 +146,17 @@ export default function AdminSidebar({ role, username, isOpen, closeSidebar }: A
             Manage Admins
           </Link>
         )}
+
+        <Link 
+          href="/admin/payment-links" 
+          onClick={closeSidebar}
+          style={{ 
+            color: pathname.startsWith('/admin/payment-links') ? '#fff' : '#888',
+            textDecoration: 'none',
+            fontWeight: pathname.startsWith('/admin/payment-links') ? 'bold' : 'normal'
+          }}>
+          Payment Links
+        </Link>
       </nav>
       
       <div style={{ marginTop: 'auto' }}>

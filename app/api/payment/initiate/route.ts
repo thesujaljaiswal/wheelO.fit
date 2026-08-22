@@ -16,6 +16,10 @@ export async function POST(req: NextRequest) {
         }),
         prisma.rentalBooking.deleteMany({
           where: { paymentStatus: 'PENDING', createdAt: { lt: oneHourAgo } }
+        }),
+        prisma.paymentLink.updateMany({
+          where: { paymentStatus: 'PENDING', expiresAt: { lt: new Date() } },
+          data: { paymentStatus: 'FAILED' }
         })
       ]);
     } catch (cleanupError) {
@@ -110,6 +114,43 @@ export async function POST(req: NextRequest) {
         }
       });
       
+    } else if (type === 'payment_link') {
+      const linkId = formData.get('linkId') as string;
+      const name = formData.get('name') as string;
+      const email = formData.get('email') as string;
+      const phone = formData.get('phone') as string;
+
+      if (!linkId || !name || !email || !phone) {
+        return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      }
+
+      const link = await prisma.paymentLink.findUnique({ where: { id: linkId } });
+      if (!link) {
+        return NextResponse.json({ error: 'Payment link not found' }, { status: 404 });
+      }
+
+      if (link.expiresAt < new Date()) {
+        return NextResponse.json({ error: 'Payment link has expired' }, { status: 400 });
+      }
+
+      if (link.paymentStatus === 'SUCCESS') {
+        return NextResponse.json({ error: 'This payment link has already been paid' }, { status: 400 });
+      }
+
+      amountInPaise = link.amount * 100;
+      merchantOrderId = `PTXN_${Date.now()}_${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+
+      await prisma.paymentLink.update({
+        where: { id: linkId },
+        data: {
+          name,
+          email,
+          phone,
+          transactionId: merchantOrderId,
+          paymentStatus: 'PENDING'
+        }
+      });
+      
     } else {
       return NextResponse.json({ error: 'Invalid type' }, { status: 400 });
     }
@@ -127,6 +168,12 @@ export async function POST(req: NextRequest) {
           data: { paymentStatus: 'SUCCESS', status: 'CONFIRMED' },
         });
         return NextResponse.json({ success: true, redirectUrl: `${baseUrl}/rentals/success?txn=${merchantOrderId}` });
+      } else if (type === 'payment_link') {
+        await prisma.paymentLink.updateMany({
+          where: { transactionId: merchantOrderId },
+          data: { paymentStatus: 'SUCCESS' },
+        });
+        return NextResponse.json({ success: true, redirectUrl: `${baseUrl}/pay/success?txn=${merchantOrderId}` });
       }
     }
 
