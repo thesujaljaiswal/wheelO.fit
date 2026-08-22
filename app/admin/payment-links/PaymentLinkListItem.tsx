@@ -66,7 +66,7 @@ export default function PaymentLinkListItem({ link }: { link: PaymentLink }) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', fontSize: '0.8rem', color: '#888' }}>
-        <span>Expires: {new Date(link.expiresAt).toLocaleString()}</span>
+        <span suppressHydrationWarning>Expires: {new Date(link.expiresAt).toLocaleString()}</span>
         {link.name && <span>Paid by: {link.name} ({link.email})</span>}
       </div>
 
