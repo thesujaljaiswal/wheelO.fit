@@ -1,7 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import dynamic from 'next/dynamic';
-const BookingForm = dynamic(() => import('@/components/ui/BookingForm').then(mod => mod.BookingForm), { ssr: false });
+import { BookingForm } from '@/components/ui/BookingForm';
 import prisma from '@/lib/prisma';
 import { RidePageLayout } from '@/components/ui/RidePageLayout';
 import styles from '@/components/ui/RidePageLayout.module.css';

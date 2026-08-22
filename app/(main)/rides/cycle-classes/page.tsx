@@ -4,9 +4,8 @@ import styles from '../rides.module.css';
 import CycleClassTabs from '@/components/ui/CycleClassTabs';
 import WhyLearnWithUs from '@/components/ui/WhyLearnWithUs';
 import { ImageSlider } from '@/components/ui/ImageSlider';
-import dynamic from 'next/dynamic';
-const EnquireModalFAB = dynamic(() => import('@/components/ui/EnquireModalFAB'), { ssr: false });
-const WhatsAppFAB = dynamic(() => import('@/components/ui/WhatsAppFAB'), { ssr: false });
+import EnquireModalFAB from '@/components/ui/EnquireModalFAB';
+import WhatsAppFAB from '@/components/ui/WhatsAppFAB';
 import CycleClassesTestimonials from '@/components/ui/CycleClassesTestimonials';
 
 export const revalidate = 3600;
