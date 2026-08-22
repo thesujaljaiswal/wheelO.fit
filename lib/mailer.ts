@@ -239,3 +239,42 @@ Transaction ID: ${booking.transactionId}
     console.error('Error sending rental confirmation email:', error);
   }
 }
+
+interface CustomPayment {
+  name: string | null;
+  phone: string | null;
+  amount: number;
+  transactionId: string | null;
+}
+
+export async function sendCustomPaymentNotificationEmail(payment: CustomPayment) {
+  const user = process.env.GMAIL_USER || process.env.EMAIL_USER;
+  const pass = process.env.GMAIL_APP_PASSWORD || process.env.EMAIL_PASS;
+
+  if (!user || !pass) {
+    console.warn('Email credentials not set, skipping email.');
+    return;
+  }
+
+  try {
+    if (adminEmail) {
+      await transporter.sendMail({
+        from: `"Wheelo System" <${user}>`,
+        to: adminEmail,
+        subject: `New Custom Payment: ₹${payment.amount} by ${payment.name || 'Unknown'}`,
+        text: `
+New Custom Payment Received!
+
+Details:
+Name: ${payment.name || 'N/A'}
+Phone: ${payment.phone || 'N/A'}
+Amount: ₹${payment.amount}
+Transaction ID: ${payment.transactionId}
+        `,
+      });
+      console.log(`Successfully sent custom payment notification email to admin.`);
+    }
+  } catch (error) {
+    console.error('Error sending custom payment notification email:', error);
+  }
+}

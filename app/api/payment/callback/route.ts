@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { verifyPhonePePayment } from '@/lib/phonepe';
-import { sendEventRegistrationEmail, sendRentalConfirmationEmail } from '@/lib/mailer';
+import { sendEventRegistrationEmail, sendRentalConfirmationEmail, sendCustomPaymentNotificationEmail } from '@/lib/mailer';
 
 export async function GET(req: NextRequest) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
@@ -57,7 +57,12 @@ export async function GET(req: NextRequest) {
             data: { paymentStatus: 'SUCCESS' },
           });
           
-          // Optionally, send an email receipt here if mailer supports it
+          await sendCustomPaymentNotificationEmail({
+            name: link.name,
+            phone: link.phone,
+            amount: link.amount,
+            transactionId: link.transactionId
+          });
         }
 
         return NextResponse.redirect(`${baseUrl}/pay/success?txn=${merchantOrderId}`, 303);
@@ -91,9 +96,8 @@ export async function GET(req: NextRequest) {
           where: { transactionId: merchantOrderId },
         });
       } else if (isPaymentLink) {
-        await prisma.paymentLink.updateMany({
-          where: { transactionId: merchantOrderId },
-          data: { paymentStatus: 'FAILED' } // We don't delete payment links, just mark them as failed so they can try again
+        await prisma.paymentLink.deleteMany({
+          where: { transactionId: merchantOrderId }
         });
       } else {
         await prisma.registration.deleteMany({
