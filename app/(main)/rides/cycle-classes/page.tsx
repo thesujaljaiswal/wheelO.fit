@@ -1,4 +1,5 @@
 import React from 'react';
+import { Metadata } from 'next';
 import styles from '../rides.module.css';
 import CycleClassTabs from '@/components/ui/CycleClassTabs';
 import WhyLearnWithUs from '@/components/ui/WhyLearnWithUs';
@@ -6,6 +7,13 @@ import { ImageSlider } from '@/components/ui/ImageSlider';
 import EnquireModalFAB from '@/components/ui/EnquireModalFAB';
 import WhatsAppFAB from '@/components/ui/WhatsAppFAB';
 import CycleClassesTestimonials from '@/components/ui/CycleClassesTestimonials';
+
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'Cycling Classes in Mumbai | Wheelo.fit',
+  description: 'Learn to ride a cycle with confidence. Personalized cycling classes for children and adults aged 5 to 75 years across Mumbai.',
+};
 
 const happyCustomerImages = [
   { id: "1", img: "/cycling classes visuals/cycling-classes/Wheelofit cycling classes customer-1.jpg", height: 400 },

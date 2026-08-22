@@ -1,8 +1,16 @@
 import React from 'react';
+import { Metadata } from 'next';
 import { BookingForm } from '@/components/ui/BookingForm';
 import prisma from '@/lib/prisma';
 import { RidePageLayout } from '@/components/ui/RidePageLayout';
 import styles from '@/components/ui/RidePageLayout.module.css';
+
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'Mumbai Midnight Cycling Experience | Wheelo.fit',
+  description: 'Explore Mumbai after hours on a guided midnight cycling tour. Ride through iconic landmarks like Haji Ali, Marine Drive, and Gateway of India.',
+};
 
 const sliderImages = [
   { id: "1", img: "/midnight-cycling/IMG_9065_Original.jpg", height: 400 },
@@ -171,23 +179,55 @@ export default async function MidnightRidesPage() {
     }
   ];
 
-  return (
-    <RidePageLayout 
-      title="Midnight Rides"
-      overview={overview}
-      inclusionsExclusions={inclusionsExclusions}
-      itinerary={itinerary}
-      additionalSections={additionalSections}
-      sliderImages={sliderImages}
-      priceText="₹749"
-      bookingForm={
-        <BookingForm 
-          key="booking-form"
-          title="Book Your Spot"
-          buttonText="Register Now"
-          events={events}
-        />
+  const jsonLd = events.map(e => ({
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: e.title || 'Mumbai Midnight Cycling Experience',
+    startDate: e.date.toISOString(),
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    location: {
+      '@type': 'Place',
+      name: 'Worli, Mumbai',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Mumbai',
+        addressRegion: 'Maharashtra',
+        addressCountry: 'IN'
       }
-    />
+    },
+    offers: {
+      '@type': 'Offer',
+      price: e.price,
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+      url: 'https://wheelo.fit/rides/midnight-rides'
+    }
+  }));
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <RidePageLayout 
+        title="Midnight Rides"
+        overview={overview}
+        inclusionsExclusions={inclusionsExclusions}
+        itinerary={itinerary}
+        additionalSections={additionalSections}
+        sliderImages={sliderImages}
+        priceText="₹749"
+        bookingForm={
+          <BookingForm 
+            key="booking-form"
+            title="Book Your Spot"
+            buttonText="Register Now"
+            events={events}
+          />
+        }
+      />
+    </>
   );
 }

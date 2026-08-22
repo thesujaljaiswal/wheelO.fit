@@ -45,7 +45,7 @@ export function ImageSlider({ images }: ImageSliderProps) {
             return (
               <div className={styles.slide} key={img.id}>
                 {/* Blurred Background Layer */}
-                <Image src={img.img} alt="" className={styles.bgImage} fill unoptimized style={{ objectFit: 'cover' }} />
+                <Image src={img.img} alt="" className={styles.bgImage} fill unoptimized priority={index === 0} style={{ objectFit: 'cover' }} />
                 <div className={styles.bgOverlay} />
                 
                 {/* Main Foreground Image */}
@@ -56,6 +56,8 @@ export function ImageSlider({ images }: ImageSliderProps) {
                   initial={{ scale: 1 }}
                   animate={{ scale: isActive ? 1.05 : 1 }}
                   transition={{ duration: 4, ease: "linear" }}
+                  fetchPriority={index === 0 ? "high" : "auto"}
+                  loading={index === 0 ? "eager" : "lazy"}
                 />
               </div>
             );

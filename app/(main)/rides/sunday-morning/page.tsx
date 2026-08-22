@@ -1,8 +1,16 @@
 import React from 'react';
+import { Metadata } from 'next';
 import { BookingForm } from '@/components/ui/BookingForm';
 import prisma from '@/lib/prisma';
 import { RidePageLayout } from '@/components/ui/RidePageLayout';
 import styles from '@/components/ui/RidePageLayout.module.css';
+
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'Sunday Morning Coastal Cycling | Wheelo.fit',
+  description: 'Start your Sunday on two wheels with a refreshing 15km cycling experience through Mumbai’s scenic coastal stretches like Worli Seaface and Shivaji Park.',
+};
 
 const sliderImages = [
   { id: "1", img: "/sunday-morning-cycling/IMG_1301.jpeg", height: 400 },
@@ -158,16 +166,48 @@ export default async function SundayMorningPage() {
     }
   ];
 
+  const jsonLd = events.map(e => ({
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: e.title || 'Sunday Morning Coastal Cycling',
+    startDate: e.date.toISOString(),
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    location: {
+      '@type': 'Place',
+      name: 'Worli, Mumbai',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Mumbai',
+        addressRegion: 'Maharashtra',
+        addressCountry: 'IN'
+      }
+    },
+    offers: {
+      '@type': 'Offer',
+      price: e.price,
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+      url: 'https://wheelo.fit/rides/sunday-morning'
+    }
+  }));
+
   return (
-    <RidePageLayout 
-      title="Sunday Morning Rides"
-      overview={overview}
-      inclusionsExclusions={inclusionsExclusions}
-      itinerary={itinerary}
-      additionalSections={additionalSections}
-      sliderImages={sliderImages}
-      priceText="₹649"
-      bookingForm={<BookingForm key="booking-form" title="Book Your Spot" buttonText="Register Now" events={events} />}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <RidePageLayout 
+        title="Sunday Morning Rides"
+        overview={overview}
+        inclusionsExclusions={inclusionsExclusions}
+        itinerary={itinerary}
+        additionalSections={additionalSections}
+        sliderImages={sliderImages}
+        priceText="₹649"
+        bookingForm={<BookingForm key="booking-form" title="Book Your Spot" buttonText="Register Now" events={events} />}
+      />
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Metadata } from 'next';
 import styles from '../rides.module.css';
 import RentalsView from './RentalsView';
 import prisma from '@/lib/prisma';
@@ -10,6 +11,11 @@ import { CycleData } from './RentalsView';
 
 type CycleBooking = { startDate: Date; endDate: Date; quantity: number };
 type CycleWithBookings = Omit<CycleData, 'isInstock' | 'nextAvailableDate'> & { bookings: CycleBooking[] };
+
+export const metadata: Metadata = {
+  title: 'Premium Bicycle Rentals in Mumbai | Wheelo.fit',
+  description: 'Rent premium geared and non-geared cycles in Mumbai. Perfect for hitting the trails or a casual weekend spin with flexible timings.',
+};
 
 export const dynamic = 'force-dynamic';
 
